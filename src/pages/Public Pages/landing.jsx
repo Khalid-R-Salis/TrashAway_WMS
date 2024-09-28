@@ -443,8 +443,7 @@ const Landing = () => {
                 </div>
                 <div className=" items-center w-[30rem]">
                   <h2 className=" text-center text-[23px] font-[500px] leading-[160%] text-testimony-gray">
-                    Thanks to the ICT hub, our business has transformed and
-                    reached new heights!
+                    Thanks to the Trash Away System, Dan Agundi is now clean!
                   </h2>
                 </div>
                 <div className=" flex flex-col justify-center items-center gap-1">
@@ -464,8 +463,7 @@ const Landing = () => {
                 </div>
                 <div className=" items-center w-[30rem]">
                   <h2 className=" text-center text-[23px] font-[500px] leading-[160%] text-testimony-gray">
-                    The training programs offered are top-notch and have
-                    significantly improved my skills.
+                    Thanks to Trash Away. Now, Kabuga is CLEAN!
                   </h2>
                 </div>
                 <div className=" flex flex-col justify-center items-center gap-1">
