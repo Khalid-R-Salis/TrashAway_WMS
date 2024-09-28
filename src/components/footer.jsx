@@ -7,7 +7,8 @@ import youtubeIcon from "../assets/youtubeIcon.png";
 const downfooter = () => {
   return (
     <>
-      <footer className=" bg-[#234032] text-[#FFF] font-Inter py-[48px] px-[108px]">
+      <div className="new"></div>
+      <footer className=" bg-[#234032] text-[#FFF] font-Inter py-[48px] px-[108px] hidden md:block">
         <div className="flex justify-between items-start">
           <div className="foot1">
             <a href="#">
