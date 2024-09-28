@@ -34,7 +34,9 @@ const Landing = () => {
       <h2 className="md:hidden sm:block text-wrap text-[5rem] p-5 text-center flex justify-center items-center">
         MOBILE VIEW COMING SOON
       </h2>
-      <p className=" text-center">please view on wide screen</p>
+      <p className=" md:hidden sm:block text-center">
+        please view on wide screen
+      </p>
       <body className="hidden md:block">
         {/* ---------------------------START--------------------------------------- */}
         <div
