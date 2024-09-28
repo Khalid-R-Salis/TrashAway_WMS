@@ -15,6 +15,7 @@ export default {
         "section-black": "#1E1E1E", // Custom light black color
         "section-gray": "#666", // Custom gray black for section color
         "gray-green": "#3C6C54", // Custom gray black for section color
+        "testimony-gray": "#424242",
       },
       fontFamily: {
         Inter: ["Inter"],

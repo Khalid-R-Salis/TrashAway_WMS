@@ -21,6 +21,12 @@ import WAPANlogo from "../../assets/WAPANlogo.png";
 import FGLogo from "../../assets/FGlogo.png";
 import NESREALogo from "../../assets/NESREALogo.png";
 import workers1 from "../../assets/workers1.png";
+import REMSABLogo from "../../assets/REMSABLogo.png";
+import Arrowleft from "../../assets/Arrowleft.png";
+import ArrowRight from "../../assets/ArrowRight.png";
+import StarIcon from "../../assets/StarIcon.png";
+import Aishapic from "../../assets/Aishapic.png";
+import SundayPic from "../../assets/SundayPic.png";
 
 const Landing = () => {
   return (
@@ -356,20 +362,24 @@ const Landing = () => {
                 <img src={WAPANlogo} alt="WAPANlogo" className="" />
                 <img src={FGLogo} alt="FGLogo" className="" />
                 <img src={NESREALogo} alt="NESREALogo" className="" />
+                <img src={REMSABLogo} alt="REMSAB" className=" w-[8rem]" />
                 <img src={Kanologo} alt="Kanologo" className="" />
                 <img src={WAPANlogo} alt="WAPANlogo" className="" />
                 <img src={FGLogo} alt="FGLogo" className="" />
                 <img src={NESREALogo} alt="NESREALogo" className="" />
+                <img src={REMSABLogo} alt="REMSAB" className=" w-[8rem]" />
 
                 {/* Second Set of Images (Identical to the First) */}
                 <img src={Kanologo} alt="Kanologo" className="" />
                 <img src={WAPANlogo} alt="WAPANlogo" className="" />
                 <img src={FGLogo} alt="FGLogo" className="" />
                 <img src={NESREALogo} alt="NESREALogo" className="" />
+                <img src={REMSABLogo} alt="REMSAB" className=" w-[8rem]" />
                 <img src={Kanologo} alt="Kanologo" className="" />
                 <img src={WAPANlogo} alt="WAPANlogo" className="" />
                 <img src={FGLogo} alt="FGLogo" className="" />
                 <img src={NESREALogo} alt="NESREALogo" className="" />
+                <img src={REMSABLogo} alt="REMSAB" className=" w-[8rem]" />
               </div>
             </div>
 
@@ -412,18 +422,83 @@ const Landing = () => {
             </h4>
 
             <h1 className=" text-[35px] font-semibold text-light-black">
-              Our Partners
+              User Testimonials
             </h1>
             <p className=" w-[45rem] text-center text-[20px] text-gray-black">
               Hear from residents and partners who have experienced the positive
               impact of our waste management system in their daily lives.
             </p>
-            <div className="new">
-              <div className="test1"></div>
-              <div className="test1"></div>
+            <div className=" flex justify-center items-center gap-[50px] mt-[28px]">
+              <div className="arrowpic">
+                {" "}
+                <img src={Arrowleft} alt="" />{" "}
+              </div>
+              <div className=" flex flex-col justify-center items-center gap-6">
+                <div className=" flex justify-center items-center gap-1">
+                  <img src={StarIcon} alt="" />
+                  <img src={StarIcon} alt="" />
+                  <img src={StarIcon} alt="" />
+                  <img src={StarIcon} alt="" />
+                  <img src={StarIcon} alt="" />
+                </div>
+                <div className=" items-center w-[30rem]">
+                  <h2 className=" text-center text-[23px] font-[500px] leading-[160%] text-testimony-gray">
+                    Thanks to the ICT hub, our business has transformed and
+                    reached new heights!
+                  </h2>
+                </div>
+                <div className=" flex flex-col justify-center items-center gap-1">
+                  <img src={SundayPic} alt="" />
+                  <p className=" text-testimony-gray tracking-[2px]">
+                    Jeramiah Sunday
+                  </p>
+                </div>
+              </div>
+              <div className=" flex flex-col justify-center items-center gap-6">
+                <div className=" flex justify-center items-center gap-1">
+                  <img src={StarIcon} alt="" />
+                  <img src={StarIcon} alt="" />
+                  <img src={StarIcon} alt="" />
+                  <img src={StarIcon} alt="" />
+                  <img src={StarIcon} alt="" />
+                </div>
+                <div className=" items-center w-[30rem]">
+                  <h2 className=" text-center text-[23px] font-[500px] leading-[160%] text-testimony-gray">
+                    The training programs offered are top-notch and have
+                    significantly improved my skills.
+                  </h2>
+                </div>
+                <div className=" flex flex-col justify-center items-center gap-1">
+                  <img src={Aishapic} alt="" />
+                  <p className=" text-testimony-gray tracking-[2px]">
+                    Aishat Kabiru
+                  </p>
+                </div>
+              </div>
+              <div className="arrowpic">
+                {" "}
+                <img src={ArrowRight} alt="" />{" "}
+              </div>
             </div>
           </div>
+
+          <div className=" flex flex-col justify-center items-center gap-6 mt-[7.5rem]">
+            <h1 className=" font-Inter text-[35px] font-semibold">
+              Join Us Today
+            </h1>
+            <p className=" text-center font-Inter text-[18px] font-[400px] leading-[150%] w-[45rem]">
+              Interested in waste collection and tracking for a cleaner, greener
+              Kano. Click the button below to create an account.
+            </p>
+            <button className="text-white bg-[#299D91] px-[32px] py-[16px] rounded-[4px] ">
+              <a href="#">Create an Account</a>
+            </button>
+          </div>
+          <div className=" w-full h-[8rem] "></div>
         </div>
+        {/* ---------------------------END--------------------------------------- */}
+        {/* ---------------------------START FOOTER--------------------------------------- */}
+
         {/* ---------------------------END--------------------------------------- */}
       </div>
     </body>
