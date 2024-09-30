@@ -1,13 +1,20 @@
-import { useState } from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Landing from "./pages/Public Pages/landing.jsx";
+import Footer from "./components/footer.jsx";
 import "./index.css";
 
 function App() {
   return (
-    <>
-      <div className="text-center bg-blue-500 text-white p-10">
-        <h1 className="text-[50px] font-bold ">REACT PLUS TAILWIND</h1>
+    <Router>
+      <div className="App">
+        <div className="content">
+          <Routes>
+            <Route path="/" element={<Landing />} />
+          </Routes>
+          <Footer />
+        </div>
       </div>
-    </>
+    </Router>
   );
 }
 
