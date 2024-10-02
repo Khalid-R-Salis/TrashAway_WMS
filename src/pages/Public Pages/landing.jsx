@@ -40,7 +40,7 @@ const Landing = () => {
       <body className="hidden md:block">
         {/* ---------------------------START--------------------------------------- */}
         <div
-          className=" rounded-b-[25px] bg-no-repeat bg-cover bg-center w-full  min-h-screen"
+          className=" rounded-b-[25px] bg-no-repeat bg-cover bg-center w-full  min-h-screen pt-12"
           style={{ backgroundImage: `url(${bgLogo})` }}
         >
           <div
@@ -49,7 +49,7 @@ const Landing = () => {
           ></div>
 
           <div className="relative z-10">
-            <div className="flex justify-between items-center pt-[24px] px-20">
+            <div className="flex justify-between items-center px-20">
               <a className=" h-[50px] w-[50px]" href="#">
                 <img src={logo} alt="Logo" />
               </a>
@@ -62,10 +62,10 @@ const Landing = () => {
                     </a>
                   </li>
                   <li className="  border-[2.5px] border-transparent hover:border-[2.5px] hover:text-light-green hover:border-b-custom ">
-                    <a href="#">About</a>
+                    <a href="about">About</a>
                   </li>
                   <li className=" border-[2.5px] border-transparent hover:border-[2.5px] hover:text-light-green hover:border-b-custom ">
-                    <a href="#">Services</a>
+                    <a href="services">Services</a>
                   </li>
                   <li className=" border-[2.5px] border-transparent hover:border-[2.5px] hover:text-light-green hover:border-b-custom ">
                     <a href="#">Contact</a>
@@ -99,12 +99,12 @@ const Landing = () => {
               </div>
             </div>
             <div className=" flex gap-8 mt-[40px] justify-center items-center">
-              <div className=" flex justify-center items-center gap-2">
+              <button className=" flex justify-center items-center gap-2">
                 <h4 className=" font-Inter text-white tracking-wide">
                   View Services
                 </h4>
                 <img src={symbol1} alt="" />
-              </div>
+              </button>
               <button className="text-white bg-light-green px-[20px] py-[10px] rounded-[4px] ">
                 <a href="#">Get Started</a>
               </button>
@@ -133,7 +133,7 @@ const Landing = () => {
             </p>
           </div>
 
-          <div className=" flex justify-center items-center gap-6 mt-[32px] ">
+          <div className=" flex justify-center items-center flex-w gap-6 mt-[32px] ">
             <div className=" flex flex-col justify-start gap-4 p-[24px] bg-white rounded-md shadow-lg ">
               <div className="h-[42px] w-[42px] bg-light-green bg-opacity-10 rounded-full flex items-center justify-center">
                 <img src={clockIcon} alt="" className="h-[30px] w-[30px]" />

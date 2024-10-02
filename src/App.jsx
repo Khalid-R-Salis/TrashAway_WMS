@@ -1,5 +1,8 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Landing from "./pages/Public Pages/landing.jsx";
+import About from "./pages/Public Pages/About.jsx";
+import Services from "./pages/Public Pages/Services.jsx";
+import Contact from "./pages/Public Pages/Contact.jsx";
 import Footer from "./components/footer.jsx";
 import "./index.css";
 
@@ -10,6 +13,9 @@ function App() {
         <div className="content">
           <Routes>
             <Route path="/" element={<Landing />} />
+            <Route path="about" element={<About />} />
+            <Route path="services" element={<Services />} />
+            <Route path="contact" element={<Contact />} />
           </Routes>
           <Footer />
         </div>

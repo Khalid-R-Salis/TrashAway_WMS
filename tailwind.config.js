@@ -7,6 +7,11 @@ export default {
         slide: "slide 5s linear infinite",
       },
 
+      boxShadow: {
+        "custom-sh": "0 4px 20px rgba(0, 0, 0, 0.05)",
+        "custom-sh2": "0px 0px 4.333px 0px rgba(34, 139, 34, 0.25",
+      },
+
       colors: {
         // Add custom colors here
         "light-green": "#549877", // Custom green color
