@@ -5,7 +5,7 @@ import symbol2 from "../../assets/symbolAbout1.png";
 import bg2 from "../../assets/bg2.png";
 import aboutbg1 from "../../assets/aboutbg1.png";
 import aboutbg2 from "../../assets/aboutbg2.png";
-import abouticon1 from "../../assets/Abouticon1.svg";
+import abouticon1 from "../../assets/abouticon1.svg";
 import raechusAbout from "../../assets/raechusAbout.png";
 
 const About = () => {
