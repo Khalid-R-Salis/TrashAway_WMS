@@ -1,9 +1,9 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Landing from "./pages/Public Pages/landing.jsx";
-import About from "./pages/Public Pages/about.jsx";
-import Services from "./pages/Public Pages/services.jsx";
-import Contact from "./pages/Public Pages/contact.jsx";
-import Footer from "./components/footer.jsx";
+import Landing from "./pages/Public_Pages/Landing.jsx";
+import About from "./pages/Public_Pages/About.jsx";
+import Services from "./pages/Public_Pages/Services.jsx";
+import Contact from "./pages/Public_Pages/Contact.jsx";
+import Footer from "./components/Footer.jsx";
 import "./index.css";
 
 function App() {
