@@ -5,7 +5,7 @@ import symbol2 from "../../assets/symbolAbout1.png";
 import bg2 from "../../assets/bg2.png";
 import aboutbg1 from "../../assets/aboutbg1.png";
 import aboutbg2 from "../../assets/aboutbg2.png";
-import Abouticon1 from "../../assets/Abouticon1.svg";
+import abouticon1 from "../../assets/Abouticon1.svg";
 import raechusAbout from "../../assets/raechusAbout.png";
 
 const About = () => {
@@ -135,7 +135,7 @@ const About = () => {
 
         <div className=" flex justify-center flex-wrap items-center gap-[55px] mt-[32px]">
           <div className=" flex flex-col justify-center items-center gap-4 p-[24px] bg-white rounded-md shadow-custom-sh">
-            <img src={Abouticon1} alt="" className="h-[48px] w-[48px]" />
+            <img src={abouticon1} alt="" className="h-[48px] w-[48px]" />
 
             <h2 className=" text-[24px] font-bold text-section-black">
               Reliability
@@ -146,7 +146,7 @@ const About = () => {
           </div>
 
           <div className=" flex flex-col justify-center items-center gap-4 p-[24px] bg-white rounded-md shadow-custom-sh">
-            <img src={Abouticon1} alt="" className="h-[48px] w-[48px]" />
+            <img src={abouticon1} alt="" className="h-[48px] w-[48px]" />
 
             <h2 className=" text-[24px] font-bold text-section-black">
               Professionalism
@@ -158,7 +158,7 @@ const About = () => {
           </div>
 
           <div className=" flex flex-col justify-center items-center gap-4 p-[24px] bg-white rounded-md shadow-custom-sh">
-            <img src={Abouticon1} alt="" className="h-[48px] w-[48px]" />
+            <img src={abouticon1} alt="" className="h-[48px] w-[48px]" />
 
             <h2 className=" text-[24px] font-bold text-section-black">
               Innovation
@@ -169,7 +169,7 @@ const About = () => {
           </div>
 
           <div className=" flex flex-col justify-center items-center gap-4 p-[24px] bg-white rounded-md shadow-custom-sh">
-            <img src={Abouticon1} alt="" className="h-[48px] w-[48px]" />
+            <img src={abouticon1} alt="" className="h-[48px] w-[48px]" />
 
             <h2 className=" text-[24px] font-bold text-section-black">
               Customer Focus
@@ -181,7 +181,7 @@ const About = () => {
           </div>
 
           <div className=" flex flex-col justify-center items-center gap-4 p-[24px] bg-white rounded-md shadow-custom-sh">
-            <img src={Abouticon1} alt="" className="h-[48px] w-[48px]" />
+            <img src={abouticon1} alt="" className="h-[48px] w-[48px]" />
 
             <h2 className=" text-[24px] font-bold text-section-black">
               Integrity
@@ -192,7 +192,7 @@ const About = () => {
           </div>
 
           <div className=" flex flex-col justify-center items-center gap-4 p-[24px] bg-white rounded-md shadow-custom-sh">
-            <img src={Abouticon1} alt="" className="h-[48px] w-[48px]" />
+            <img src={abouticon1} alt="" className="h-[48px] w-[48px]" />
 
             <h2 className=" text-[24px] font-bold text-section-black">
               Professionalism
