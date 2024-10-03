@@ -1,7 +1,6 @@
 import React from "react";
 // import bgLogo1 from "../../assets/bg1.png";
 import logo from "../../assets/logo.png";
-import symbol2 from "../../assets/symbolAbout1.png";
 import bgcontact from "../../assets/bgcontact.png";
 
 const Contact = () => {

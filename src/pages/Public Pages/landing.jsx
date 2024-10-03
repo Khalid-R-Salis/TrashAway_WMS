@@ -9,24 +9,24 @@ import clockIcon from "../../assets/clockIcon.png";
 import calenderIcon from "../../assets/calendarIcon.png";
 import settingIcon from "../../assets/settingIcon.png";
 import line7 from "../../assets/Line7.png";
-import Icon1 from "../../assets/Icon1.png";
-import Icon2 from "../../assets/Icon2.png";
-import Icon3 from "../../assets/Icon3.png";
-import Icon4 from "../../assets/Icon4.png";
-import Group1 from "../../assets/Group1.png";
-import Group2 from "../../assets/Group2.png";
-import Group3 from "../../assets/Group3.png";
-import Kanologo from "../../assets/Kanologo.png";
-import WAPANlogo from "../../assets/WAPANlogo.png";
-import FGLogo from "../../assets/FGlogo.png";
-import NESREALogo from "../../assets/NESREALogo.png";
+import icon1 from "../../assets/Icon1.png";
+import icon2 from "../../assets/Icon2.png";
+import icon3 from "../../assets/Icon3.png";
+import icon4 from "../../assets/Icon4.png";
+import group1 from "../../assets/Group1.png";
+import group2 from "../../assets/Group2.png";
+import group3 from "../../assets/Group3.png";
+import kanologo from "../../assets/Kanologo.png";
+import wapanlogo from "../../assets/WAPANlogo.png";
+import fglogo from "../../assets/FGlogo.png";
+import nesrealogo from "../../assets/NESREALogo.png";
 import workers1 from "../../assets/workers1.png";
-import REMSABLogo from "../../assets/REMSABLogo.png";
-import Arrowleft from "../../assets/Arrowleft.png";
-import ArrowRight from "../../assets/ArrowRight.png";
-import StarIcon from "../../assets/StarIcon.png";
-import Aishapic from "../../assets/Aishapic.png";
-import SundayPic from "../../assets/SundayPic.png";
+import remsablogo from "../../assets/REMSABLogo.png";
+import arrowleft from "../../assets/Arrowleft.png";
+import arrowright from "../../assets/ArrowRight.png";
+import staricon from "../../assets/StarIcon.png";
+import aishapic from "../../assets/Aishapic.png";
+import sundayPic from "../../assets/SundayPic.png";
 
 const Landing = () => {
   return (
@@ -218,9 +218,9 @@ const Landing = () => {
           <div className=" flex justify-around items-center mt-[32px]">
             <div className=" flex justify-center items-center gap-3">
               <div className=" flex flex-col justify-center items-center">
-                <img src={Icon1} alt="" />
+                <img src={icon1} alt="" />
                 <img src={line7} alt="" />
-                <img src={Icon2} alt="" />
+                <img src={icon2} alt="" />
               </div>
               <div className=" flex flex-col justify-center items-left gap-16">
                 <div className=" flex flex-col justify-center items-left">
@@ -246,9 +246,9 @@ const Landing = () => {
 
             <div className=" flex justify-center items-center gap-3">
               <div className=" flex flex-col justify-center items-center">
-                <img src={Icon3} alt="" />
+                <img src={icon3} alt="" />
                 <img src={line7} alt="" />
-                <img src={Icon4} alt="" />
+                <img src={icon4} alt="" />
               </div>
               <div className=" flex flex-col justify-center items-left gap-16">
                 <div className=" flex flex-col justify-center items-left">
@@ -298,7 +298,7 @@ const Landing = () => {
               <div className=" flex flex-col justify-center items-center">
                 <div className="relative flex justify-center items-center">
                   <img
-                    src={Group1}
+                    src={group1}
                     alt=""
                     className="w-full h-full object-contain"
                   />
@@ -314,7 +314,7 @@ const Landing = () => {
               <div className=" flex flex-col justify-center items-center">
                 <div className="relative flex justify-center items-center">
                   <img
-                    src={Group2}
+                    src={group2}
                     alt=""
                     className="w-full h-full object-contain"
                   />
@@ -330,7 +330,7 @@ const Landing = () => {
               <div className=" flex flex-col justify-center items-center">
                 <div className="relative flex justify-center items-center">
                   <img
-                    src={Group3}
+                    src={group3}
                     alt=""
                     className="w-full h-full object-contain"
                   />
@@ -365,28 +365,28 @@ const Landing = () => {
               <div className="relative overflow-hidden w-full h-auto">
                 <div className="animate-marquee flex whitespace-nowrap">
                   {/* First Set of Images */}
-                  <img src={Kanologo} alt="Kanologo" className="" />
-                  <img src={WAPANlogo} alt="WAPANlogo" className="" />
-                  <img src={FGLogo} alt="FGLogo" className="" />
-                  <img src={NESREALogo} alt="NESREALogo" className="" />
-                  <img src={REMSABLogo} alt="REMSAB" className=" w-[8rem]" />
-                  <img src={Kanologo} alt="Kanologo" className="" />
-                  <img src={WAPANlogo} alt="WAPANlogo" className="" />
-                  <img src={FGLogo} alt="FGLogo" className="" />
-                  <img src={NESREALogo} alt="NESREALogo" className="" />
-                  <img src={REMSABLogo} alt="REMSAB" className=" w-[8rem]" />
+                  <img src={kanologo} alt="Kanologo" className="" />
+                  <img src={wapanlogo} alt="WAPANlogo" className="" />
+                  <img src={fglogo} alt="FGLogo" className="" />
+                  <img src={nesrealogo} alt="NESREALogo" className="" />
+                  <img src={remsablogo} alt="REMSAB" className=" w-[8rem]" />
+                  <img src={kanologo} alt="Kanologo" className="" />
+                  <img src={wapanlogo} alt="WAPANlogo" className="" />
+                  <img src={fglogo} alt="FGLogo" className="" />
+                  <img src={nesrealogo} alt="NESREALogo" className="" />
+                  <img src={remsablogo} alt="REMSAB" className=" w-[8rem]" />
 
                   {/* Second Set of Images (Identical to the First) */}
-                  <img src={Kanologo} alt="Kanologo" className="" />
-                  <img src={WAPANlogo} alt="WAPANlogo" className="" />
-                  <img src={FGLogo} alt="FGLogo" className="" />
-                  <img src={NESREALogo} alt="NESREALogo" className="" />
-                  <img src={REMSABLogo} alt="REMSAB" className=" w-[8rem]" />
-                  <img src={Kanologo} alt="Kanologo" className="" />
-                  <img src={WAPANlogo} alt="WAPANlogo" className="" />
-                  <img src={FGLogo} alt="FGLogo" className="" />
-                  <img src={NESREALogo} alt="NESREALogo" className="" />
-                  <img src={REMSABLogo} alt="REMSAB" className=" w-[8rem]" />
+                  <img src={kanologo} alt="Kanologo" className="" />
+                  <img src={wapanlogo} alt="WAPANlogo" className="" />
+                  <img src={fglogo} alt="FGLogo" className="" />
+                  <img src={nesrealogo} alt="NESREALogo" className="" />
+                  <img src={remsablogo} alt="REMSAB" className=" w-[8rem]" />
+                  <img src={kanologo} alt="Kanologo" className="" />
+                  <img src={wapanlogo} alt="WAPANlogo" className="" />
+                  <img src={fglogo} alt="FGLogo" className="" />
+                  <img src={nesrealogo} alt="NESREALogo" className="" />
+                  <img src={remsablogo} alt="REMSAB" className=" w-[8rem]" />
                 </div>
               </div>
 
@@ -439,15 +439,15 @@ const Landing = () => {
               <div className=" flex justify-center items-center gap-[50px] mt-[28px]">
                 <div className="arrowpic">
                   {" "}
-                  <img src={Arrowleft} alt="" />{" "}
+                  <img src={arrowleft} alt="" />{" "}
                 </div>
                 <div className=" flex flex-col justify-center items-center gap-6">
                   <div className=" flex justify-center items-center gap-1">
-                    <img src={StarIcon} alt="" />
-                    <img src={StarIcon} alt="" />
-                    <img src={StarIcon} alt="" />
-                    <img src={StarIcon} alt="" />
-                    <img src={StarIcon} alt="" />
+                    <img src={staricon} alt="" />
+                    <img src={staricon} alt="" />
+                    <img src={staricon} alt="" />
+                    <img src={staricon} alt="" />
+                    <img src={staricon} alt="" />
                   </div>
                   <div className=" items-center w-[30rem]">
                     <h2 className=" text-center text-[23px] font-[500px] leading-[160%] text-testimony-gray">
@@ -455,7 +455,7 @@ const Landing = () => {
                     </h2>
                   </div>
                   <div className=" flex flex-col justify-center items-center gap-1">
-                    <img src={SundayPic} alt="" />
+                    <img src={sundayPic} alt="" />
                     <p className=" text-testimony-gray tracking-[2px]">
                       Jeramiah Sunday
                     </p>
@@ -463,11 +463,11 @@ const Landing = () => {
                 </div>
                 <div className=" flex flex-col justify-center items-center gap-6">
                   <div className=" flex justify-center items-center gap-1">
-                    <img src={StarIcon} alt="" />
-                    <img src={StarIcon} alt="" />
-                    <img src={StarIcon} alt="" />
-                    <img src={StarIcon} alt="" />
-                    <img src={StarIcon} alt="" />
+                    <img src={staricon} alt="" />
+                    <img src={staricon} alt="" />
+                    <img src={staricon} alt="" />
+                    <img src={staricon} alt="" />
+                    <img src={staricon} alt="" />
                   </div>
                   <div className=" items-center w-[30rem]">
                     <h2 className=" text-center text-[23px] font-[500px] leading-[160%] text-testimony-gray">
@@ -475,7 +475,7 @@ const Landing = () => {
                     </h2>
                   </div>
                   <div className=" flex flex-col justify-center items-center gap-1">
-                    <img src={Aishapic} alt="" />
+                    <img src={aishapic} alt="" />
                     <p className=" text-testimony-gray tracking-[2px]">
                       Aishat Kabiru
                     </p>
@@ -483,7 +483,7 @@ const Landing = () => {
                 </div>
                 <div className="arrowpic">
                   {" "}
-                  <img src={ArrowRight} alt="" />{" "}
+                  <img src={arrowright} alt="" />{" "}
                 </div>
               </div>
             </div>

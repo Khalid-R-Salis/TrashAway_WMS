@@ -1,10 +1,10 @@
 import React from "react";
-import LogoFooter from "../assets/LogoFooter.png";
-import facebookIcon from "../assets/facebookIcon.png";
-import twitterIcon from "../assets/twitterIcon.png";
-import youtubeIcon from "../assets/youtubeIcon.png";
+import logofooter from "../assets/LogoFooter.png";
+import facebookicon from "../assets/facebookIcon.png";
+import twittericon from "../assets/twitterIcon.png";
+import youtubeicon from "../assets/youtubeIcon.png";
 
-const downfooter = () => {
+const Footer = () => {
   return (
     <>
       <div className="new"></div>
@@ -12,7 +12,7 @@ const downfooter = () => {
         <div className="flex justify-between items-start">
           <div className="foot1">
             <a href="#">
-              <img src={LogoFooter} alt="" />
+              <img src={logofooter} alt="" />
             </a>
           </div>
           <div className=" flex flex-col justify-center items-start gap-6">
@@ -48,15 +48,15 @@ const downfooter = () => {
           <div className=" flex justify-center items-center gap-[32px]">
             <button>
               {" "}
-              <img src={facebookIcon} alt="" />
+              <img src={facebookicon} alt="" />
             </button>
 
             <button>
-              <img src={twitterIcon} alt="" />
+              <img src={twittericon} alt="" />
             </button>
             <button>
               {" "}
-              <img src={youtubeIcon} alt="" />{" "}
+              <img src={youtubeicon} alt="" />{" "}
             </button>
           </div>
         </div>
@@ -68,4 +68,4 @@ const downfooter = () => {
     </>
   );
 };
-export default downfooter;
+export default Footer;

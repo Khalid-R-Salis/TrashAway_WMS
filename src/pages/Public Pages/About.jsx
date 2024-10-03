@@ -6,7 +6,7 @@ import bg2 from "../../assets/bg2.png";
 import aboutbg1 from "../../assets/aboutbg1.png";
 import aboutbg2 from "../../assets/aboutbg2.png";
 import abouticon1 from "../../assets/abouticon1.svg";
-import raechusAbout from "../../assets/raechusAbout.png";
+import raechusabout from "../../assets/raechusAbout.png";
 
 const About = () => {
   return (
@@ -227,7 +227,7 @@ const About = () => {
               </div>
             </div>
             <div className="">
-              <img src={raechusAbout} alt="" className=" h-[20rem] w-[25rem]" />
+              <img src={raechusabout} alt="" className=" h-[20rem] w-[25rem]" />
             </div>
           </div>
         </div>

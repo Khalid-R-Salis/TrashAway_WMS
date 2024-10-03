@@ -3,7 +3,7 @@ import bgLogo1 from "../../assets/bg1.png";
 import logo from "../../assets/logo.png";
 import symbol2 from "../../assets/symbolAbout1.png";
 import bg2 from "../../assets/bg2.png";
-import raechusAbout from "../../assets/raechusAbout.png";
+import raechusabout from "../../assets/raechusAbout.png";
 import servicesimg1 from "../../assets/servicesimg1.png";
 import servicesimg2 from "../../assets/servicesimg2.png";
 import servicesimg3 from "../../assets/servicesimg3.png";
@@ -223,7 +223,7 @@ const Services = () => {
               </div>
             </div>
             <div className="">
-              <img src={raechusAbout} alt="" className=" h-[20rem] w-[25rem]" />
+              <img src={raechusabout} alt="" className=" h-[20rem] w-[25rem]" />
             </div>
           </div>
         </div>
