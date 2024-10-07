@@ -1,13 +1,13 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./index.css";
-import Index from "./pages/publicpages/index";
-import About from "./pages/publicpages/about";
-import Services from "./pages/publicpages/services";
-import Contact from "./pages/publicpages/contact";
-import Footer from "./components/Footer";
+import Index from "./pages/publicpages/index.jsx";
+import About from "./pages/publicpages/about.jsx";
+import Services from "./pages/publicpages/services.jsx";
+import Contact from "./pages/publicpages/contact.jsx";
+import Footer from "./components/Footer.jsx";
 // FORMS
 
-import Login from "./pages/forms/login";
+import Login from "./pages/forms/login.jsx";
 
 function App() {
   return (
