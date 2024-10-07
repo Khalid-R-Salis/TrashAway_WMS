@@ -1,5 +1,7 @@
 import React from "react";
-import bgLogo1 from "../../assets/bg1.png";
+// import bgLogo1 from "../../assets/bg1.png";
+import bgServices from "../../assets/image.png";
+
 import logo from "../../assets/logo.png";
 import symbol2 from "../../assets/symbolAbout1.png";
 import bg2 from "../../assets/bg2.png";
@@ -15,7 +17,7 @@ const Services = () => {
     <>
       <div
         className=" rounded-b-[25px] bg-no-repeat bg-cover bg-center w-full  min-h-screen pt-12"
-        style={{ backgroundImage: `url(${bgLogo1})` }}
+        style={{ backgroundImage: `url(${bgServices})` }}
       >
         <div
           className="absolute inset-0 bg-black opacity-65 rounded-b-[25px]"
@@ -59,19 +61,19 @@ const Services = () => {
             <h1 className=" text-[36px] sm:text-[48px] z-10">Our Services</h1>
 
             <div>
-              <h2 className=" text-[16px] mt-[28px] font-[400px] tracking-[913px]]">
+              <h2 className=" text-[20px] mt-[28px] font-[400px] tracking-[2px] w-[60rem]">
                 Explore the range of waste management solutions we offer to help
                 keep Kano State clean and sustainable.
               </h2>
             </div>
           </div>
           <div className=" flex gap-8 mt-[40px] justify-center items-center">
-            <button className=" flex justify-center items-center gap-2">
+            <div className=" flex justify-center items-center gap-2">
               <h4 className=" font-Inter text-white tracking-wide">
                 Our Service
               </h4>
               <img src={symbol2} alt="" />
-            </button>
+            </div>
           </div>
         </div>
       </div>

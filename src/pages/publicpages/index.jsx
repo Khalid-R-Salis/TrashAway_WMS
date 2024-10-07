@@ -1,4 +1,5 @@
 import React from "react";
+import { useRef } from "react";
 import bgLogo from "../../assets/bg1.png";
 import logo from "../../assets/logo.png";
 import vector1 from "../../assets/Vector1.png";
@@ -27,6 +28,13 @@ import arrowright from "../../assets/ArrowRight.png";
 import staricon from "../../assets/StarIcon.png";
 import aishapic from "../../assets/Aishapic.png";
 import sundayPic from "../../assets/SundayPic.png";
+
+const scrollToTestimonials = () => {
+  const testimonialsSection = document.getElementById("testimonials");
+  if (testimonialsSection) {
+    testimonialsSection.scrollIntoView({ behavior: "smooth" });
+  }
+};
 
 const Landing = () => {
   return (
@@ -92,16 +100,19 @@ const Landing = () => {
               </div>
 
               <div>
-                <h2 className=" text-[16px] mt-[28px] font-[400px] tracking-widest">
+                <h2 className=" text-[22px] mt-[28px] font-[400px] tracking-widest">
                   Efficient waste collection and tracking for a cleaner, greener
                   Kano.
                 </h2>
               </div>
             </div>
             <div className=" flex gap-8 mt-[40px] justify-center items-center">
-              <button className=" flex justify-center items-center gap-2">
-                <h4 className=" font-Inter text-white tracking-wide">
-                  View Services
+              <button
+                className="flex justify-center items-center gap-2"
+                onClick={scrollToTestimonials}
+              >
+                <h4 className="font-Inter text-white tracking-wide">
+                  View Testimonials
                 </h4>
                 <img src={symbol1} alt="" />
               </button>
@@ -133,8 +144,8 @@ const Landing = () => {
             </p>
           </div>
 
-          <div className=" flex justify-center items-center flex-w gap-6 mt-[32px] ">
-            <div className=" flex flex-col justify-start gap-4 p-[24px] bg-white rounded-md shadow-lg ">
+          <div className=" flex justify-center items-center flex-wrap gap-6 mt-[32px] ">
+            <div className=" flex flex-col justify-start gap-4 p-[24px] bg-white rounded-md shadow-lg w-[19rem] ">
               <div className="h-[42px] w-[42px] bg-light-green bg-opacity-10 rounded-full flex items-center justify-center">
                 <img src={clockIcon} alt="" className="h-[30px] w-[30px]" />
               </div>
@@ -148,7 +159,7 @@ const Landing = () => {
               </p>
             </div>
 
-            <div className=" flex flex-col justify-start gap-4 p-[24px] bg-white rounded-md shadow-lg">
+            <div className=" flex flex-col justify-start gap-4 p-[24px] bg-white rounded-md shadow-lg w-[19rem]">
               <div className="h-[42px] w-[42px] bg-light-green bg-opacity-10 rounded-full flex items-center justify-center">
                 <img src={calenderIcon} alt="" className="h-[30px] w-[30px]" />
               </div>
@@ -163,7 +174,7 @@ const Landing = () => {
               </p>
             </div>
 
-            <div className=" flex flex-col justify-start gap-4 p-[24px] bg-white rounded-md shadow-lg">
+            <div className=" flex flex-col justify-start gap-4 p-[24px] bg-white rounded-md shadow-lg w-[19rem]">
               <div className="h-[42px] w-[42px] bg-light-green bg-opacity-10 rounded-full flex items-center justify-center">
                 <img src={healthIcon} alt="" className="h-[30px] w-[30px]" />
               </div>
@@ -177,7 +188,7 @@ const Landing = () => {
               </p>
             </div>
 
-            <div className=" flex flex-col justify-start gap-4 p-[24px] bg-white rounded-md shadow-lg">
+            <div className=" flex flex-col justify-start gap-4 p-[24px] bg-white rounded-md shadow-lg w-[19rem]">
               <div className="h-[42px] w-[42px] bg-light-green bg-opacity-10 rounded-full flex items-center justify-center">
                 <img src={settingIcon} alt="" className="h-[30px] w-[30px]" />
               </div>
@@ -276,72 +287,133 @@ const Landing = () => {
 
           {/* ---------------------------START--------------------------------------- */}
 
-          <div
-            className=" bg-center bg-cover min-h-screen"
-            style={{ backgroundImage: `url(${bg2})` }}
-          >
-            <div className=" flex flex-col justify-center items-center gap-[16px] pt-[150px] font-Inter">
-              <h4 className="text-white px-6 py-0 rounded-xl bg-gradient-to-r from-light-green/0 via-light-green/100 to-light-green/0">
-                Statistics
-              </h4>
+          <div className=" flex flex-col justify-center items-center gap-[16px] pt-[150px] font-Inter">
+            <h4 className="text-white px-6 py-0 rounded-xl bg-gradient-to-r from-light-green/0 via-light-green/100 to-light-green/0">
+              Statistics
+            </h4>
 
-              <h1 className=" text-[35px] font-semibold text-light-black">
-                Impact Statistics
-              </h1>
-              <p className=" w-[60rem] text-center text-[20px] text-gray-black">
-                Explore the significant strides we've made in waste management,
-                from reducing pollution to enhancing community health and
-                sustainability across the state.
+            <h1 className=" text-[35px] font-semibold text-light-black">
+              Impact Statistics
+            </h1>
+            <p className=" w-[60rem] text-center text-[20px] text-gray-black">
+              Explore the significant strides we've made in waste management,
+              from reducing pollution to enhancing community health and
+              sustainability across the state.
+            </p>
+          </div>
+          <div className=" flex justify-center items-center gap-[32px] mt-[32px]">
+            <div className=" flex flex-col justify-center items-center">
+              <div className="relative flex justify-center items-center">
+                <img
+                  src={group1}
+                  alt=""
+                  className="w-full h-full object-contain"
+                />
+                <p className="absolute inset-0 flex justify-center items-center text-section-gray text-[20px] font-semibold">
+                  15,000 kg
+                </p>
+              </div>
+
+              <p className=" mt-6 text-[20px] text-light-black text-center">
+                Total Plastic Recycled
               </p>
             </div>
-            <div className=" flex justify-center items-center gap-[32px] mt-[32px]">
-              <div className=" flex flex-col justify-center items-center">
-                <div className="relative flex justify-center items-center">
-                  <img
-                    src={group1}
-                    alt=""
-                    className="w-full h-full object-contain"
-                  />
-                  <p className="absolute inset-0 flex justify-center items-center text-section-gray text-[20px] font-semibold">
-                    15,000 kg
-                  </p>
-                </div>
-
-                <p className=" mt-6 text-[20px] text-light-black">
-                  Total Plastic Recycled
+            <div className=" flex flex-col justify-center items-center">
+              <div className="relative flex justify-center items-center">
+                <img
+                  src={group2}
+                  alt=""
+                  className="w-full h-full object-contain"
+                />
+                <p className="absolute inset-0 flex justify-center items-center text-section-gray text-[20px] font-semibold">
+                  70,000 kg
                 </p>
               </div>
-              <div className=" flex flex-col justify-center items-center">
-                <div className="relative flex justify-center items-center">
-                  <img
-                    src={group2}
-                    alt=""
-                    className="w-full h-full object-contain"
-                  />
-                  <p className="absolute inset-0 flex justify-center items-center text-section-gray text-[20px] font-semibold">
-                    70,000 kg
-                  </p>
-                </div>
 
-                <p className=" mt-6 text-[20px] text-light-black">
-                  Plastic Waste into New Products
+              <p className=" mt-6 text-[20px] text-light-black text-center">
+                Plastic Waste into New Products
+              </p>
+            </div>
+            <div className=" flex flex-col justify-center items-center">
+              <div className="relative flex justify-center items-center">
+                <img
+                  src={group3}
+                  alt=""
+                  className="w-full h-full object-contain"
+                />
+                <p className="absolute inset-0 flex justify-center items-center text-section-gray text-[20px] font-semibold text-center">
+                  20% compared to last month
                 </p>
               </div>
-              <div className=" flex flex-col justify-center items-center">
-                <div className="relative flex justify-center items-center">
-                  <img
-                    src={group3}
-                    alt=""
-                    className="w-full h-full object-contain"
-                  />
-                  <p className="absolute inset-0 flex justify-center items-center text-section-gray text-[20px] font-semibold text-center">
-                    20% compared to last month
-                  </p>
-                </div>
 
-                <p className=" mt-6 text-[20px] text-light-black">
-                  Increase in Recycling Rate
+              <p className=" mt-6 text-[20px] text-light-black text-center">
+                Increase in Recycling Rate
+              </p>
+            </div>
+          </div>
+
+          {/* ---------------------------END--------------------------------------- */}
+
+          {/* ---------------------------START--------------------------------------- */}
+
+          <div className=" flex flex-col justify-center items-center gap-[16px] font-Inter">
+            <h4 className="text-white mt-[8rem] px-6 py-0 rounded-xl bg-gradient-to-r from-light-green/0 via-light-green/100 to-light-green/0">
+              partners
+            </h4>
+
+            <h1 className=" text-[35px] font-semibold text-light-black">
+              Our Partners
+            </h1>
+            <div className="relative overflow-hidden w-full h-auto">
+              <div className="animate-marquee flex whitespace-nowrap">
+                {/* First Set of Images */}
+                <img src={kanologo} alt="Kanologo" className="" />
+                <img src={wapanlogo} alt="WAPANlogo" className="" />
+                <img src={fglogo} alt="FGLogo" className="" />
+                <img src={nesrealogo} alt="NESREALogo" className="" />
+                <img src={remsablogo} alt="REMSAB" className=" w-[8rem]" />
+                <img src={kanologo} alt="Kanologo" className="" />
+                <img src={wapanlogo} alt="WAPANlogo" className="" />
+                <img src={fglogo} alt="FGLogo" className="" />
+                <img src={nesrealogo} alt="NESREALogo" className="" />
+                <img src={remsablogo} alt="REMSAB" className=" w-[8rem]" />
+
+                {/* Second Set of Images (Identical to the First) */}
+                <img src={kanologo} alt="Kanologo" className="" />
+                <img src={wapanlogo} alt="WAPANlogo" className="" />
+                <img src={fglogo} alt="FGLogo" className="" />
+                <img src={nesrealogo} alt="NESREALogo" className="" />
+                <img src={remsablogo} alt="REMSAB" className=" w-[8rem]" />
+                <img src={kanologo} alt="Kanologo" className="" />
+                <img src={wapanlogo} alt="WAPANlogo" className="" />
+                <img src={fglogo} alt="FGLogo" className="" />
+                <img src={nesrealogo} alt="NESREALogo" className="" />
+                <img src={remsablogo} alt="REMSAB" className=" w-[8rem]" />
+              </div>
+            </div>
+
+            {/* FEEL THE PUSH SECTION */}
+            <div className=" flex justify-center items-center p-[50px] rounded-xl bg-gray-green gap-[50px] text-white mt-[8rem]">
+              <div className="1">
+                <h1 className=" text-[40px] w-[20rem] leading-[45px] mb-2 font-Inter font-[400px]">
+                  Feel the push? join us for free
+                </h1>
+                <p className=" mb-[25px] tracking-[2px] font-[1px] font-Inter">
+                  Enter your email below to start the process.
                 </p>
+                <div className=" flex justify-center items-center gap-3 ">
+                  <input
+                    type="text"
+                    placeholder={"✉️Email Address"}
+                    className=" p-2 rounded-[4px] text-gray-700 w-[20rem] bg-slate-100 focus: outline-none "
+                  />
+                  <button className="text-white bg-light-green px-[14px] py-[8px] rounded-[4px] ">
+                    <a href="#">Sign Up</a>
+                  </button>
+                </div>
+              </div>
+              <div className="">
+                <img src={workers1} alt="" className=" h-[20rem] w-[25rem]" />
               </div>
             </div>
           </div>
@@ -351,157 +423,85 @@ const Landing = () => {
           {/* ---------------------------START--------------------------------------- */}
 
           <div
-            className=" bg-center bg-cover min-h-screen"
-            style={{ backgroundImage: `url(${bg2})` }}
+            id="testimonials"
+            className="flex flex-col justify-center items-center gap-[16px] font-Inter mt-[8rem]"
           >
-            <div className=" flex flex-col justify-center items-center gap-[16px] font-Inter">
-              <h4 className="text-white px-6 py-0 rounded-xl bg-gradient-to-r from-light-green/0 via-light-green/100 to-light-green/0">
-                partners
-              </h4>
-
-              <h1 className=" text-[35px] font-semibold text-light-black">
-                Our Partners
-              </h1>
-              <div className="relative overflow-hidden w-full h-auto">
-                <div className="animate-marquee flex whitespace-nowrap">
-                  {/* First Set of Images */}
-                  <img src={kanologo} alt="Kanologo" className="" />
-                  <img src={wapanlogo} alt="WAPANlogo" className="" />
-                  <img src={fglogo} alt="FGLogo" className="" />
-                  <img src={nesrealogo} alt="NESREALogo" className="" />
-                  <img src={remsablogo} alt="REMSAB" className=" w-[8rem]" />
-                  <img src={kanologo} alt="Kanologo" className="" />
-                  <img src={wapanlogo} alt="WAPANlogo" className="" />
-                  <img src={fglogo} alt="FGLogo" className="" />
-                  <img src={nesrealogo} alt="NESREALogo" className="" />
-                  <img src={remsablogo} alt="REMSAB" className=" w-[8rem]" />
-
-                  {/* Second Set of Images (Identical to the First) */}
-                  <img src={kanologo} alt="Kanologo" className="" />
-                  <img src={wapanlogo} alt="WAPANlogo" className="" />
-                  <img src={fglogo} alt="FGLogo" className="" />
-                  <img src={nesrealogo} alt="NESREALogo" className="" />
-                  <img src={remsablogo} alt="REMSAB" className=" w-[8rem]" />
-                  <img src={kanologo} alt="Kanologo" className="" />
-                  <img src={wapanlogo} alt="WAPANlogo" className="" />
-                  <img src={fglogo} alt="FGLogo" className="" />
-                  <img src={nesrealogo} alt="NESREALogo" className="" />
-                  <img src={remsablogo} alt="REMSAB" className=" w-[8rem]" />
-                </div>
+            <h4 className="text-white px-6 py-0 rounded-xl bg-gradient-to-r from-light-green/0 via-light-green/100 to-light-green/0">
+              Testimonials
+            </h4>
+            <h1 className="text-[35px] font-semibold text-light-black">
+              User Testimonials
+            </h1>
+            <p className="w-[45rem] text-center text-[20px] text-gray-black">
+              Hear from residents and partners who have experienced the positive
+              impact of our waste management system in their daily lives.
+            </p>
+            <div className=" flex justify-center items-center gap-[50px] mt-[28px]">
+              <div className="arrowpic">
+                {" "}
+                <img src={arrowleft} alt="" />{" "}
               </div>
-
-              {/* FEEL THE PUSH SECTION */}
-              <div className=" flex justify-center items-center p-[50px] rounded-xl bg-gray-green gap-[50px] text-white mt-[8rem]">
-                <div className="1">
-                  <h1 className=" text-[40px] w-[20rem] leading-[45px] mb-2 font-Inter font-[400px]">
-                    Feel the push? join us for free
-                  </h1>
-                  <p className=" mb-[25px] tracking-[2px] font-[1px] font-Inter">
-                    Enter your email below to start the process.
+              <div className=" flex flex-col justify-center items-center gap-6">
+                <div className=" flex justify-center items-center gap-1">
+                  <img src={staricon} alt="" />
+                  <img src={staricon} alt="" />
+                  <img src={staricon} alt="" />
+                  <img src={staricon} alt="" />
+                  <img src={staricon} alt="" />
+                </div>
+                <div className=" items-center w-[30rem]">
+                  <h2 className=" text-center text-[18px] font-[500px] leading-[160%] text-testimony-gray">
+                    Thanks to the Trash Away System, Dan Agundi is now clean!
+                  </h2>
+                </div>
+                <div className=" flex flex-col justify-center items-center gap-1">
+                  <img src={sundayPic} alt="" />
+                  <p className=" text-testimony-gray tracking-[2px]">
+                    Jeramiah Sunday
                   </p>
-                  <div className=" flex justify-center items-center gap-3 ">
-                    <input
-                      type="text"
-                      placeholder={"✉️Email Address"}
-                      className=" p-2 rounded-[4px] text-gray-700 w-[20rem] bg-slate-100 focus: outline-none "
-                    />
-                    <button className="text-white bg-light-green px-[14px] py-[8px] rounded-[4px] ">
-                      <a href="#">Sign Up</a>
-                    </button>
-                  </div>
                 </div>
-                <div className="">
-                  <img src={workers1} alt="" className=" h-[20rem] w-[25rem]" />
+              </div>
+              <div className=" flex flex-col justify-center items-center gap-6">
+                <div className=" flex justify-center items-center gap-1">
+                  <img src={staricon} alt="" />
+                  <img src={staricon} alt="" />
+                  <img src={staricon} alt="" />
+                  <img src={staricon} alt="" />
+                  <img src={staricon} alt="" />
                 </div>
+                <div className=" items-center w-[30rem]">
+                  <h2 className=" text-center text-[18px] font-[500px] leading-[160%] text-testimony-gray">
+                    Thanks to This Waste Managment System. No MORE TRASH!!
+                  </h2>
+                </div>
+                <div className=" flex flex-col justify-center items-center gap-1">
+                  <img src={aishapic} alt="" />
+                  <p className=" text-testimony-gray tracking-[2px]">
+                    Aishat Kabiru
+                  </p>
+                </div>
+              </div>
+              <div className="arrowpic">
+                {" "}
+                <img src={arrowright} alt="" />{" "}
               </div>
             </div>
           </div>
-          {/* ---------------------------END--------------------------------------- */}
 
-          {/* ---------------------------START--------------------------------------- */}
-          <div
-            className=" bg-center bg-cover min-h-screen"
-            style={{ backgroundImage: `url(${bg2})` }}
-          >
-            <div className=" flex flex-col justify-center items-center gap-[16px] font-Inter mt-[8rem]">
-              <h4 className="text-white px-6 py-0 rounded-xl bg-gradient-to-r from-light-green/0 via-light-green/100 to-light-green/0">
-                Testimonials
-              </h4>
-
-              <h1 className=" text-[35px] font-semibold text-light-black">
-                User Testimonials
-              </h1>
-              <p className=" w-[45rem] text-center text-[20px] text-gray-black">
-                Hear from residents and partners who have experienced the
-                positive impact of our waste management system in their daily
-                lives.
-              </p>
-              <div className=" flex justify-center items-center gap-[50px] mt-[28px]">
-                <div className="arrowpic">
-                  {" "}
-                  <img src={arrowleft} alt="" />{" "}
-                </div>
-                <div className=" flex flex-col justify-center items-center gap-6">
-                  <div className=" flex justify-center items-center gap-1">
-                    <img src={staricon} alt="" />
-                    <img src={staricon} alt="" />
-                    <img src={staricon} alt="" />
-                    <img src={staricon} alt="" />
-                    <img src={staricon} alt="" />
-                  </div>
-                  <div className=" items-center w-[30rem]">
-                    <h2 className=" text-center text-[23px] font-[500px] leading-[160%] text-testimony-gray">
-                      Thanks to the Trash Away System, Dan Agundi is now clean!
-                    </h2>
-                  </div>
-                  <div className=" flex flex-col justify-center items-center gap-1">
-                    <img src={sundayPic} alt="" />
-                    <p className=" text-testimony-gray tracking-[2px]">
-                      Jeramiah Sunday
-                    </p>
-                  </div>
-                </div>
-                <div className=" flex flex-col justify-center items-center gap-6">
-                  <div className=" flex justify-center items-center gap-1">
-                    <img src={staricon} alt="" />
-                    <img src={staricon} alt="" />
-                    <img src={staricon} alt="" />
-                    <img src={staricon} alt="" />
-                    <img src={staricon} alt="" />
-                  </div>
-                  <div className=" items-center w-[30rem]">
-                    <h2 className=" text-center text-[23px] font-[500px] leading-[160%] text-testimony-gray">
-                      Thanks to Trash Away. Now, Kabuga is CLEAN!
-                    </h2>
-                  </div>
-                  <div className=" flex flex-col justify-center items-center gap-1">
-                    <img src={aishapic} alt="" />
-                    <p className=" text-testimony-gray tracking-[2px]">
-                      Aishat Kabiru
-                    </p>
-                  </div>
-                </div>
-                <div className="arrowpic">
-                  {" "}
-                  <img src={arrowright} alt="" />{" "}
-                </div>
-              </div>
-            </div>
-
-            <div className=" flex flex-col justify-center items-center gap-6 mt-[7.5rem]">
-              <h1 className=" font-Inter text-[35px] font-semibold">
-                Join Us Today
-              </h1>
-              <p className=" text-center font-Inter text-[18px] font-[400px] leading-[150%] w-[45rem]">
-                Interested in waste collection and tracking for a cleaner,
-                greener Kano. Click the button below to create an account.
-              </p>
-              <button className="text-white bg-[#299D91] px-[32px] py-[16px] rounded-[4px] ">
-                <a href="#">Create an Account</a>
-              </button>
-            </div>
-            <div className=" w-full h-[8rem] "></div>
+          <div className=" flex flex-col justify-center items-center gap-6 mt-[7.5rem]">
+            <h1 className=" font-Inter text-[35px] font-semibold">
+              Join Us Today
+            </h1>
+            <p className=" text-center font-Inter text-[18px] font-[400px] leading-[150%] w-[45rem]">
+              Interested in waste collection and tracking for a cleaner, greener
+              Kano. Click the button below to create an account.
+            </p>
+            <button className="text-white bg-[#299D91] px-[32px] py-[16px] rounded-[4px] ">
+              <a href="#">Create an Account</a>
+            </button>
           </div>
+          <div className=" w-full h-[8rem] "></div>
+
           {/* ---------------------------END--------------------------------------- */}
           {/* ---------------------------START FOOTER--------------------------------------- */}
 

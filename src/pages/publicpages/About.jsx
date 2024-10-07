@@ -1,12 +1,20 @@
 import React from "react";
 import bgLogo from "../../assets/bg1About.png";
 import logo from "../../assets/logo.png";
-import symbol2 from "../../assets/symbolAbout1.png";
+// import symbol2 from "../../assets/symbolAbout1.png";
+import symbol1 from "../../assets/symbol1.png";
 import bg2 from "../../assets/bg2.png";
 import aboutbg1 from "../../assets/aboutbg1.png";
 import aboutbg2 from "../../assets/aboutbg2.png";
 import abouticon1 from "../../assets/abouticon1.svg";
 import raechusabout from "../../assets/raechusAbout.png";
+
+const scrollToValues = () => {
+  const valiuesSection = document.getElementById("values");
+  if (valiuesSection) {
+    valiuesSection.scrollIntoView({ behavior: "smooth" });
+  }
+};
 
 const About = () => {
   return (
@@ -61,18 +69,21 @@ const About = () => {
             </h1>
 
             <div>
-              <h2 className=" text-[16px] mt-[28px] font-[400px] tracking-[913px]]">
+              <h2 className=" text-[20px] mt-[28px] font-[400px] tracking-[2px] w-[60rem]">
                 Learn more about our mission to create a cleaner, greener Kano
                 State through innovative waste management solutions
               </h2>
             </div>
           </div>
           <div className=" flex gap-8 mt-[40px] justify-center items-center">
-            <button className=" flex justify-center items-center gap-2">
+            <button
+              className=" flex justify-center items-center gap-2"
+              onClick={scrollToValues}
+            >
               <h4 className=" font-Inter text-white tracking-wide">
-                Our Value
+                View Values
               </h4>
-              <img src={symbol2} alt="" />
+              <img src={symbol1} alt="" />
             </button>
           </div>
         </div>
@@ -118,7 +129,10 @@ const About = () => {
           <img src={aboutbg2} alt="" />
         </div>
 
-        <div className=" flex flex-col justify-center items-center gap-[16px] font-Inter mt-[224px] mb-[32px]">
+        <div
+          id="values"
+          className=" flex flex-col justify-center items-center gap-[16px] font-Inter mt-[224px] mb-[32px]"
+        >
           <h4 className="text-white px-6 py-0 rounded-xl bg-gradient-to-r from-light-green/0 via-light-green/100 to-light-green/0">
             Values
           </h4>
@@ -127,9 +141,9 @@ const About = () => {
             Our Values
           </h1>
           <p className=" w-[70rem] text-center text-[20px] text-gray-black">
-            Our core principles guide everything we do, driving us to deliver
-            exceptional design solutions with creativity, innovation, and
-            integrity.
+            Our core principles reflect our commitment to delivering innovative,
+            efficient, and sustainable waste management solutions that benefit
+            both the community and the environment.
           </p>
         </div>
 
@@ -138,10 +152,11 @@ const About = () => {
             <img src={abouticon1} alt="" className="h-[48px] w-[48px]" />
 
             <h2 className=" text-[24px] font-bold text-section-black">
-              Reliability
+              Sustainability
             </h2>
             <p className=" w-[20rem] text-[16px] text-center text-section-gray">
-              Ensuring every shipment arrives safely and on time.
+              We are dedicated to eco-friendly waste management, promoting
+              recycling and minimizing environmental impact.
             </p>
           </div>
 
@@ -149,11 +164,11 @@ const About = () => {
             <img src={abouticon1} alt="" className="h-[48px] w-[48px]" />
 
             <h2 className=" text-[24px] font-bold text-section-black">
-              Professionalism
+              Efficiency
             </h2>
             <p className=" w-[20rem] text-[16px] text-center text-section-gray">
-              Upholding high standards in service delivery and customer
-              interaction.
+              We strive for timely, reliable, and optimized waste collection to
+              ensure cleaner communities.
             </p>
           </div>
 
@@ -164,7 +179,8 @@ const About = () => {
               Innovation
             </h2>
             <p className=" w-[20rem] text-[16px] text-center text-section-gray">
-              Embracing technology and best practices to enhance efficiency.
+              We use advanced technology for real-time tracking, data-driven
+              insights, and automated waste solutions.
             </p>
           </div>
 
@@ -172,11 +188,11 @@ const About = () => {
             <img src={abouticon1} alt="" className="h-[48px] w-[48px]" />
 
             <h2 className=" text-[24px] font-bold text-section-black">
-              Customer Focus
+              Community Engagement
             </h2>
             <p className=" w-[20rem] text-[16px] text-center text-section-gray">
-              Prioritizing customer satisfaction and building long-term
-              relationships.
+              We work closely with local communities, addressing their waste
+              management needs and fostering collaboration.
             </p>
           </div>
 
@@ -184,10 +200,11 @@ const About = () => {
             <img src={abouticon1} alt="" className="h-[48px] w-[48px]" />
 
             <h2 className=" text-[24px] font-bold text-section-black">
-              Integrity
+              Accountability
             </h2>
             <p className=" w-[20rem] text-[16px] text-center text-section-gray">
-              Operating with honesty and transparency in all business dealings.
+              We ensure transparency and high service standards, delivering
+              reliable waste management solutions.
             </p>
           </div>
 
@@ -195,11 +212,11 @@ const About = () => {
             <img src={abouticon1} alt="" className="h-[48px] w-[48px]" />
 
             <h2 className=" text-[24px] font-bold text-section-black">
-              Professionalism
+              Customer Satisfaction
             </h2>
             <p className=" w-[20rem] text-[16px] text-center text-section-gray">
-              Upholding high standards in service delivery and customer
-              interaction.
+              Our success is measured by the satisfaction of the residents,
+              businesses, and municipalities we serve.
             </p>
           </div>
 
