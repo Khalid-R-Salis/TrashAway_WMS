@@ -42,10 +42,10 @@ const Contact = () => {
 
             <div className="flex justify-center items-center gap-[30px] text-white font-Inter tracking-wider">
               <button>
-                <a href="#">Sign In</a>
+                <a href="/login">Sign In</a>
               </button>
               <button className="text-white bg-light-green px-[14px] py-[10px] rounded-[4px] ">
-                <a href="#">Sign Up</a>
+                <a href="/singup">Sign Up</a>
               </button>
             </div>
           </div>

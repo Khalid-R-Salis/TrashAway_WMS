@@ -83,10 +83,10 @@ const Landing = () => {
 
               <div className="flex justify-center items-center gap-[30px] text-white font-Inter tracking-wider">
                 <button>
-                  <a href="#">Sign In</a>
+                  <a href="/login">Sign In</a>
                 </button>
                 <button className="text-white bg-light-green px-[14px] py-[10px] rounded-[4px] ">
-                  <a href="#">Sign Up</a>
+                  <a href="/singup">Sign Up</a>
                 </button>
               </div>
             </div>
@@ -117,7 +117,7 @@ const Landing = () => {
                 <img src={symbol1} alt="" />
               </button>
               <button className="text-white bg-light-green px-[20px] py-[10px] rounded-[4px] ">
-                <a href="#">Get Started</a>
+                <a href="/singup">Get Started</a>
               </button>
             </div>
           </div>
@@ -497,7 +497,7 @@ const Landing = () => {
               Kano. Click the button below to create an account.
             </p>
             <button className="text-white bg-[#299D91] px-[32px] py-[16px] rounded-[4px] ">
-              <a href="#">Create an Account</a>
+              <a href="/singup">Create an Account</a>
             </button>
           </div>
           <div className=" w-full h-[8rem] "></div>

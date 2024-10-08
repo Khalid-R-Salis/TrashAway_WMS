@@ -1,47 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
+import { useState } from "react";
 import logo from "../../assets/logo.png";
 import formbg from "../../assets/formsbg.png";
 import googleicon from "../../assets/googleicon.png";
 import eyeicon from "../../assets/eyeicon.png";
 
-const Login = () => {
+const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [keepSignedIn, setKeepSignedIn] = useState(false);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
-
-  const handleLogin = (e) => {
-    e.preventDefault();
-
-    // Simulated authentication process
-    const user = { email, password };
-
-    if (keepSignedIn) {
-      // Save user session to localStorage if "Keep me signed in" is checked
-      localStorage.setItem("userSession", JSON.stringify(user));
-    } else {
-      // Clear localStorage if not keeping the user signed in
-      localStorage.removeItem("userSession");
-    }
-
-    // Continue with your login logic (e.g., API call)
-    console.log("User logged in:", user);
-  };
-
-  // Check localStorage on component mount to keep the user signed in
-  React.useEffect(() => {
-    const savedUser = localStorage.getItem("userSession");
-    if (savedUser) {
-      // Auto-fill the login form if user session exists
-      const parsedUser = JSON.parse(savedUser);
-      setEmail(parsedUser.email);
-      setPassword(parsedUser.password);
-    }
-  }, []);
 
   return (
     <>
@@ -50,40 +19,59 @@ const Login = () => {
         style={{ backgroundImage: `url(${formbg})` }}
       >
         <form
-          onSubmit={handleLogin}
+          action=""
           className=" font-Inter text-[#191D23] flex flex-col justify-center items-center gap-[24px]"
         >
           <img src={logo} alt="" className=" mb-[40px]" />
-          <h2 className=" text-[24px] font-[700]">Login Account</h2>
+          <h2 className=" text-[24px] font-[700]">Create an Account</h2>
+          <div className=" flex flex-col justify-center items-start gap-[8px]">
+            <p className=" text-[16px] font-[500] ">Name</p>
+            <input
+              type="text"
+              placeholder="Khalid Rabiu Salis"
+              className=" outline-none rounded-[8px] px-[16px] py-[12px] w-[400px] h-[48px] border-[#4B5768] border-[1px] "
+              required
+            />
+          </div>
+
           <div className=" flex flex-col justify-center items-start gap-[8px]">
             <p className=" text-[16px] font-[500] ">Email Address</p>
             <input
               type="email"
               placeholder="khalidrabiu@gmail.com"
               className=" outline-none rounded-[8px] px-[16px] py-[12px] w-[400px] h-[48px] border-[#4B5768] border-[1px] "
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
+
+          <div className=" flex flex-col justify-center items-start gap-[8px]">
+            <p className=" text-[16px] font-[500] ">Phone Number</p>
+            <input
+              type="number"
+              placeholder="08011111111"
+              className=" outline-none rounded-[8px] px-[16px] py-[12px] w-[400px] h-[48px] border-[#4B5768] border-[1px] "
+              onInput={(e) => {
+                if (e.target.value.length > 11) {
+                  e.target.value = e.target.value.slice(0, 11);
+                }
+              }}
+              required
+            />
+          </div>
+
           <div className=" flex flex-col justify-center items-start gap-[8px]">
             <div className=" flex justify-between items-center w-full">
               <p className=" text-[16px] font-[500] ">Password</p>
-
-              <p className=" text-[12px] font-[500] text-[#549877] ">
-                <a href="/reset">Forgot Password?</a>
-              </p>
             </div>
             <div className="relative">
               <input
-                type={showPassword ? "text" : "password"}
+                type={showPassword ? " text" : "password"}
                 className="bg-no-repeat bg-[20px_center] bg-[length:20px_20px] outline-none rounded-[8px] pl-[48px] pr-[16px] py-[12px] w-[400px] h-[48px] border-[#4B5768] border-[1px]"
                 style={{ backgroundImage: `url(${eyeicon})` }}
                 placeholder="Enter Your Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
                 required
               />
+              {/* Hidden button overlay to detect click on the icon */}
               <button
                 type="button"
                 onClick={togglePasswordVisibility}
@@ -92,39 +80,43 @@ const Login = () => {
               />
             </div>
           </div>
-          <div className=" mt-[8px] mb-[-10px] flex justify-start items-center gap-[4px] w-full ml-[74%] ">
-            <input
-              type="checkbox"
-              className="border-[#549877] rounded-sm accent-[#549877]"
-              checked={keepSignedIn}
-              onChange={() => setKeepSignedIn(!keepSignedIn)}
-            />
-            <p className=" text-[16px] font-[300]">Keep me signed in</p>
+          <div className=" mt-[8px] mb-[-10px] flex justify-start items-center gap-[16px] w-full ml-[74%] ">
+            <p className=" text-[14px] font-[400]">
+              By continuring, you agree to our{" "}
+              <a href="/ourterms" className=" text-[#549877]">
+                terms of service.
+              </a>
+            </p>
           </div>
           <button
-            className="text-white bg-[#549877] py-[16px] rounded-[4px] w-[400px]"
+            class="text-white bg-[#549877] py-[16px] rounded-[4px] w-[400px]"
             type="submit"
           >
-            Login
+            Sign up
           </button>
           <div className=" flex justify-center items-center gap-4">
-            <div className="border-[0.5px] border-solid border-[#4B5768] w-[115px] opacity-[0.2]"></div>
-            <p>or sign in with</p>
-            <div className="border-[1px] border-solid border-[#4B5768] w-[115px] opacity-[0.2]"></div>
+            <div class=" border-[0.5px] border-solid border-[#4B5768] w-[115px] opacity-[0.2]"></div>
+            <p>or sign up with</p>
+            <div class=" border-[1px] border-solid border-[#4B5768] w-[115px] opacity-[0.2]"></div>
           </div>
           <div className=" flex justify-center items-center gap-[16px] py-[12px] bg-[#E4E7EB] rounded-[4px] w-[400px]">
             <img src={googleicon} alt="" />
             <a href="" className=" text-[#4B5768] text-[16px] font-[400]">
+              {" "}
               Continue with Google
             </a>
           </div>
-          <a href="/signup" className=" text-[#549877] font-[600]">
-            Create an account
-          </a>
+          <div className=" flex justify-center items-center gap-1 mb-10">
+            <p>Already have an account?</p>
+            <a href="/login" className=" text-[#549877] font-[600]">
+              {" "}
+              Login in here
+            </a>
+          </div>
         </form>
       </div>
     </>
   );
 };
 
-export default Login;
+export default Signup;
