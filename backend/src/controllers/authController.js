@@ -24,7 +24,6 @@ exports.registerController = async (req, res) => {
     });
     user = await user.save();
     res.json(user);
-    // console.log(user);
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
@@ -57,7 +56,7 @@ exports.loginUserController = async (req, res) => {
       },
       process.env.JWT_SECRET,
       {
-        expiresIn: "1h",
+        expiresIn: "30m",
       }
     );
 
@@ -68,6 +67,7 @@ exports.loginUserController = async (req, res) => {
         name: user.name,
         email: user.email,
         phone: user.phone,
+        role: user.role,
       },
     });
   } catch (e) {
