@@ -1,3 +1,4 @@
+// Key import
 import {
   BrowserRouter as Router,
   Route,
@@ -5,17 +6,27 @@ import {
   useLocation,
 } from "react-router-dom";
 import "./index.css";
+
+// landing import
 import Index from "./pages/publicpages/index.jsx";
 import About from "./pages/publicpages/about.jsx";
 import Services from "./pages/publicpages/services.jsx";
 import Contact from "./pages/publicpages/contact.jsx";
-import Footer from "./components/Footer.jsx";
 
-// FORMS
+// FORMS Import
 import Login from "./pages/forms/login.jsx";
 import Signup from "./pages/forms/signup.jsx";
 import ResetPassword from "./pages/forms/resetpassword.jsx";
 import Terms from "./components/Terms.jsx";
+
+// Onside Pages
+import LoginHome from "./pages/onsidepages/index.jsx";
+import LoginAbout from "./pages/onsidepages/about.jsx";
+import LoginServices from "./pages/onsidepages/services.jsx";
+import LoginContact from "./pages/onsidepages/contact.jsx";
+
+// Footer Inport
+import Footer from "./components/Footer.jsx";
 
 function App() {
   const location = useLocation();
@@ -32,7 +43,13 @@ function App() {
           <Route path="/singup" element={<Signup />} />
           <Route path="/reset" element={<ResetPassword />} />
           <Route path="/ourterms" element={<Terms />} />
+          {/* ------------------------------------------- */}
+          <Route path="/loginhome" element={<LoginHome />} />
+          <Route path="/loginabout" element={<LoginAbout />} />
+          <Route path="/loginservices" element={<LoginServices />} />
+          <Route path="/logincontact" element={<LoginContact />} />
         </Routes>
+        {/* ------------------------------------------------ */}
         {location.pathname !== "/login" &&
           location.pathname !== "/singup" &&
           location.pathname !== "/reset" &&
