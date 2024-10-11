@@ -8,25 +8,25 @@ import {
 import "./index.css";
 
 // landing import
-import Index from "./pages/publicpages/index.jsx";
-import About from "./pages/publicpages/about.jsx";
-import Services from "./pages/publicpages/services.jsx";
-import Contact from "./pages/publicpages/contact.jsx";
+import Index from "./pages/publicpages/index";
+import About from "./pages/publicpages/about";
+import Services from "./pages/publicpages/services";
+import Contact from "./pages/publicpages/contact";
 
 // FORMS Import
-import Login from "./pages/forms/login.jsx";
-import Signup from "./pages/forms/signup.jsx";
-import ResetPassword from "./pages/forms/resetpassword.jsx";
-import Terms from "./components/Terms.jsx";
+import Login from "./pages/forms/login";
+import Signup from "./pages/forms/signup";
+import ResetPassword from "./pages/forms/resetpassword";
+import Terms from "./components/Terms";
 
 // Onside Pages
-import LoginHome from "./pages/onsidepages/index.jsx";
-import LoginAbout from "./pages/onsidepages/about.jsx";
-import LoginServices from "./pages/onsidepages/services.jsx";
-import LoginContact from "./pages/onsidepages/contact.jsx";
+import LoginHome from "./pages/onsidepages/index";
+import LoginAbout from "./pages/onsidepages/about";
+import LoginServices from "./pages/onsidepages/services";
+import LoginContact from "./pages/onsidepages/contact";
 
 // Footer Inport
-import Footer from "./components/Footer.jsx";
+import Footer from "./components/Footer";
 
 function App() {
   const location = useLocation();
