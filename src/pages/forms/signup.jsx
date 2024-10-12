@@ -22,7 +22,9 @@ const Signup = () => {
           action=""
           className=" font-Inter text-[#191D23] flex flex-col justify-center items-center gap-[24px]"
         >
-          <img src={logo} alt="" className=" mb-[40px]" />
+          <a href="/" className=" mb-[40px]">
+            <img src={logo} alt="" />
+          </a>
           <h2 className=" text-[24px] font-[700]">Create an Account</h2>
           <div className=" flex flex-col justify-center items-start gap-[8px]">
             <p className=" text-[16px] font-[500] ">Name</p>

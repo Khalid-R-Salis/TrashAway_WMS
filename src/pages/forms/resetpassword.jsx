@@ -13,7 +13,9 @@ const Resetpassword = () => {
           action=""
           className=" font-Inter text-[#191D23] flex flex-col justify-center items-center gap-[35px] mt-[40px]"
         >
-          <img src={logo} alt="" className=" mb-[40px]" />
+          <a href="/" className=" mb-[40px]">
+            <img src={logo} alt="" />
+          </a>
           <h2 className=" text-[24px] font-[700]">Forgot Password?</h2>
           <p className=" text-[#666] text-[18px] w-[342px] text-center leading-6 mt-[-30px]">
             Enter your email address to get the password reset link.

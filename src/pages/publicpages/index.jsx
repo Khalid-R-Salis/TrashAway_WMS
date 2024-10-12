@@ -83,7 +83,7 @@ const Landing = () => {
 
               <div className="flex justify-center items-center gap-[30px] text-white font-Inter tracking-wider">
                 <button>
-                  <a href="/login">Sign In</a>
+                  <a href="/login">Log In</a>
                 </button>
                 <button className="text-white bg-light-green px-[14px] py-[10px] rounded-[4px] ">
                   <a href="/singup">Sign Up</a>
