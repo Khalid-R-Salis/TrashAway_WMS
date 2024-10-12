@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "../../assets/logo.png";
 import bgcontact from "../../assets/bgcontact.png";
 import icons_phone from "../../assets/icons-phone.png";
@@ -7,6 +7,7 @@ import profileicon from "../../assets/profileicon.png";
 import arrow_down from "../../assets/arrow_down.svg";
 
 const Contact = () => {
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <>
       <div
@@ -43,12 +44,26 @@ const Contact = () => {
             </nav>
 
             <div className="flex justify-center items-center gap-[30px] text-white font-Inter tracking-wider">
-              <div className=" flex justify-center items-center gap-[10px]">
-                <img src={profileicon} alt="" />
+              <div className="relative flex justify-center items-center gap-[10px]">
+                <img src={profileicon} alt="Profile" />
                 <h3>Profile</h3>
-                <button>
-                  <img src={arrow_down} alt="" />
+                <button onClick={() => setIsOpen(!isOpen)}>
+                  <img src={arrow_down} alt="Toggle Dropdown" />
                 </button>
+
+                {isOpen && (
+                  <ul className="absolute top-full mt-2 bg-[#EEF5F1]/60 shadow-lg rounded-md w-[150px] text-left text-black">
+                    <li className="hover:bg-white p-2 font-[500]">
+                      <a href="/dashboard">Dashboard</a>
+                    </li>
+                    <li className="hover:bg-gray-100 p-2 font-[500]">
+                      <a href="/orders">Orders</a>
+                    </li>
+                    <li className="hover:bg-gray-100 p-2 font-[500]">
+                      <a href="/collection">Collection Point</a>
+                    </li>
+                  </ul>
+                )}
               </div>
             </div>
           </div>

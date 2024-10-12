@@ -399,7 +399,7 @@ const Landing = () => {
                   Feel the push? join us for free
                 </h1>
                 <p className=" mb-[25px] tracking-[2px] font-[1px] font-Inter">
-                  Enter your email below to start the process.
+                  Enter your email below for our News Letter.
                 </p>
                 <div className=" flex justify-center items-center gap-3 ">
                   <input

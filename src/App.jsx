@@ -25,6 +25,13 @@ import LoginAbout from "./pages/onsidepages/about";
 import LoginServices from "./pages/onsidepages/services";
 import LoginContact from "./pages/onsidepages/contact";
 
+// client Pages
+import Dashboard from "./pages/clientpages/dashbord";
+import Orders from "./pages/clientpages/orders";
+import Collection from "./pages/clientpages/collection";
+import Support from "./pages/clientpages/support";
+import Settings from "./pages/clientpages/settings";
+
 // Footer Inport
 import Footer from "./components/Footer";
 
@@ -48,11 +55,23 @@ function App() {
           <Route path="/loginabout" element={<LoginAbout />} />
           <Route path="/loginservices" element={<LoginServices />} />
           <Route path="/logincontact" element={<LoginContact />} />
+
+          {/* ------------------------------------------- */}
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/orders" element={<Orders />} />
+          <Route path="/collection" element={<Collection />} />
+          <Route path="/support" element={<Support />} />
+          <Route path="/settings" element={<Settings />} />
         </Routes>
         {/* ------------------------------------------------ */}
         {location.pathname !== "/login" &&
           location.pathname !== "/singup" &&
           location.pathname !== "/reset" &&
+          location.pathname !== "/dashboard" &&
+          location.pathname !== "/orders" &&
+          location.pathname !== "/collection" &&
+          location.pathname !== "/support" &&
+          location.pathname !== "/settings" &&
           location.pathname !== "/ourterms" && <Footer />}
       </div>
     </div>

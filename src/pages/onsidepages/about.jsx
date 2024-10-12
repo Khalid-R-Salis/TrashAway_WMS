@@ -24,6 +24,8 @@ const scrollToValues = () => {
 const About = () => {
   // State to track the form's visibility
   const [showForm, setShowForm] = useState(false);
+
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <>
       <div
@@ -61,12 +63,26 @@ const About = () => {
             </nav>
 
             <div className="flex justify-center items-center gap-[30px] text-white font-Inter tracking-wider">
-              <div className=" flex justify-center items-center gap-[10px]">
-                <img src={profileicon} alt="" />
+              <div className="relative flex justify-center items-center gap-[10px]">
+                <img src={profileicon} alt="Profile" />
                 <h3>Profile</h3>
-                <button>
-                  <img src={arrow_down} alt="" />
+                <button onClick={() => setIsOpen(!isOpen)}>
+                  <img src={arrow_down} alt="Toggle Dropdown" />
                 </button>
+
+                {isOpen && (
+                  <ul className="absolute top-full mt-2 bg-[#EEF5F1]/60 shadow-lg rounded-md w-[150px] text-left text-black">
+                    <li className="hover:bg-white p-2 font-[500]">
+                      <a href="/dashboard">Dashboard</a>
+                    </li>
+                    <li className="hover:bg-gray-100 p-2 font-[500]">
+                      <a href="/orders">Orders</a>
+                    </li>
+                    <li className="hover:bg-gray-100 p-2 font-[500]">
+                      <a href="/collection">Collection Point</a>
+                    </li>
+                  </ul>
+                )}
               </div>
 
               <div className=" border-white border-[1px] h-[18px]"></div>
@@ -123,14 +139,15 @@ const About = () => {
               Enter Amount of Recyclables
             </h2>
             <p className="text-[#666] text-[13px] font-[400] text-center leading-[150%] w-[248px] mt-[-10px]">
-              Select the time you prefer to receive daily notifications and
-              reminders:
+              Select the number of items for pickup. Each bin should not weight
+              above 50kg
             </p>
 
             <input
               type="number"
               placeholder="1"
               min={1}
+              max={20}
               className="outline-none w-[59px] h-[52px] py-[11.834px] px-[8.876px] rounded-[5.917px] border-[0.74px] border-solid border-[#626262] bg-[#549877] text-white"
             />
 
@@ -308,7 +325,7 @@ const About = () => {
                 Feel the push? join us for free
               </h1>
               <p className=" mb-[25px] tracking-[2px] font-[1px] font-Inter">
-                Enter your email below to start the process.
+                Enter your email below for our News Letter.
               </p>
               <div className=" flex justify-center items-center gap-3 ">
                 <input
