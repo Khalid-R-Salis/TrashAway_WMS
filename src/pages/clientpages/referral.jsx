@@ -12,7 +12,7 @@ import cancelIcon from "../../assets/close.svg";
 
 const Referral = () => {
   const [showNotification, setShowNotification] = useState(false);
-  const url = "https:/trash-away.vercel.app";
+  const url = "https://trash-away.vercel.app";
 
   const copyText = () => {
     const tempInput = document.createElement("input");
@@ -46,6 +46,9 @@ const Referral = () => {
 
           {/* Notification Dropdown */}
           {showNotification && (
+            <>
+             {/* Black overlay */}
+             <div className="fixed inset-0 bg-black opacity-50 z-10" onClick={toggleNotification}></div>
             <div className="absolute right-[30px] mt-[23rem]  w-[370px] bg-white p-6 rounded-lg shadow-sm z-10">
               <div className="flex justify-between items-center pb-[32px]">
                 <h3 className="text-[#1E1E1E] font-Inter text-[20px] font-semibold">
@@ -116,6 +119,7 @@ const Referral = () => {
                 </div>
               ))} */}
             </div>
+            </>
           )}
         </div>
 
