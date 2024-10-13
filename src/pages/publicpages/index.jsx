@@ -28,6 +28,7 @@ import arrowright from "../../assets/ArrowRight.png";
 import staricon from "../../assets/StarIcon.png";
 import aishapic from "../../assets/Aishapic.png";
 import sundayPic from "../../assets/SundayPic.png";
+import supportus from "../../assets/supportus.png";
 
 const scrollToTestimonials = () => {
   const testimonialsSection = document.getElementById("testimonials");
@@ -500,7 +501,15 @@ const Landing = () => {
               <a href="/singup">Create an Account</a>
             </button>
           </div>
-          <div className=" w-full h-[8rem] "></div>
+          <div className=" w-full h-[8rem] flex flex-col justify-center items-end">
+            <a href="#">
+              {" "}
+              <img src={supportus} alt="support us" className=" h-[7rem]" />
+            </a>
+            <h2 className=" pr-[40px] font-Inter text-[25px] font-[600] mb-4">
+              FAQ
+            </h2>
+          </div>
 
           {/* ---------------------------END--------------------------------------- */}
           {/* ---------------------------START FOOTER--------------------------------------- */}

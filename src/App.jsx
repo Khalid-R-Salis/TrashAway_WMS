@@ -31,9 +31,13 @@ import Orders from "./pages/clientpages/orders";
 import Collection from "./pages/clientpages/collection";
 import Support from "./pages/clientpages/support";
 import Settings from "./pages/clientpages/settings";
+import Referral from "./pages/clientpages/referral";
 
 // Footer Inport
 import Footer from "./components/Footer";
+
+// // Dashboard
+// import Natification from "./components/notification";
 
 function App() {
   const location = useLocation();
@@ -62,6 +66,7 @@ function App() {
           <Route path="/collection" element={<Collection />} />
           <Route path="/support" element={<Support />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/referral" element={<Referral />} />
         </Routes>
         {/* ------------------------------------------------ */}
         {location.pathname !== "/login" &&
@@ -72,6 +77,7 @@ function App() {
           location.pathname !== "/collection" &&
           location.pathname !== "/support" &&
           location.pathname !== "/settings" &&
+          location.pathname !== "/referral" &&
           location.pathname !== "/ourterms" && <Footer />}
       </div>
     </div>
