@@ -179,7 +179,8 @@ const Landing = () => {
                 type="number"
                 placeholder="1"
                 min={1}
-                max={20}
+                max={99}
+                maxLength={2}
                 className="outline-none w-[59px] h-[52px] py-[11.834px] px-[8.876px] rounded-[5.917px] border-[0.74px] border-solid border-[#626262] bg-[#549877] text-white"
               />
 
