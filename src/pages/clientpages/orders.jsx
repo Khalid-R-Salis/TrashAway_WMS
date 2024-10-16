@@ -3,7 +3,7 @@ import Sidebar from "../../components/Sidebar";
 import formbg from "../../assets/formsbg.png";
 import notificationdb from "../../assets/notificationdb.png";
 import cancelIcon from "../../assets/close.svg";
-import search from "../../assets/search.png";
+import search from "../../assets/Search.png";
 
 const Orders = () => {
   // start timer
