@@ -65,7 +65,7 @@ const Orders = () => {
   };
 
   // Orders logic
-  const [orders] = useState([
+  const [orders, setOrders]= useState([
     {
       id: 1001,
       date: "7 July 2024",
@@ -134,19 +134,120 @@ const Orders = () => {
       date: "7 July 2024",
       items: 20,
       category: "Organic",
+      status: "Pending",
+    },
+    {
+      id: 1011,
+      date: "7 July 2024",
+      items: 20,
+      category: "Organic",
       status: "Completed",
     },
+    {
+      id: 1012,
+      date: "7 July 2024",
+      items: 20,
+      category: "Organic",
+      status: "Completed",
+    },
+    {
+      id: 1013,
+      date: "7 July 2024",
+      items: 20,
+      category: "Organic",
+      status: "Completed",
+    },   {
+      id: 1014,
+      date: "7 July 2024",
+      items: 20,
+      category: "Organic",
+      status: "Completed",
+    },
+    {
+      id: 1015,
+      date: "7 July 2024",
+      items: 20,
+      category: "Organic",
+      status: "Completed",
+    },   {
+      id: 1016,
+      date: "7 July 2024",
+      items: 20,
+      category: "Organic",
+      status: "Pending",
+    },
+    {
+      id: 1017,
+      date: "7 July 2024",
+      items: 20,
+      category: "Organic",
+      status: "Completed",
+    },
+    {
+      id: 1018,
+      date: "7 July 2024",
+      items: 20,
+      category: "Organic",
+      status: "Completed",
+    },
+    {
+      id: 1019,
+      date: "7 July 2024",
+      items: 20,
+      category: "Organic",
+      status: "Completed",
+    },    {
+      id: 1020,
+      date: "7 July 2024",
+      items: 20,
+      category: "Organic",
+      status: "Pending",
+    },
+
   ]);
+
+  const [selectedOrderId, setSelectedOrderId] = useState(null);
+
+  const handleDelete = (id) => {
+    const filteredOrders = orders.filter((order) => order.id !== id);
+    setOrders(filteredOrders);
+  };
+
   const [filterStatus, setFilterStatus] = useState("All");
 
-  // Function to filter orders
-  const filteredOrders = orders.filter((order) => {
-    if (filterStatus === "All") return true;
-    return order.status === filterStatus;
-  });
+  /// Apply the filter first, then paginate the filtered list
+const filteredOrders = orders.filter((order) => {
+  if (filterStatus === "All") return true;
+  return order.status === filterStatus;
+});
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const ordersPerPage = 6;
 
+  // Get the orders for the current page
+  const indexOfLastOrder = currentPage * ordersPerPage;
+  const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
+  const currentOrders = filteredOrders.slice(indexOfFirstOrder, indexOfLastOrder);
+
+
+  // Calculate total pages
+  const totalPages = Math.ceil(filteredOrders.length / ordersPerPage);
+
+  // Navigate to next page
+  const handleNext = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  // Navigate to previous page
+  const handlePrevious = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex h-screen overflow-hidden">  
       <Sidebar activePage="orders" />
       <main className="flex-1">
         <div className="flex justify-between items-center px-[32px] py-[12px] w-full bg-[#1E1E1E] h-20 relative">
@@ -335,11 +436,12 @@ const Orders = () => {
                   <th className="font-sans text-[#8B909A] text-[13px] font-[500] px-0 py-2 uppercase">
                     Status
                   </th>
+                  <th className="px-0 py-2"></th>
                 </tr>
               </thead>
               <tbody>
-                {filteredOrders.map((order) => (
-                  <tr key={order.id} className="border-b">
+              {currentOrders.map((order) => (
+    <tr key={order.id} className="border-b">
                     <td className="px-[45px] py-2">{order.id}</td>
                     <td className="px-[45px] py-2">{order.date}</td>
                     <td className="px-[45px] py-2">{order.items}</td>
@@ -355,14 +457,56 @@ const Orders = () => {
                         </span>
                       )}
                     </td>
+                    <td className="px-4 py-2">
+                      {order.status === "Pending" && (
+                        <div className="relative">
+                          <button
+                            onClick={() => setSelectedOrderId(order.id)}
+                            className="text-gray-500"
+                          >
+                            &#x22EE;
+                          </button>
+                          {selectedOrderId === order.id && (
+                            <div className="absolute right-0 mt-2 w-[100px] bg-white shadow-md border border-gray-200">
+                              <button
+                                onClick={() => handleDelete(order.id)}
+                                className="w-full text-red-500 py-2 hover:bg-gray-100"
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
         </div>
-      </main>
+       {/* Pagination Content here */}
+  <div className="flex justify-between items-center mt-4">
+    <button
+      onClick={handlePrevious}
+      className="bg-gray-200 text-gray-700 px-4 py-2 mx-4 mt-[-250px] rounded-md hover:bg-gray-300"
+      disabled={currentPage === 1} // Disable if on the first page
+    >
+      Previous
+    </button>
+    <button
+      onClick={handleNext}
+      className="bg-gray-200 text-gray-700 px-4 mx-4 py-2 mt-[-250px] rounded-md hover:bg-gray-300"
+      disabled={currentPage === totalPages} // Disable if on the last page
+    >
+      Next
+    </button>
     </div>
+      </main>
+     
+    </div>
+
+    
   );
 };
 
