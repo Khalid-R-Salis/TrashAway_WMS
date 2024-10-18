@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../../components/Sidebar";
+import PersonalInformation from "../clientpages/personalInformation";
+import NotificationPreferences from "../clientpages/notificationPreferences";
+import Security from "../clientpages/securitySettings";
 import formbg from "../../assets/formsbg.png";
 import notificationdb from "../../assets/notificationdb.png";
 import cancelIcon from "../../assets/close.svg";
 
 const Settings = () => {
-  // start timer
+  // Time and date state
   const [time, setTime] = useState({
     hours: "00",
     minutes: "00",
@@ -56,17 +59,33 @@ const Settings = () => {
     return () => clearInterval(intervalId); // Cleanup interval on unmount
   }, []);
 
-  // end timer
-
+  // Handle showing notification dropdown
   const [showNotification, setShowNotification] = useState(false);
-
   const toggleNotification = () => {
     setShowNotification(!showNotification);
+  };
+
+  // Handle switching between sections
+  const [activeSection, setActiveSection] = useState("personal");
+
+  const renderSection = () => {
+    switch (activeSection) {
+      case "personal":
+        return <PersonalInformation />;
+      case "notifications":
+        return <NotificationPreferences />;
+      case "security":
+        return <Security />;
+      default:
+        return <PersonalInformation />;
+    }
   };
 
   return (
     <div className="flex h-screen overflow-hidden">
       <Sidebar activePage="settings" />
+
+      {/* Main Content */}
       <main className="flex-1">
         <div className="flex justify-between items-center px-[32px] py-[12px] w-full bg-[#1E1E1E] h-20 relative">
           <h2 className="text-white font-Inter text-[20px] font-[600] tracking-[-0.4]">
@@ -91,15 +110,14 @@ const Settings = () => {
             className="cursor-pointer"
             onClick={toggleNotification}
           />
-          {/* Notification Dropdown */}
           {showNotification && (
             <>
-              {/* Black overlay */}
+              {/* Notification Dropdown */}
               <div
                 className="fixed inset-0 bg-black opacity-50 z-10"
                 onClick={toggleNotification}
               ></div>
-              <div className="absolute right-[30px] mt-[23rem]  w-[370px] bg-white p-6 rounded-lg shadow-sm z-10">
+              <div className="absolute right-[30px] mt-[23rem] w-[370px] bg-white p-6 rounded-lg shadow-sm z-10">
                 <div className="flex justify-between items-center pb-[32px]">
                   <h3 className="text-[#1E1E1E] font-Inter text-[20px] font-semibold">
                     Notifications
@@ -111,8 +129,8 @@ const Settings = () => {
                     onClick={toggleNotification}
                   />
                 </div>
-
-                <div className=" flex justify-between items-center">
+                {/* Notification items */}
+                <div className="flex justify-between items-center">
                   <div className="text-[#343A40] font-Inter text-[16px] font-medium">
                     Pick up completed
                   </div>
@@ -120,9 +138,8 @@ const Settings = () => {
                     10/10/2024
                   </div>
                 </div>
-                <hr className="w-full border-b-[1px] border-[#E9E9E9]  mb-4" />
-
-                <div className=" flex justify-between items-center">
+                <hr className="w-full border-b-[1px] border-[#E9E9E9] mb-4" />
+                <div className="flex justify-between items-center">
                   <div className="text-[#343A40] font-Inter text-[16px] font-medium">
                     Pick up completed
                   </div>
@@ -130,9 +147,8 @@ const Settings = () => {
                     10/10/2024
                   </div>
                 </div>
-                <hr className="w-full border-b-[1px] border-[#E9E9E9]  mb-4" />
-
-                <div className=" flex justify-between items-center">
+                <hr className="w-full border-b-[1px] border-[#E9E9E9] mb-4" />
+                <div className="flex justify-between items-center">
                   <div className="text-[#343A40] font-Inter text-[16px] font-medium">
                     Pick up completed
                   </div>
@@ -140,9 +156,8 @@ const Settings = () => {
                     10/10/2024
                   </div>
                 </div>
-                <hr className="w-full border-b-[1px] border-[#E9E9E9]  mb-4" />
-
-                <div className=" flex justify-between items-center">
+                <hr className="w-full border-b-[1px] border-[#E9E9E9] mb-4" />
+                <div className="flex justify-between items-center">
                   <div className="text-[#343A40] font-Inter text-[16px] font-medium">
                     Pick up completed
                   </div>
@@ -150,35 +165,47 @@ const Settings = () => {
                     10/10/2024
                   </div>
                 </div>
-                <hr className="w-full border-b-[1px] border-[#E9E9E9]  mb-4" />
-
-                {/* {[...Array(4)].map((_, idx) => (
-                <div
-                  key={idx}
-                  className="flex justify-between items-center my-4"
-                >
-                  <div className="text-[#343A40] font-Inter text-[16px] font-medium">
-                    Pick up completed
-                  </div>
-                  <div className="text-[#B9B9B9] font-Inter text-[12px] font-medium">
-                    10/10/2024
-                  </div>
-                  {idx < 3 && (
-                    <hr className="w-full border-b-[1px] border-[#E9E9E9] my-2" />
-                  )}
-                </div>
-              ))} */}
+                <hr className="w-full border-b-[1px] border-[#E9E9E9] mb-4" />
               </div>
             </>
           )}
         </div>
-
         <div
-          className="bg-no-repeat bg-cover bg-center w-full h-full flex justify-center items-center"
+          className="bg-no-repeat bg-cover bg-center w-full h-full"
           style={{ backgroundImage: `url(${formbg})` }}
         >
-          {/* CONTENT HERE */}
-          On development
+          {/* Sidebar with settings options */}
+          <div className="flex">
+            <div className="w-1/4 p-6">
+              <button
+                onClick={() => setActiveSection("personal")}
+                className={`block w-full px-[12px] py-[8px] text-[#1E1E1E] font-[500] text-[14px] rounded-[6px] ${
+                  activeSection === "personal" ? "bg-[#B9B9B9]" : ""
+                }`}
+              >
+                Personal Information
+              </button>
+              <button
+                onClick={() => setActiveSection("notifications")}
+                className={`block w-full px-[12px] py-[8px] text-[#1E1E1E] font-[500] text-[14px] rounded-[6px] ${
+                  activeSection === "notifications" ? "bg-[#B9B9B9]" : ""
+                }`}
+              >
+                Notification Preferences
+              </button>
+              <button
+                onClick={() => setActiveSection("security")}
+                className={`block w-full px-[12px] py-[8px] text-[#1E1E1E] font-[500] text-[14px] rounded-[6px] ${
+                  activeSection === "security" ? "bg-[#B9B9B9]" : ""
+                }`}
+              >
+                Security
+              </button>
+            </div>
+
+            {/* Content section */}
+            <div className="flex-1 pr-8  ">{renderSection()}</div>
+          </div>
         </div>
       </main>
     </div>

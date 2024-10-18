@@ -1,14 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import UserGroup from "../assets/usergroup.svg";
-// import logo from "../assets/logo.png";
+
 import dashboarddb from "../assets/dashboarddb.png";
 import settingdb from "../assets/settingdb.png";
 import shopdb from "../assets/shopdb.png";
 import logoutdb from "../assets/logoutdb.png";
 import cartdb from "../assets/cartdb.png";
 import profiledb1 from "../assets/profiledb1.png";
-import profiledb2 from "../assets/profiledb2.png";
 
 const Sidebar = ({ activePage }) => {
   return (
