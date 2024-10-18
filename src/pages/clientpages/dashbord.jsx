@@ -312,11 +312,11 @@ const Dashboard = () => {
               <tbody>
                 {orders.map((order) => (
                   <tr key={order.id} className="border-b">
-                    <td className="px-[45px] py-2">{order.id}</td>
-                    <td className="px-[45px] py-2">{order.date}</td>
-                    <td className="px-[45px] py-2">{order.items}</td>
-                    <td className="px-[45px] py-2">{order.category}</td>
-                    <td className="px-4 py-2">
+                    <td className="px-4 py-2 text-[#23272E] text-[15px] font-[400] font-sans">{order.id}</td>
+                    <td className="px-4 py-2 text-[#23272E] text-[15px] font-[400] font-sans">{order.date}</td>
+                    <td className="px-4 py-2 text-[#23272E] text-[15px] font-[400] font-sans">{order.items}</td>
+                    <td className="px-4 py-2 text-[#23272E] text-[15px] font-[400] font-sans">{order.category}</td>
+                    <td className="px-4 py-2 text-[#23272E] text-[15px] font-[400] font-sans">
                       {order.status === "Pending" ? (
                         <span className="text-yellow-500 bg-yellow-50 p-1">
                           Pending

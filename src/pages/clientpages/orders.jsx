@@ -215,7 +215,7 @@ const Orders = () => {
 
   const [filterStatus, setFilterStatus] = useState("All");
 
-  /// Apply the filter first, then paginate the filtered list
+
 const filteredOrders = orders.filter((order) => {
   if (filterStatus === "All") return true;
   return order.status === filterStatus;
@@ -224,7 +224,7 @@ const filteredOrders = orders.filter((order) => {
   const [currentPage, setCurrentPage] = useState(1);
   const ordersPerPage = 6;
 
-  // Get the orders for the current page
+
   const indexOfLastOrder = currentPage * ordersPerPage;
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
   const currentOrders = filteredOrders.slice(indexOfFirstOrder, indexOfLastOrder);
@@ -442,11 +442,11 @@ const filteredOrders = orders.filter((order) => {
               <tbody>
               {currentOrders.map((order) => (
     <tr key={order.id} className="border-b">
-                    <td className="px-[45px] py-2">{order.id}</td>
-                    <td className="px-[45px] py-2">{order.date}</td>
-                    <td className="px-[45px] py-2">{order.items}</td>
-                    <td className="px-[45px] py-2">{order.category}</td>
-                    <td className="px-[45px] py-2">
+                    <td className="px-[45px] py-2 text-[#23272E] text-[15px] font-[400] font-sans">{order.id}</td>
+                    <td className="px-[45px] py-2 text-[#23272E] text-[15px] font-[400] font-sans">{order.date}</td>
+                    <td className="px-[45px] py-2 text-[#23272E] text-[15px] font-[400] font-sans">{order.items}</td>
+                    <td className="px-[45px] py-2 text-[#23272E] text-[15px] font-[400] font-sans">{order.category}</td>
+                    <td className="px-[45px] py-2 text-[#23272E] text-[15px] font-[400] font-sans">
                       {order.status === "Pending" ? (
                         <span className="text-yellow-500 bg-yellow-50 p-1">
                           Pending
@@ -486,18 +486,18 @@ const filteredOrders = orders.filter((order) => {
           </div>
         </div>
        {/* Pagination Content here */}
-  <div className="flex justify-between items-center mt-4">
+  <div className="flex justify-around items-center">
     <button
       onClick={handlePrevious}
-      className="bg-gray-200 text-gray-700 px-4 py-2 mx-4 mt-[-250px] rounded-md hover:bg-gray-300"
-      disabled={currentPage === 1} // Disable if on the first page
+      className="bg-gray-200 text-gray-700 px-4 py-2 mt-[-350px] rounded-md hover:bg-gray-300"
+      disabled={currentPage === 1}
     >
       Previous
     </button>
     <button
       onClick={handleNext}
-      className="bg-gray-200 text-gray-700 px-4 mx-4 py-2 mt-[-250px] rounded-md hover:bg-gray-300"
-      disabled={currentPage === totalPages} // Disable if on the last page
+      className="bg-gray-200 text-gray-700 px-4 py-2 mt-[-350px] rounded-md hover:bg-gray-300"
+      disabled={currentPage === totalPages}
     >
       Next
     </button>
