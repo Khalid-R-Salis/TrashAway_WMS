@@ -3,9 +3,13 @@ import Sidebar from "../../components/Sidebar";
 import formbg from "../../assets/formsbg.png";
 import notificationdb from "../../assets/notificationdb.png";
 import cancelIcon from "../../assets/close.svg";
+import setting2 from "../../assets/setting2.png";
+import bot from "../../assets/bot.png";
+
+
 
 const Support = () => {
-  // start timer
+  const [showNotification, setShowNotification] = useState(false);
   const [time, setTime] = useState({
     hours: "00",
     minutes: "00",
@@ -17,6 +21,46 @@ const Support = () => {
     year: 2023,
   });
 
+  // Handle the API call
+  const [messages, setMessages] = useState([]);  
+  const [userInput, setUserInput] = useState(''); 
+
+  // Handle sending a message
+  const handleSendMessage = async () => {
+    if (!userInput.trim()) return;
+  
+    const newMessage = { text: userInput, sender: 'user' };
+    setMessages((prevMessages) => [...prevMessages, newMessage]);
+  
+    try {
+      const response = await fetch('http://localhost:5000/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: userInput }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+  
+      const data = await response.json();
+      const botMessage = { text: data.message, sender: 'bot' };
+      setMessages((prevMessages) => [...prevMessages, botMessage]);
+    } catch (error) {
+      console.error('Error sending message:', error);
+    }
+  
+    setUserInput('');
+  };
+  
+
+  const toggleNotification = () => {
+    setShowNotification(!showNotification);
+  };
+
+  // Timer setup using useEffect
   useEffect(() => {
     const updateDateTime = () => {
       const now = new Date();
@@ -55,14 +99,6 @@ const Support = () => {
     const intervalId = setInterval(updateDateTime, 1000);
     return () => clearInterval(intervalId); // Cleanup interval on unmount
   }, []);
-
-  // end timer
-
-  const [showNotification, setShowNotification] = useState(false);
-
-  const toggleNotification = () => {
-    setShowNotification(!showNotification);
-  };
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -123,6 +159,7 @@ const Support = () => {
                 </div>
                 <hr className="w-full border-b-[1px] border-[#E9E9E9]  mb-4" />
 
+               
                 <div className=" flex justify-between items-center">
                   <div className="text-[#343A40] font-Inter text-[16px] font-medium">
                     Pick up completed
@@ -132,54 +169,66 @@ const Support = () => {
                   </div>
                 </div>
                 <hr className="w-full border-b-[1px] border-[#E9E9E9]  mb-4" />
-
-                <div className=" flex justify-between items-center">
-                  <div className="text-[#343A40] font-Inter text-[16px] font-medium">
-                    Pick up completed
-                  </div>
-                  <div className="text-[#B9B9B9] font-Inter text-[12px] font-medium mb-5">
-                    10/10/2024
-                  </div>
-                </div>
-                <hr className="w-full border-b-[1px] border-[#E9E9E9]  mb-4" />
-
-                <div className=" flex justify-between items-center">
-                  <div className="text-[#343A40] font-Inter text-[16px] font-medium">
-                    Pick up completed
-                  </div>
-                  <div className="text-[#B9B9B9] font-Inter text-[12px] font-medium mb-5">
-                    10/10/2024
-                  </div>
-                </div>
-                <hr className="w-full border-b-[1px] border-[#E9E9E9]  mb-4" />
-
-                {/* {[...Array(4)].map((_, idx) => (
-                <div
-                  key={idx}
-                  className="flex justify-between items-center my-4"
-                >
-                  <div className="text-[#343A40] font-Inter text-[16px] font-medium">
-                    Pick up completed
-                  </div>
-                  <div className="text-[#B9B9B9] font-Inter text-[12px] font-medium">
-                    10/10/2024
-                  </div>
-                  {idx < 3 && (
-                    <hr className="w-full border-b-[1px] border-[#E9E9E9] my-2" />
-                  )}
-                </div>
-              ))} */}
               </div>
             </>
           )}
         </div>
 
         <div
-          className="bg-no-repeat bg-cover bg-center w-full h-full flex justify-center items-center"
+          className="bg-no-repeat bg-cover bg-center w-full h-full"
           style={{ backgroundImage: `url(${formbg})` }}
         >
           {/* CONTENT HERE */}
-          On development
+
+          <div className=" flex justify-start items-center gap-2 p-4 font-Inter font-[500] text-[16px]">
+           <img src={setting2} alt="" className="" />
+           <h1>Support</h1>
+          </div>
+          <div className=" flex justify-between items-center">
+          <div className=" flex justify-start items-center gap-2 px-4 text-[#1E1E1E] font-[600] text-[18px] tracking-[-0.36px] font-Inter">
+            <img src={bot} alt="" />
+            <h2>WMS Assistant</h2>
+          </div>
+            <button className=" py-[7px] px-[32px] text-white bg-[#549877] font-Inter text-[12px] font-[600] tracking-[-0.24px] rounded-[4px] mx-4">
+              <h2>View FAQ</h2>
+            </button>
+          </div>
+          <div className="flex flex-col h-[75%] p-4">
+      <div className="flex-grow overflow-y-auto bg-white mx-16 rounded-lg shadow-md p-4">
+        {messages.map((msg, index) => (
+          <div
+            key={index}
+            className={`flex mb-4 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+          >
+            <div
+              className={`rounded-lg p-2 max-w-xs ${
+                msg.sender === 'user'
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-gray-300 text-black'
+              }`}
+            >
+              {msg.text}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="flex mt-[10px] mx-20">
+        <input
+          className="flex-grow p-2 border rounded-lg outline-none focus:ring-2 focus:ring-blue-400"
+          type="text"
+          value={userInput}
+          onChange={(e) => setUserInput(e.target.value)}
+          placeholder="Type your message..."
+        />
+        <button
+          className="ml-2 p-2 bg-blue-500 text-white rounded-lg"
+          onClick={handleSendMessage}
+        >
+          Send
+        </button>
+      </div>
+    </div>
         </div>
       </main>
     </div>
