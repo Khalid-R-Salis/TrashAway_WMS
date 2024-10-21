@@ -33,11 +33,18 @@ import Support from "./pages/clientpages/support";
 import Settings from "./pages/clientpages/settings";
 import Referral from "./pages/clientpages/referral";
 
+// Admin Pages
+import AdminDashboard from "./pages/adminpages/adminDashboard";
+import Adminsettings from "./pages/adminpages/adminsettings";
+import Scheduling from "./pages/adminpages/scheduling";
+import Staffs from "./pages/adminpages/staffs";
+import AdminSupport from "./pages/adminpages/support";
+import UserManagement from "./pages/adminpages/userManagement";
+import VehicleTracking from "./pages/adminpages/vehicleTracking";
+import WasteManagment from "./pages/adminpages/wasteManagment";
+
 // Footer Inport
 import Footer from "./components/Footer";
-
-// // Dashboard
-// import Natification from "./components/notification";
 
 function App() {
   const location = useLocation();
@@ -67,6 +74,16 @@ function App() {
           <Route path="/support" element={<Support />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/referral" element={<Referral />} />
+
+          {/* ------------------------------------------------ */}
+          <Route path="/admindashboard" element={<AdminDashboard />} />
+          <Route path="/adminsettings" element={<Adminsettings />} />
+          <Route path="/scheduling" element={<Scheduling />} />
+          <Route path="/staffs" element={<Staffs />} />
+          <Route path="/adminsupport" element={<AdminSupport />} />
+          <Route path="/usermanagment" element={<UserManagement />} />
+          <Route path="/vehicletracking" element={<VehicleTracking />} />
+          <Route path="/wastemanagment" element={<WasteManagment />} />
         </Routes>
         {/* ------------------------------------------------ */}
         {location.pathname !== "/login" &&
@@ -78,7 +95,16 @@ function App() {
           location.pathname !== "/support" &&
           location.pathname !== "/settings" &&
           location.pathname !== "/referral" &&
-          location.pathname !== "/ourterms" && <Footer />}
+          location.pathname !== "/ourterms" &&
+          location.pathname !== "/settings" &&
+          location.pathname !== "/admindashboard" &&
+          location.pathname !== "/adminsettings" &&
+          location.pathname !== "/scheduling" &&
+          location.pathname !== "/staffs" &&
+          location.pathname !== "/adminsupport" &&
+          location.pathname !== "/usermanagment" &&
+          location.pathname !== "/vehicletracking" &&
+          location.pathname !== "/wastemanagment" && <Footer />}
       </div>
     </div>
   );

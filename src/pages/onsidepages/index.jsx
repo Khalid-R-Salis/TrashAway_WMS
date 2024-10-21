@@ -110,6 +110,9 @@ const Landing = () => {
                       <li className="hover:bg-gray-100 p-2 font-[500]">
                         <a href="/collection">Collection Point</a>
                       </li>
+                      <li className="hover:bg-gray-100 p-2 font-[500]">
+                        <a href="/">Logout</a>
+                      </li>
                     </ul>
                   )}
                 </div>
