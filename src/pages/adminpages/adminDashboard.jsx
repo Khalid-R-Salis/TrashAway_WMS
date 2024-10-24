@@ -3,7 +3,7 @@ import SidebarAdmin from "../../components/SidebarAdmin";
 import formbg from "../../assets/formsbg.png";
 import notificationdb from "../../assets/notificationdb.png";
 import cancelIcon from "../../assets/close.svg";
-import profile2 from "../../assets/profiledb2.png";
+import iconSet from "../../assets/iconSet.png";
 
 const AdminDashboard = () => {
   // start timer
@@ -235,51 +235,62 @@ const AdminDashboard = () => {
           className="bg-no-repeat bg-cover bg-center w-full h-full px-5 py-2 font-Inter"
           style={{ backgroundImage: `url(${formbg})` }}
         >
-          <div className=" text-[#141417] font-Inter text-[20px] font-[600] mb-2">
-            Personal information
-          </div>
-          <div className=" flex justify-center items-center gap-6 mb-1">
-            <img src={profile2} alt="" />
-            <div className="flex flex-col justify-center items-center gap-4">
-              <div className="rounded-[4px] w-[25rem] bg-white shadow-inner [box-shadow:0px_0px_4px_0px_#83818E_inset] px-4 py-1">
-                <h2 className=" text-[#666] text-[12px] font-[500] text-start">
-                  Full Name
-                </h2>
-                <h1 className=" text-[#212121] text-[14px] font-[400] text-start">
-                  Khalid Rabiu
-                </h1>
-              </div>
+          <div className="flex justify-center items-center gap-6">
+            <div className="flex flex-wrap gap-6 ">
+            
+            <div className="flex flex-col justify-between items-start p-6 bg-[#F7F9FB] font-Inter text-[#1C1C1C] rounded-[16px] w-[400px] shadow-sm gap-6">
+  <div>
+    <h1 className="text-[17px] font-[600]">Total Vehicles</h1>
+  </div>
+  <div className="flex justify-between items-center w-full">
+    <h1 className="text-[48px] font-[700]">50</h1>
+    <div className="flex items-center gap-1 text-[14px] font-[400]">
+      <p>+0.03%</p>
+      <img src={iconSet} alt="iconSet" />
+    </div>
+  </div>
+</div>
 
-              <div className="rounded-[4px] w-[25rem] bg-white shadow-inner [box-shadow:0px_0px_4px_0px_#83818E_inset] px-4 py-1">
-                <h2 className=" text-[#666] text-[12px] font-[500] text-start">
-                  User Name
-                </h2>
-                <h1 className=" text-[#212121] text-[14px] font-[400] text-start">
-                  Eng. Khalid
-                </h1>
-              </div>
+<div className="flex flex-col justify-between items-start p-6 bg-[#E3F5FF] font-Inter text-[#1C1C1C] rounded-[16px] w-[400px] shadow-sm gap-6">
+  <div>
+    <h1 className="text-[17px] font-[600]">Revenue</h1>
+  </div>
+  <div className="flex justify-between items-center w-full">
+    <h1 className="text-[48px] font-[700] font-Inter">37</h1>
+    <div className="flex items-center gap-1 text-[14px] font-[400]">
+      <p>+11.01%</p>
+      <img src={iconSet} alt="iconSet" />
+    </div>
+  </div>
+</div>
+<div className="flex flex-col justify-between items-start p-6 bg-[#F7F9FB] font-Inter text-[#1C1C1C] rounded-[16px] w-[400px] shadow-sm gap-6">
+  <div>
+    <h1 className="text-[17px] font-[600]">Total Users</h1>
+  </div>
+  <div className="flex justify-between items-center w-full">
+    <h1 className="text-[48px] font-[700]">20</h1>
+    <div className="flex items-center gap-1 text-[14px] font-[400]">
+      <p>+6.08%</p>
+      <img src={iconSet} alt="iconSet" />
+    </div>
+  </div>
+</div>
+<div className="flex flex-col justify-between items-start p-6 bg-[#E5ECF6] font-Inter text-[#1C1C1C] rounded-[16px] w-[400px] shadow-sm gap-6">
+  <div>
+    <h1 className="text-[17px] font-[600]">Staffs</h1>
+  </div>
+  <div className="flex justify-between items-center w-full">
+    <h1 className="text-[48px] font-[700]">25</h1>
+    <div className="flex items-center gap-1 text-[14px] font-[400]">
+      <p>+15.03%</p>
+      <img src={iconSet} alt="iconSet" />
+    </div>
+  </div>
+</div>
             </div>
-
-            <div className="flex flex-col justify-center items-center gap-4">
-              <div className="rounded-[4px] w-[25rem] bg-white shadow-inner [box-shadow:0px_0px_4px_0px_#83818E_inset] px-4 py-1">
-                <h2 className=" text-[#666] text-[12px] font-[500] text-start">
-                  Email
-                </h2>
-                <h1 className=" text-[#212121] text-[14px] font-[400] text-start">
-                  khalidrabiu@gmail.com
-                </h1>
-              </div>
-
-              <div className="rounded-[4px] w-[25rem] bg-white shadow-inner [box-shadow:0px_0px_4px_0px_#83818E_inset] px-4 py-1">
-                <h2 className=" text-[#666] text-[12px] font-[500] text-start">
-                  Phone number
-                </h2>
-                <h1 className=" text-[#212121] text-[14px] font-[400] text-start">
-                  08085499803
-                </h1>
-              </div>
-            </div>
+            <div className=""></div>
           </div>
+          
 
           <div className="RecentPickUpOrders mt-4">
             <h2 className="text-[20px] font-semibold text-[#212121] font-Inter">
