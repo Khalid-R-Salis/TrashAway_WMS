@@ -4,6 +4,79 @@ import notificationdb from "../../assets/notificationdb.png";
 import cancelIcon from "../../assets/close.svg";
 import SidebarAdmin from "../../components/SidebarAdmin";
 
+const data = [
+  {
+    id: "US001",
+    name: "John Joe",
+    pickups: 10,
+    phoneNumber: "08111111111",
+    category: "Hazardous",
+  },
+  {
+    id: "US002",
+    name: "Jane Doe",
+    pickups: 8,
+    phoneNumber: "08122222222",
+    category: "Organic",
+  },
+  {
+    id: "US003",
+    name: "Khalid Rabiu",
+    pickups: 12,
+    phoneNumber: "08133333333",
+    category: "Recyclable",
+  },
+  {
+    id: "US004",
+    name: "Khalid Rabiu",
+    pickups: 12,
+    phoneNumber: "08133333333",
+    category: "Recyclable",
+  },
+  {
+    id: "US005",
+    name: "Khalid Rabiu",
+    pickups: 12,
+    phoneNumber: "08133333333",
+    category: "Recyclable",
+  },
+  {
+    id: "US006",
+    name: "Khalid Rabiu",
+    pickups: 12,
+    phoneNumber: "08133333333",
+    category: "Recyclable",
+  },
+  {
+    id: "US007",
+    name: "Khalid Rabiu",
+    pickups: 12,
+    phoneNumber: "08133333333",
+    category: "Recyclable",
+  },
+  {
+    id: "US008",
+    name: "Khalid Rabiu",
+    pickups: 12,
+    phoneNumber: "08133333333",
+    category: "Recyclable",
+  },
+  {
+    id: "US009",
+    name: "Khalid Rabiu",
+    pickups: 12,
+    phoneNumber: "08133333333",
+    category: "Recyclable",
+  },
+  {
+    id: "US010",
+    name: "Khalid Rabiu",
+    pickups: 12,
+    phoneNumber: "08133333333",
+    category: "Recyclable",
+  },
+];
+
 const userManagement = () => {
   // start timer
   const [time, setTime] = useState({
@@ -63,6 +136,20 @@ const userManagement = () => {
     setShowNotification(!showNotification);
   };
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const rowsPerPage = 6;
+
+  const indexOfLastRow = currentPage * rowsPerPage;
+  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  const currentRows = data.slice(indexOfFirstRow, indexOfLastRow);
+
+  const handleNextPage = () => {
+    if (indexOfLastRow < data.length) setCurrentPage(currentPage + 1);
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
   return (
     <div className="flex h-screen overflow-hidden">
       <SidebarAdmin activePage="userManagement" />
@@ -173,9 +260,63 @@ const userManagement = () => {
         </div>
 
         <div
-          className="bg-no-repeat bg-cover bg-center w-full h-full flex justify-center items-center"
+          className="bg-no-repeat bg-cover bg-center w-full h-full py-[2px] px-[5px]"
           style={{ backgroundImage: `url(${formbg})` }}
-        ></div>
+        >
+          <h1 className=" text-[#1E1E1E] text-[24px] font-[600] tracking-[-0.48px] mt-3 ml-4">
+            Pick up History
+          </h1>
+          <div className="mx-[18px] mt-[30px] bg-white shadow-md p-4 rounded-md">
+            <table className="w-full">
+              <thead>
+                <tr className="font-sans text-[#8B909A] text-[13px] font-[500] px-0 py-2">
+                  <th className="py-3 px-4 text-left">ID</th>
+                  <th className="py-3 px-4 text-left">Name</th>
+                  <th className="py-3 px-4 text-left">Pickups</th>
+                  <th className="py-3 px-4 text-left">Phone Number</th>
+                  <th className="py-3 px-4 text-left">Category</th>
+                </tr>
+              </thead>
+
+              <tbody className="px-4 py-2 text-[#23272E] text-[15px] font-[400] font-sans">
+                {currentRows.map((row, index) => (
+                  <tr key={index} className="border-b hover:bg-gray-100">
+                    <td className="py-3 px-4 text-left">{row.id}</td>
+                    <td className="py-3 px-4 text-left">{row.name}</td>
+                    <td className="py-3 px-4 text-left">{row.pickups}</td>
+                    <td className="py-3 px-4 text-left">{row.phoneNumber}</td>
+                    <td className="py-3 px-4 text-left">{row.category}</td>
+                    <td className="py-3 px-4 text-center"></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            {/* Pagination */}
+            <div className="flex justify-between mt-4">
+              <button
+                onClick={handlePreviousPage}
+                disabled={currentPage === 1}
+                className={`px-4 py-2 border ${
+                  currentPage === 1 ? "text-gray-400" : "text-gray-green"
+                } hover:bg-gray-100`}
+              >
+                Previous
+              </button>
+              <button
+                onClick={handleNextPage}
+                disabled={indexOfLastRow >= data.length}
+                className={`px-4 py-2 border ${
+                  indexOfLastRow >= data.length
+                    ? "text-gray-400"
+                    : "text-gray-green"
+                } hover:bg-gray-100`}
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        </div>
       </main>
     </div>
   );

@@ -117,10 +117,10 @@ const AdminDashboard = () => {
     setShowNotification(!showNotification);
   };
 
-  const handleDelete = (id) => {
-    const filteredOrders = orders.filter((order) => order.id !== id);
-    setOrders(filteredOrders);
-  };
+  // const handleDelete = (id) => {
+  //   const filteredOrders = orders.filter((order) => order.id !== id);
+  //   setOrders(filteredOrders);
+  // };
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -157,7 +157,7 @@ const AdminDashboard = () => {
                 className="fixed inset-0 bg-black opacity-50 z-10"
                 onClick={toggleNotification}
               ></div>
-              <div className="absolute right-[30px] mt-[23rem]  w-[370px] bg-white p-6 rounded-lg shadow-sm z-10">
+              <div className="absolute right-[30px] mt-[23rem]  w-[370px] bg-white p-6 rounded-lg shadow-sm z-50">
                 <div className="flex justify-between items-center pb-[32px]">
                   <h3 className="text-[#1E1E1E] font-Inter text-[20px] font-semibold">
                     Notifications
@@ -235,62 +235,102 @@ const AdminDashboard = () => {
           className="bg-no-repeat bg-cover bg-center w-full h-full px-5 py-2 font-Inter"
           style={{ backgroundImage: `url(${formbg})` }}
         >
-          <div className="flex justify-center items-center gap-6">
-            <div className="flex flex-wrap gap-6 ">
-            
-            <div className="flex flex-col justify-between items-start p-6 bg-[#F7F9FB] font-Inter text-[#1C1C1C] rounded-[16px] w-[400px] shadow-sm gap-6">
-  <div>
-    <h1 className="text-[17px] font-[600]">Total Vehicles</h1>
-  </div>
-  <div className="flex justify-between items-center w-full">
-    <h1 className="text-[48px] font-[700]">50</h1>
-    <div className="flex items-center gap-1 text-[14px] font-[400]">
-      <p>+0.03%</p>
-      <img src={iconSet} alt="iconSet" />
-    </div>
-  </div>
-</div>
+          <div className="grid grid-cols-[2fr_1fr] gap-2">
+            <div className=" LEFT-CONTAINER flex flex-wrap gap-6">
+              <div className="flex flex-col justify-between w-[350px] items-start p-4 bg-[#F7F9FB] font-Inter text-[#1C1C1C] rounded-[16px] shadow-sm">
+                <div>
+                  <h1 className="text-[17px] font-[600]">Total Vehicles</h1>
+                </div>
+                <div className="flex justify-between items-center w-full">
+                  <h1 className="text-[40px] font-[700]">50</h1>
+                  <div className="flex items-center gap-1 text-[14px] font-[400]">
+                    <p>+0.03%</p>
+                    <img src={iconSet} alt="iconSet" />
+                  </div>
+                </div>
+              </div>
 
-<div className="flex flex-col justify-between items-start p-6 bg-[#E3F5FF] font-Inter text-[#1C1C1C] rounded-[16px] w-[400px] shadow-sm gap-6">
-  <div>
-    <h1 className="text-[17px] font-[600]">Revenue</h1>
-  </div>
-  <div className="flex justify-between items-center w-full">
-    <h1 className="text-[48px] font-[700] font-Inter">37</h1>
-    <div className="flex items-center gap-1 text-[14px] font-[400]">
-      <p>+11.01%</p>
-      <img src={iconSet} alt="iconSet" />
-    </div>
-  </div>
-</div>
-<div className="flex flex-col justify-between items-start p-6 bg-[#F7F9FB] font-Inter text-[#1C1C1C] rounded-[16px] w-[400px] shadow-sm gap-6">
-  <div>
-    <h1 className="text-[17px] font-[600]">Total Users</h1>
-  </div>
-  <div className="flex justify-between items-center w-full">
-    <h1 className="text-[48px] font-[700]">20</h1>
-    <div className="flex items-center gap-1 text-[14px] font-[400]">
-      <p>+6.08%</p>
-      <img src={iconSet} alt="iconSet" />
-    </div>
-  </div>
-</div>
-<div className="flex flex-col justify-between items-start p-6 bg-[#E5ECF6] font-Inter text-[#1C1C1C] rounded-[16px] w-[400px] shadow-sm gap-6">
-  <div>
-    <h1 className="text-[17px] font-[600]">Staffs</h1>
-  </div>
-  <div className="flex justify-between items-center w-full">
-    <h1 className="text-[48px] font-[700]">25</h1>
-    <div className="flex items-center gap-1 text-[14px] font-[400]">
-      <p>+15.03%</p>
-      <img src={iconSet} alt="iconSet" />
-    </div>
-  </div>
-</div>
+              {/* Card 2 */}
+              <div className="flex flex-col justify-between w-[350px] items-start p-4 bg-[#E3F5FF] font-Inter text-[#1C1C1C] rounded-[16px] shadow-sm ">
+                <div>
+                  <h1 className="text-[17px] font-[600]">Revenue</h1>
+                </div>
+                <div className="flex justify-between items-center w-full">
+                  <h1 className="text-[40px] font-[700]">37</h1>
+                  <div className="flex items-center gap-1 text-[14px] font-[400]">
+                    <p>+11.01%</p>
+                    <img src={iconSet} alt="iconSet" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Card 3 */}
+              <div className="flex flex-col justify-between  w-[350px] items-start p-4 bg-[#F7F9FB] font-Inter text-[#1C1C1C] rounded-[16px] shadow-sm ">
+                <div>
+                  <h1 className="text-[17px] font-[600]">Total Users</h1>
+                </div>
+                <div className="flex justify-between items-center w-full">
+                  <h1 className="text-[40px] font-[700]">20</h1>
+                  <div className="flex items-center gap-1 text-[14px] font-[400]">
+                    <p>+6.08%</p>
+                    <img src={iconSet} alt="iconSet" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Card 4 */}
+              <div className="flex flex-col justify-between  w-[350px] items-start p-4 bg-[#E5ECF6] font-Inter text-[#1C1C1C] rounded-[16px] shadow-sm ">
+                <div>
+                  <h1 className="text-[17px] font-[600]">Staffs</h1>
+                </div>
+                <div className="flex justify-between items-center w-full">
+                  <h1 className="text-[40px] font-[700]">25</h1>
+                  <div className="flex items-center gap-1 text-[14px] font-[400]">
+                    <p>+15.03%</p>
+                    <img src={iconSet} alt="iconSet" />
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className=""></div>
+
+            <div className="relative p-[30px] bg-[#EEF5F1] rounded-[8px]">
+              <div className="text-left">
+                <h2 className="text-[#1E1E1E] font-Inter text-[18px] font-[600] tracking-[-0.36px]">
+                  Pickups
+                </h2>
+                <p className="text-[#888] text-[14px] font-[500] tracking-[-0.28px]">
+                  Last 24hours
+                </p>
+              </div>
+
+              <div className="relative mt-6 flex justify-center items-center gap-4">
+                <div className="absolute w-[120px] h-[120px] flex flex-col justify-center items-center gap-[3px] bg-[#6389EB] rounded-full text-center z-10">
+                  <p className="text-[#EEF5F1] text-[12px] font-[400] font-Inter leading-[14px]">
+                    Total Plastic Recycled
+                  </p>
+                  <h1 className="font-sans text-[16px] font-[700] text-[#FFF] tracking-[-0.311px]">
+                    25
+                  </h1>
+                </div>
+                <div className="absolute w-[100px] h-[100px] flex flex-col justify-center items-center gap-[3px] bg-[#D3E9FE] rounded-full text-center z-20 top-[7px] right-[3rem]">
+                  <p className="text-black text-[10px] font-[400] font-Inter leading-[14px] ">
+                    Hazardous Waste
+                  </p>
+                  <h1 className="font-sans text-[16px] font-[700] text-gray-600 tracking-[-0.311px]">
+                    10
+                  </h1>
+                </div>
+                <div className="absolute w-[80px] h-[80px] flex flex-col justify-center items-center gap-[3px] bg-[#1E63B5] rounded-full text-center z-30 top-[3rem] right-[8rem]">
+                  <p className="text-[#EEF5F1] text-[12px] font-[400] font-Inter leading-[14px] w-full">
+                    Organic Waste
+                  </p>
+                  <h1 className="font-sans text-[16px] font-[700] text-[#FFF] tracking-[-0.311px]">
+                    15
+                  </h1>
+                </div>
+              </div>
+            </div>
           </div>
-          
 
           <div className="RecentPickUpOrders mt-4">
             <h2 className="text-[20px] font-semibold text-[#212121] font-Inter">
@@ -348,24 +388,7 @@ const AdminDashboard = () => {
                     </td>
                     <td className="px-4 py-2">
                       {order.status === "Pending" && (
-                        <div className="relative">
-                          <button
-                            onClick={() => setSelectedOrderId(order.id)}
-                            className="text-gray-500"
-                          >
-                            &#x22EE;
-                          </button>
-                          {selectedOrderId === order.id && (
-                            <div className="absolute right-0 mt-2 w-[100px] bg-white shadow-md border border-gray-200">
-                              <button
-                                onClick={() => handleDelete(order.id)}
-                                className="w-full text-red-500 py-2 hover:bg-gray-100"
-                              >
-                                Delete
-                              </button>
-                            </div>
-                          )}
-                        </div>
+                        <div className="relative"></div>
                       )}
                     </td>
                   </tr>
