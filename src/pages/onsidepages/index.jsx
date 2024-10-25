@@ -111,7 +111,7 @@ const Landing = () => {
                         <a href="/collection">Collection Point</a>
                       </li>
                       <li className="hover:bg-gray-100 p-2 font-[500]">
-                        <a href="/">Logout</a>
+                        <a href="/">Log out</a>
                       </li>
                     </ul>
                   )}

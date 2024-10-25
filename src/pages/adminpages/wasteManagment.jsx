@@ -299,7 +299,7 @@ const WasteManagment = () => {
         >
           <div className="flex justify-between items-center px-5 py-2">
             <h1 className="text-[#1E1E1E] text-[24px] font-Inter font-[600] tracking-[-0.48px]">
-              Orders
+            Pick up Requests
             </h1>
             <input
               type="number"
@@ -340,14 +340,7 @@ const WasteManagment = () => {
               Pending
             </h2>
 
-            <h2
-              className={`cursor-pointer text-[#666] font-sans text-[15px] font-[400] ${
-                filterStatus === "All" ? "border-b-2 border-gray-green" : ""
-              }`}
-              onClick={() => setFilterStatus("All")}
-            >
-              All Orders
-            </h2>
+            
           </div>
           <hr className=" h-3 w-full" />
 

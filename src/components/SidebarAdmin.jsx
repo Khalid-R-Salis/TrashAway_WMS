@@ -117,7 +117,7 @@ const SidebarAdmin = ({ activePage }) => {
                   }`}
                 >
                   <img src={logoutdb} alt="Icon" />
-                  <Link to="/loginhome">Log Out</Link>
+                  <Link to="/">Log Out</Link>
                 </div>
               </li>
 

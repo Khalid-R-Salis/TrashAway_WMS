@@ -175,7 +175,10 @@ const WasteManagment = () => {
         <div
           className="bg-no-repeat bg-cover bg-center w-full h-full flex justify-center items-center"
           style={{ backgroundImage: `url(${formbg})` }}
-        ></div>
+        >
+          Google Map will be integrated on this page <br />
+          ON DEVELOPMENT
+        </div>
       </main>
     </div>
   );
