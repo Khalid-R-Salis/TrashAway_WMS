@@ -143,7 +143,7 @@ const Login = () => {
             Continue with Google
           </a>
         </div>
-        <a href="/signup" className="text-[#549877] font-[600]">
+        <a href="/singup" className="text-[#549877] font-[600]">
           Create an account
         </a>
       </form>
