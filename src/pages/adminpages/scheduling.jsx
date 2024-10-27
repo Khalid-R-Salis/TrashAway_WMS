@@ -304,7 +304,8 @@ const Scheduling = () => {
         >
           <div className="flex justify-between items-center px-5 py-2">
             <h1 className="text-[#1E1E1E] text-[24px] font-Inter font-[600] tracking-[-0.48px]">
-            Scheduling            </h1>
+              Scheduling{" "}
+            </h1>
             <input
               type="number"
               min={1}
@@ -369,34 +370,34 @@ const Scheduling = () => {
                 </tr>
               </thead>
               <tbody className=" px-4 py-2 text-[#23272E] text-[15px] font-[400] font-sans">
-  {currentOrders.map((order) => (
-    <tr key={order.id} className="border-b">
-      <td className="py-3 px-4 text-left">{order.id}</td>
-      <td className="py-3 px-4 text-left">{order.date}</td>
-      <td className="py-3 px-4 text-left">{order.items}</td>
-      <td className="py-3 px-4 text-left">{order.category}</td>
-      <td className="py-3 px-4 text-left">{order.status}</td>
-      <td className="py-3 px-4 text-center">
-        {order.status === "Pending" && (
-          <button
-            className="text-gray-green underline font-semibold tracking-wide"
-            onClick={() => handleAllocate(order.id)}
-          >
-            Allocate
-          </button>
-        )}
-        {order.status === "Completed" && (
-          <button
-            className="text-red-600 underline font-semibold tracking-wide"
-            onClick={() => handleDelete(order.id)}
-          >
-            Delete
-          </button>
-        )}
-      </td>
-    </tr>
-  ))}
-</tbody>
+                {currentOrders.map((order) => (
+                  <tr key={order.id} className="border-b">
+                    <td className="py-3 px-4 text-left">{order.id}</td>
+                    <td className="py-3 px-4 text-left">{order.date}</td>
+                    <td className="py-3 px-4 text-left">{order.items}</td>
+                    <td className="py-3 px-4 text-left">{order.category}</td>
+                    <td className="py-3 px-4 text-left">{order.status}</td>
+                    <td className="py-3 px-4 text-center">
+                      {order.status === "Pending" && (
+                        <button
+                          className="text-gray-green underline font-semibold tracking-wide"
+                          onClick={() => handleAllocate(order.id)}
+                        >
+                          Allocate
+                        </button>
+                      )}
+                      {order.status === "Completed" && (
+                        <button
+                          className="text-red-600 underline font-semibold tracking-wide"
+                          onClick={() => handleDelete(order.id)}
+                        >
+                          Delete
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
             </table>
 
             {/* Pagination */}
