@@ -1,57 +1,114 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "../../services/api";
 import logo from "../../assets/logo.png";
 import formbg from "../../assets/formsbg.png";
 import googleicon from "../../assets/googleicon.png";
 import eyeicon from "../../assets/eyeicon.png";
 
 const Signup = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    password: "",
+  });
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
+  // Update formData state on input change
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+
+    try {
+      const response = await axios.post("/register", formData);
+      setSuccess("Registration successful! You can now log in.");
+      setFormData({ name: "", email: "", phone: "", password: "" });
+    } catch (error) {
+      setError(
+        error.response?.data?.message || "Registration failed. Try again."
+      );
+    }
+  };
+
+  // Redirect to login page after a delay when registration is successful
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        navigate("/login");
+      }, 3000); // Redirect after 3 seconds
+
+      // Clear the timer if the component unmounts
+      return () => clearTimeout(timer);
+    }
+  }, [success, navigate]);
+
   return (
     <>
       <div
-        className=" bg-no-repeat bg-cover bg-center w-full pt-12 overflow-hidden"
+        className="bg-no-repeat bg-cover bg-center w-full pt-12 overflow-hidden"
         style={{ backgroundImage: `url(${formbg})` }}
       >
         <form
-          action=""
-          className=" font-Inter text-[#191D23] flex flex-col justify-center items-center gap-[24px]"
+          onSubmit={handleSubmit}
+          className="font-Inter text-[#191D23] flex flex-col justify-center items-center gap-[24px]"
         >
-          <a href="/" className=" mb-[40px]">
+          <a href="/" className="mb-[40px]">
             <img src={logo} alt="" />
           </a>
-          <h2 className=" text-[24px] font-[700]">Create an Account</h2>
-          <div className=" flex flex-col justify-center items-start gap-[8px]">
-            <p className=" text-[16px] font-[500] ">Name</p>
+          <h2 className="text-[24px] font-[700]">Create an Account</h2>
+          {error && <p className="text-red-500">{error}</p>}
+          {success && <p className="text-green-500">{success}</p>}
+
+          <div className="flex flex-col justify-center items-start gap-[8px]">
+            <p className="text-[16px] font-[500]">Name</p>
             <input
               type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
               placeholder="Khalid Rabiu Salis"
-              className=" outline-none rounded-[8px] px-[16px] py-[12px] w-[400px] h-[48px] border-[#4B5768] border-[1px] "
+              className="outline-none rounded-[8px] px-[16px] py-[12px] w-[400px] h-[48px] border-[#4B5768] border-[1px]"
               required
             />
           </div>
 
-          <div className=" flex flex-col justify-center items-start gap-[8px]">
-            <p className=" text-[16px] font-[500] ">Email Address</p>
+          <div className="flex flex-col justify-center items-start gap-[8px]">
+            <p className="text-[16px] font-[500]">Email Address</p>
             <input
               type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
               placeholder="khalidrabiu@gmail.com"
-              className=" outline-none rounded-[8px] px-[16px] py-[12px] w-[400px] h-[48px] border-[#4B5768] border-[1px] "
+              className="outline-none rounded-[8px] px-[16px] py-[12px] w-[400px] h-[48px] border-[#4B5768] border-[1px]"
               required
             />
           </div>
 
-          <div className=" flex flex-col justify-center items-start gap-[8px]">
-            <p className=" text-[16px] font-[500] ">Phone Number</p>
+          <div className="flex flex-col justify-center items-start gap-[8px]">
+            <p className="text-[16px] font-[500]">Phone Number</p>
             <input
               type="number"
+              name="phone"
+              value={formData.phone}
+              onChange={handleInputChange}
               placeholder="08011111111"
-              className=" outline-none rounded-[8px] px-[16px] py-[12px] w-[400px] h-[48px] border-[#4B5768] border-[1px] "
+              className="outline-none rounded-[8px] px-[16px] py-[12px] w-[400px] h-[48px] border-[#4B5768] border-[1px]"
               onInput={(e) => {
                 if (e.target.value.length > 11) {
                   e.target.value = e.target.value.slice(0, 11);
@@ -61,19 +118,21 @@ const Signup = () => {
             />
           </div>
 
-          <div className=" flex flex-col justify-center items-start gap-[8px]">
-            <div className=" flex justify-between items-center w-full">
-              <p className=" text-[16px] font-[500] ">Password</p>
+          <div className="flex flex-col justify-center items-start gap-[8px]">
+            <div className="flex justify-between items-center w-full">
+              <p className="text-[16px] font-[500]">Password</p>
             </div>
             <div className="relative">
               <input
-                type={showPassword ? " text" : "password"}
+                type={showPassword ? "text" : "password"}
+                name="password"
+                value={formData.password}
+                onChange={handleInputChange}
                 className="bg-no-repeat bg-[20px_center] bg-[length:20px_20px] outline-none rounded-[8px] pl-[48px] pr-[16px] py-[12px] w-[400px] h-[48px] border-[#4B5768] border-[1px]"
                 style={{ backgroundImage: `url(${eyeicon})` }}
                 placeholder="Enter Your Password"
                 required
               />
-              {/* Hidden button overlay to detect click on the icon */}
               <button
                 type="button"
                 onClick={togglePasswordVisibility}
@@ -82,37 +141,40 @@ const Signup = () => {
               />
             </div>
           </div>
-          <div className=" mt-[8px] mb-[-10px] flex justify-start items-center gap-[16px] w-full ml-[74%] ">
-            <p className=" text-[14px] font-[400]">
-              By continuring, you agree to our{" "}
-              <a href="/ourterms" className=" text-[#549877]">
+
+          <div className="mt-[8px] mb-[-10px] flex justify-start items-center gap-[16px] w-full ml-[74%]">
+            <p className="text-[14px] font-[400]">
+              By continuing, you agree to our{" "}
+              <a href="/ourterms" className="text-[#549877]">
                 terms of service.
               </a>
             </p>
           </div>
+
           <button
-            class="text-white bg-[#549877] py-[16px] rounded-[4px] w-[400px]"
+            className="text-white bg-[#549877] py-[16px] rounded-[4px] w-[400px]"
             type="submit"
           >
             Sign up
           </button>
-          <div className=" flex justify-center items-center gap-4">
-            <div class=" border-[0.5px] border-solid border-[#4B5768] w-[115px] opacity-[0.2]"></div>
+
+          <div className="flex justify-center items-center gap-4">
+            <div className="border-[0.5px] border-solid border-[#4B5768] w-[115px] opacity-[0.2]"></div>
             <p>or sign up with</p>
-            <div class=" border-[1px] border-solid border-[#4B5768] w-[115px] opacity-[0.2]"></div>
+            <div className="border-[1px] border-solid border-[#4B5768] w-[115px] opacity-[0.2]"></div>
           </div>
-          <div className=" flex justify-center items-center gap-[16px] py-[12px] bg-[#E4E7EB] rounded-[4px] w-[400px]">
+
+          <div className="flex justify-center items-center gap-[16px] py-[12px] bg-[#E4E7EB] rounded-[4px] w-[400px]">
             <img src={googleicon} alt="" />
-            <a href="" className=" text-[#4B5768] text-[16px] font-[400]">
-              {" "}
+            <a href="" className="text-[#4B5768] text-[16px] font-[400]">
               Continue with Google
             </a>
           </div>
-          <div className=" flex justify-center items-center gap-1 mb-10">
+
+          <div className="flex justify-center items-center gap-1 mb-10">
             <p>Already have an account?</p>
-            <a href="/login" className=" text-[#549877] font-[600]">
-              {" "}
-              Login in here
+            <a href="/login" className="text-[#549877] font-[600]">
+              Login here
             </a>
           </div>
         </form>
