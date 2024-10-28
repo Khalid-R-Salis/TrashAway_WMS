@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; // For navigation after login
+import { useNavigate } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import formbg from "../../assets/formsbg.png";
 import googleicon from "../../assets/googleicon.png";
@@ -11,7 +11,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [keepSignedIn, setKeepSignedIn] = useState(false);
-  const [error, setError] = useState(""); // Error state for handling errors
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
@@ -20,7 +20,7 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError(""); // Reset error state
+    setError("");
 
     try {
       const response = await axios.post(
@@ -31,26 +31,29 @@ const Login = () => {
         }
       );
 
-      // If login is successful, store token or session data and redirect
       if (response.data.token) {
         const user = {
           email,
           token: response.data.token,
-          ...response.data.user, // Spread user data
+          ...response.data.user, 
         };
 
         if (keepSignedIn) {
           localStorage.setItem("userSession", JSON.stringify(user));
         }
 
-        // Redirect to the login home page
-        navigate("/loginhome");
+        // Redirect based on the user's role
+        if (user.role === "admin") {
+          navigate("/admindashboard");
+        } else {
+          navigate("/loginhome");
+        }
       } else {
         setError(response.data.message || "Login failed. Please try again.");
       }
     } catch (err) {
       setError(
-        "An error occurred. Please check your credentials and try again."
+        "Please check your credentials and try again."
       );
     }
   };
@@ -143,7 +146,7 @@ const Login = () => {
             Continue with Google
           </a>
         </div>
-        <a href="/singup" className="text-[#549877] font-[600]">
+        <a href="/signup" className="text-[#549877] font-[600]">
           Create an account
         </a>
       </form>
