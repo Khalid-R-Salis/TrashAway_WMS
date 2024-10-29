@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-// import React from "react";
+import api from "../../services/api";
 import { useRef } from "react";
 import bgLogo from "../../assets/bg1.png";
 import logo from "../../assets/logo.png";
@@ -42,10 +42,57 @@ const scrollToTestimonials = () => {
 };
 
 const Landing = () => {
-  // State to track the form's visibility
-  const [showForm, setShowForm] = useState(false);
-
+  // State variables
   const [isOpen, setIsOpen] = useState(false);
+  const [showForm, setShowForm] = useState(false);
+  const [capacity, setCapacity] = useState(1);
+  const [location, setLocation] = useState("");
+  const [time, setTime] = useState("");
+  const [category, setCategory] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
+
+  // Handle form submission
+  const handlePickupRequest = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setError("");
+
+    try {
+      // Retrieve token and userId from localStorage
+      const userSession = JSON.parse(localStorage.getItem("userSession"));
+      const token = userSession?.token;
+      const userId = userSession?.userId;
+
+      // Check for token and userId
+      if (!token || !userId) {
+        alert("User not authenticated");
+        setIsSubmitting(false);
+        return;
+      }
+
+      // API request
+      const response = await api.post(`/user/request-pickup/${userId}`, {
+        capacity,
+        location,
+        time,
+        category,
+      });
+
+      // Handle success response
+      if (response.data && response.data.message) {
+        alert(response.data.message);
+        setShowForm(false); // Close form
+      }
+    } catch (error) {
+      console.error("Pickup request failed:", error);
+      setError(
+        error.response?.data?.message || "Failed to create pickup request"
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="new">
@@ -122,7 +169,7 @@ const Landing = () => {
                 <button
                   id="pickuprequest"
                   className="text-white bg-light-green px-[10px] py-[10px] rounded-[4px] font-[600] text-[16px]"
-                  onClick={() => setShowForm(true)} // Show the form when clicked
+                  onClick={() => setShowForm(true)}
                 >
                   Request for Pickup
                 </button>
@@ -160,61 +207,69 @@ const Landing = () => {
 
         {showForm && (
           <div className="fixed inset-0 bg-black bg-opacity-50 z-30 flex justify-center items-center overflow-hidden">
-            <form className="font-Inter bg-[#EEF5F1] flex flex-col py-[14.793px] px-[11.834px] justify-center items-center rounded-[11.834px] gap-[17.751px]">
-              {/* Cancel Button to close the form */}
+            <form
+              className="font-Inter bg-[#EEF5F1] flex flex-col py-[14.793px] px-[11.834px] justify-center items-center rounded-[11.834px] gap-[17.751px]"
+              onSubmit={handlePickupRequest}
+            >
               <button
                 type="button"
                 className="absolute right-0 top-0 mt-[205px] mr-[530px]"
                 onClick={() => setShowForm(false)}
               >
-                <img src={cancel_onlogin} alt="cancel" />
+                Close
               </button>
 
               <h2 className="text-[20px] font-[600] text-center">
                 Enter Amount of Recyclables
               </h2>
-              <p className="text-[#666] text-[13px] font-[400] text-center leading-[150%] w-[248px] mt-[-10px]">
-                Select the number of items for pickup. Each bin should not
-                weight above 50kg
-              </p>
 
               <input
                 type="number"
-                placeholder="1"
+                placeholder="Capacity"
                 min={1}
                 max={99}
-                maxLength={2}
                 className="outline-none w-[59px] h-[52px] py-[11.834px] px-[8.876px] rounded-[5.917px] border-[0.74px] border-solid border-[#626262] bg-[#549877] text-white"
+                value={capacity}
+                onChange={(e) => setCapacity(e.target.value)}
+                required
               />
-
-              <div className="relative">
-                <input
-                  type="text"
-                  className="bg-no-repeat bg-[20px_center] bg-[length:20px_20px] outline-none rounded-[5.917px] pl-[48px] pr-[16px] py-[11px] w-[476px] h-[37px] border-[#549877] border-[1px]"
-                  placeholder="Location"
-                  style={{ backgroundImage: `url(${location})` }}
-                  required
-                />
-              </div>
 
               <input
                 type="text"
                 className="outline-none rounded-[5.917px] pl-[7.4px] py-[11px] w-[476px] h-[37px] border-[#549877] border-[1px]"
-                placeholder="Pickup Time"
+                placeholder="Location"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
                 required
               />
+
+              <input
+                type="datetime-local"
+                className="outline-none rounded-[5.917px] pl-[7.4px] py-[11px] w-[476px] h-[37px] border-[#549877] border-[1px]"
+                placeholder="Pickup Time"
+                value={time}
+                onChange={(e) => setTime(e.target.value)}
+                required
+              />
+
               <input
                 type="text"
                 className="outline-none rounded-[5.917px] pl-[7.4px] py-[11px] w-[476px] h-[37px] border-[#549877] border-[1px] mb-3"
                 placeholder="Category of Waste"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
                 required
               />
+
+              {/* Error message */}
+              {error && <p className="text-red-500">{error}</p>}
 
               <button
                 className="text-white font-Inter text-[600] text-[16.646px] bg-[#549877] py-[8.136px] px-[96.893px] rounded-[2.959px] w-[476px] h-[37px]"
                 type="submit"
+                disabled={isSubmitting}
               >
-                Request for pickup
+                {isSubmitting ? "Submitting..." : "Request for Pickup"}
               </button>
             </form>
           </div>

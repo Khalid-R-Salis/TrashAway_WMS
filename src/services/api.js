@@ -1,3 +1,25 @@
+// import axios from "axios";
+
+// const api = axios.create({
+//   baseURL: "https://waste-mangement-backend-j7t0.onrender.com/api",
+//   headers: {
+//     "Content-Type": "application/json",
+//   },
+// });
+
+// api.interceptors.request.use(
+//   (config) => {
+//     const token = localStorage.getItem("token");
+//     if (token) {
+//       config.headers.Authorization = `Bearer ${token}`;
+//     }
+//     return config;
+//   },
+//   (error) => Promise.reject(error)
+// );
+
+// export default api;
+
 import axios from "axios";
 
 const api = axios.create({
@@ -7,12 +29,12 @@ const api = axios.create({
   },
 });
 
-
+// Interceptor to set the Authorization header for each request
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("token"); 
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    const userSession = JSON.parse(localStorage.getItem("userSession"));
+    if (userSession?.token) {
+      config.headers.Authorization = `Bearer ${userSession.token}`;
     }
     return config;
   },

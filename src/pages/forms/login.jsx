@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../../services/api";
 import { useNavigate } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import formbg from "../../assets/formsbg.png";
@@ -35,12 +35,11 @@ const Login = () => {
         const user = {
           email,
           token: response.data.token,
-          ...response.data.user, 
+          ...response.data.user,
         };
 
-        if (keepSignedIn) {
-          localStorage.setItem("userSession", JSON.stringify(user));
-        }
+        // Store the token in localStorage for authenticated requests
+        localStorage.setItem("userSession", JSON.stringify(user));
 
         // Redirect based on the user's role
         if (user.role === "admin") {
@@ -52,9 +51,7 @@ const Login = () => {
         setError(response.data.message || "Login failed. Please try again.");
       }
     } catch (err) {
-      setError(
-        "Please check your credentials and try again."
-      );
+      setError("Please check your credentials and try again.");
     }
   };
 
