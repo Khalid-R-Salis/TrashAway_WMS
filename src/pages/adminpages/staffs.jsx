@@ -91,7 +91,10 @@ const Staffs = () => {
   const ordersPerPage = 6;
   const indexOfLastOrder = currentPage * ordersPerPage;
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
-  const currentOrders = filteredOrders.slice(indexOfFirstOrder, indexOfLastOrder);
+  const currentOrders = filteredOrders.slice(
+    indexOfFirstOrder,
+    indexOfLastOrder
+  );
   const totalPages = Math.ceil(filteredOrders.length / ordersPerPage);
 
   const handleNext = () => {
@@ -106,7 +109,6 @@ const Staffs = () => {
 
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
-
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -136,7 +138,10 @@ const Staffs = () => {
 
           {showNotification && (
             <>
-              <div className="fixed inset-0 bg-black opacity-50 z-10" onClick={toggleNotification}></div>
+              <div
+                className="fixed inset-0 bg-black opacity-50 z-10"
+                onClick={toggleNotification}
+              ></div>
               <div className="absolute right-[30px] mt-[23rem] w-[370px] bg-white p-6 rounded-lg shadow-sm z-10">
                 <div className="flex justify-between items-center pb-[32px]">
                   <h3 className="text-[#1E1E1E] font-Inter text-[20px] font-semibold">
@@ -164,31 +169,47 @@ const Staffs = () => {
               Staffs
             </h1>
             <button
-        className="py-[12px] px-[39px] bg-[#549877] rounded-[4px] text-white"
-        onClick={openModal}
-      >
-        + <span className="ml-2">Add Staff</span>
-      </button>
+              className="py-[12px] px-[39px] bg-[#549877] rounded-[4px] text-white"
+              onClick={openModal}
+            >
+              + <span className="ml-2">Add Staff</span>
+            </button>
           </div>
 
           <div className="RecentPickUpOrders mt-4 mx-[20px]">
             <table className="min-w-full table-auto bg-white shadow-md rounded-md py-5">
               <thead>
                 <tr>
-                  <th className="text-[#8B909A] text-[13px] font-[500] px-0 py-2">ID</th>
-                  <th className="text-[#8B909A] text-[13px] font-[500] px-0 py-2">Name</th>
-                  <th className="text-[#8B909A] text-[13px] font-[500] px-0 py-2">Phone Number</th>
-                  <th className="text-[#8B909A] text-[13px] font-[500] px-0 py-2">Role</th>
+                  <th className="text-[#8B909A] text-[13px] font-[500] px-0 py-2">
+                    ID
+                  </th>
+                  <th className="text-[#8B909A] text-[13px] font-[500] px-0 py-2">
+                    Name
+                  </th>
+                  <th className="text-[#8B909A] text-[13px] font-[500] px-0 py-2">
+                    Phone Number
+                  </th>
+                  <th className="text-[#8B909A] text-[13px] font-[500] px-0 py-2">
+                    Role
+                  </th>
                   <th className="px-0 py-2"></th>
                 </tr>
               </thead>
               <tbody>
                 {currentOrders.map((order) => (
                   <tr key={order.id} className="border-b">
-                    <td className="px-[45px] py-2 text-[#23272E] text-[15px] font-[400]">{order.id}</td>
-                    <td className="px-[45px] py-2 text-[#23272E] text-[15px] font-[400]">{order.name}</td>
-                    <td className="px-[45px] py-2 text-[#23272E] text-[15px] font-[400]">{order.phoneNumber}</td>
-                    <td className="px-[45px] py-2 text-[#23272E] text-[15px] font-[400]">{order.role}</td>
+                    <td className="px-[45px] py-2 text-[#23272E] text-[15px] font-[400]">
+                      {order.id}
+                    </td>
+                    <td className="px-[45px] py-2 text-[#23272E] text-[15px] font-[400]">
+                      {order.name}
+                    </td>
+                    <td className="px-[45px] py-2 text-[#23272E] text-[15px] font-[400]">
+                      {order.phoneNumber}
+                    </td>
+                    <td className="px-[45px] py-2 text-[#23272E] text-[15px] font-[400]">
+                      {order.role}
+                    </td>
                     <td className="px-4 py-2">
                       <div className="relative">
                         <button
@@ -256,84 +277,85 @@ const Staffs = () => {
           </div>
         )}
 
-         {/* Modal for the form */}
-      {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white rounded-lg p-6 w-[400px] relative">
-            <button
-              className="absolute top-2 right-2 text-gray-600"
-              onClick={closeModal}
-            >
-              &times;
-            </button>
+        {/* Modal for the form */}
+        {showModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+            <div className="bg-white rounded-lg p-6 w-[400px] relative">
+              <button
+                className="absolute top-2 right-2 text-gray-600"
+                onClick={closeModal}
+              >
+                &times;
+              </button>
 
-            <h2 className="text-[16px] font-Inter font-[500] mb-4">Add Staff</h2>
-            <form className="">
-              <div className="mb-4">
-                <label className="block text-gray-700">Full Name</label>
-                <input
-                  type="text"
-                  className="w-full border border-gray-300 p-2 rounded outline-none"
-                  placeholder="Enter Full Name"
-                  required
-                />
-              </div>
+              <h2 className="text-[16px] font-Inter font-[500] mb-4">
+                Add Staff
+              </h2>
+              <form className="">
+                <div className="mb-4">
+                  <label className="block text-gray-700">Full Name</label>
+                  <input
+                    type="text"
+                    className="w-full border border-gray-300 p-2 rounded outline-none"
+                    placeholder="Enter Full Name"
+                    required
+                  />
+                </div>
 
-              <div className="mb-4">
-                <label className="block text-gray-700">Email</label>
-                <input
-                  type="email"
-                  className="w-full border border-gray-300 p-2 rounded outline-none"
-                  placeholder="Enter Email"
-                  required
-                />
-              </div>
+                <div className="mb-4">
+                  <label className="block text-gray-700">Email</label>
+                  <input
+                    type="email"
+                    className="w-full border border-gray-300 p-2 rounded outline-none"
+                    placeholder="Enter Email"
+                    required
+                  />
+                </div>
 
-              <div className="mb-4">
-                <label className="block text-gray-700">Contact Number</label>
-                <input
-                  type="number"
-                  className="w-full border border-gray-300 p-2 rounded outline-none"
-                  placeholder="Enter Contact Number"
-                  required
-                />
-              </div>
+                <div className="mb-4">
+                  <label className="block text-gray-700">Contact Number</label>
+                  <input
+                    type="number"
+                    className="w-full border border-gray-300 p-2 rounded outline-none"
+                    placeholder="Enter Contact Number"
+                    required
+                  />
+                </div>
 
-              <div className="mb-4">
-                <label className="block text-gray-700">Role</label>
-                <input
-                  type="text"
-                  className="w-full border border-gray-300 text-gray-400 p-2 rounded outline-none"
-                  placeholder="Driver"
-                  value={"Driver"}
-                  disabled
-                  
-                />
-              </div>
+                <div className="mb-4">
+                  <label className="block text-gray-700">Role</label>
+                  <input
+                    type="text"
+                    className="w-full border border-gray-300 text-gray-400 p-2 rounded outline-none"
+                    placeholder="Driver"
+                    value={"Driver"}
+                    disabled
+                  />
+                </div>
 
-              <div className="flex justify-between">
-                <button
-                  type="button"
-                  className="text-gray-600"
-                  onClick={closeModal}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="bg-gray-green text-white px-4 py-2 rounded"
-                >
-                  Create
-                </button>
-              </div>
-            </form>
-            {/* Form ends here */}
+                <div className="flex justify-between">
+                  <button
+                    type="button"
+                    className="text-gray-600"
+                    onClick={closeModal}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="bg-gray-green text-white px-4 py-2 rounded"
+                  >
+                    Create
+                  </button>
+                </div>
+              </form>
+              {/* Form ends here */}
+            </div>
           </div>
-        </div>
-      )}
+        )}
       </main>
     </div>
-);
+  );
 };
 
 export default Staffs;

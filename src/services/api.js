@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://waste-mangement-backend-j7t0.onrender.com/api",
+  baseURL: "https://waste-mangement-backend.onrender.com",
   headers: {
     "Content-Type": "application/json",
   },
