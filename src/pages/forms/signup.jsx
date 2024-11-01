@@ -35,7 +35,17 @@ const Signup = () => {
     setSuccess("");
 
     try {
-      const response = await axios.post("/register", formData);
+      // const response = await axios.post("/register", formData);
+      const response = await fetch('http://localhost:5500/api/register', {
+        method: 'POST',
+        body: JSON.stringify({ name: formData.name, email: formData.email, phone: formData.phone, password: formData.password }),
+        headers: { 'Content-Type': 'application/json'}
+      });
+
+      // console.log({ name: formData.name, email: formData.email, phone: formData.phone, password: formData.password })
+
+      const data = await response.json();
+      console.log(data)
       setSuccess("Registration successful! You can now log in.");
       setFormData({ name: "", email: "", phone: "", password: "" });
     } catch (error) {

@@ -23,21 +23,34 @@ const Login = () => {
     setError("");
 
     try {
-      const response = await axios.post(
-        "https://waste-mangement-backend-j7t0.onrender.com/api/login",
-        {
-          email,
-          password,
-        }
-      );
+      // const response = await axios.post(
+      //   "https://waste-mangement-backend-j7t0.onrender.com/api/login",
+      //   {
+      //     email,
+      //     password,
+      //   }
+      // );
 
-      if (response.data.token) {
-        const user = {
-          email,
-          token: response.data.token,
-          ...response.data.user,
-        };
+      const response = await fetch('http://localhost:5500/api/login', {
+        method: 'POST',
+        body: JSON.stringify({ email, password }),
+        headers: { 'Content-Type': 'application/json'}
+      });
 
+      const data = await response.json();
+
+      console.log(data)
+
+      // if (response.data.token) {
+      //   const user = {
+      //     email,
+      //     token: response.data.token,
+      //     ...response.data.user,
+      //   };
+
+      if (data.token) {
+        const user = { email, token: data.token, ...data.user }
+      
         // Store the token in localStorage for authenticated requests
         localStorage.setItem("userSession", JSON.stringify(user));
 
@@ -48,10 +61,11 @@ const Login = () => {
           navigate("/loginhome");
         }
       } else {
-        setError(response.data.message || "Login failed. Please try again.");
+        setError(data.message || "Login failed. Please try again.");
       }
     } catch (err) {
       setError("Please check your credentials and try again.");
+      console.log(err)
     }
   };
 

@@ -62,7 +62,9 @@ const Landing = () => {
       // Retrieve token and userId from localStorage
       const userSession = JSON.parse(localStorage.getItem("userSession"));
       const token = userSession?.token;
-      const userId = userSession?.userId;
+      const userId = userSession?.id;
+
+      console.log('User session',userSession);      
 
       // Check for token and userId
       if (!token || !userId) {
@@ -72,22 +74,33 @@ const Landing = () => {
       }
 
       // API request
-      const response = await api.post(`/user/request-pickup/${userId}`, {
-        capacity,
-        location,
-        time,
-        category,
+      // const response = await api.post(`/user/request-pickup/${userId}`, {
+      //   capacity,
+      //   location,
+      //   time,
+      //   category,
+      // });
+
+      const response = await fetch(`http://localhost:5500/api/user/request-pickup/${userId}`, {
+        method: 'POST',
+        body: JSON.stringify({ capacity, location, time, category }),
+        headers: { 'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        }
       });
 
-      // Handle success response
-      if (response.data && response.data.message) {
-        alert(response.data.message);
+      const data = await response.json();
+      console.log(data)
+
+      // // Handle success response
+      if (data && data.message) {
+        alert(data.message);
         setShowForm(false); // Close form
       }
     } catch (error) {
       console.error("Pickup request failed:", error);
       setError(
-        error.response?.data?.message || "Failed to create pickup request"
+        data.message || "Failed to create pickup request"
       );
     } finally {
       setIsSubmitting(false);
