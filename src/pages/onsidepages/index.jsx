@@ -1,6 +1,5 @@
-import React, { useState } from "react";
-import api from "../../services/api";
-import { useRef } from "react";
+import { useState } from "react";
+// import api from "../../services/api";
 import bgLogo from "../../assets/bg1.png";
 import logo from "../../assets/logo.png";
 import vector1 from "../../assets/Vector1.png";
@@ -29,8 +28,8 @@ import arrowright from "../../assets/ArrowRight.png";
 import staricon from "../../assets/StarIcon.png";
 import aishapic from "../../assets/Aishapic.png";
 import sundayPic from "../../assets/SundayPic.png";
-import location from "../../assets/location.png";
-import cancel_onlogin from "../../assets/cancel_onlogin.png";
+// import location from "../../assets/location.png";
+// import cancel_onlogin from "../../assets/cancel_onlogin.png";
 import profileicon from "../../assets/profileicon.png";
 import arrow_down from "../../assets/arrow_down.svg";
 
@@ -64,8 +63,6 @@ const Landing = () => {
       const token = userSession?.token;
       const userId = userSession?.id;
 
-      console.log('User session',userSession);      
-
       // Check for token and userId
       if (!token || !userId) {
         alert("User not authenticated");
@@ -75,19 +72,26 @@ const Landing = () => {
 
       // API request
       // const response = await api.post(`/user/request-pickup/${userId}`, {
-      //   capacity,
+      //   capacity,kageyoshi
       //   location,
       //   time,
       //   category,
       // });
 
+      const categoryValue = category.charAt(0).toUpperCase() + category.slice(1).toLowerCase();
       const response = await fetch(`http://localhost:5500/api/user/request-pickup/${userId}`, {
         method: 'POST',
-        body: JSON.stringify({ capacity, location, time, category }),
+        body: JSON.stringify({ capacity, location, time, category: categoryValue }),
         headers: { 'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`
         }
       });
+      
+      if(!response.ok) {
+        setError(
+          "Failed to create pickup request"
+        );
+      }
 
       const data = await response.json();
       console.log(data)
@@ -99,9 +103,7 @@ const Landing = () => {
       }
     } catch (error) {
       console.error("Pickup request failed:", error);
-      setError(
-        data.message || "Failed to create pickup request"
-      );
+      setError(error.message)
     } finally {
       setIsSubmitting(false);
     }
@@ -267,7 +269,7 @@ const Landing = () => {
 
               <input
                 type="text"
-                className="outline-none rounded-[5.917px] pl-[7.4px] py-[11px] w-[476px] h-[37px] border-[#549877] border-[1px] mb-3"
+                className="outline-none rounded-[5.917px] pl-[7.4px] py-[11px] w-[476px] h-[37px] border-[#549877] border-[1px] mb-3 capitalize"
                 placeholder="Category of Waste"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
@@ -364,7 +366,7 @@ const Landing = () => {
                 Practices
               </h2>
               <p className=" w-[14rem] text-[16px]  text-section-gray">
-                Contribute to Kano's sustainability efforts by categorizing your
+                Contribute to Kano&apos;s sustainability efforts by categorizing your
                 waste correctly.
               </p>
             </div>
@@ -462,7 +464,7 @@ const Landing = () => {
               Impact Statistics
             </h1>
             <p className=" w-[60rem] text-center text-[20px] text-gray-black">
-              Explore the significant strides we've made in waste management,
+              Explore the significant strides {`we've`} made in waste management,
               from reducing pollution to enhancing community health and
               sustainability across the state.
             </p>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Sidebar from "../../components/Sidebar";
 import formbg from "../../assets/formsbg.png";
 import notificationdb from "../../assets/notificationdb.png";
@@ -6,7 +6,19 @@ import cancelIcon from "../../assets/close.svg";
 import profile2 from "../../assets/profiledb2.png";
 
 const Dashboard = () => {
-  // start timer
+  const [showNotification, setShowNotification] = useState(false);
+  const [orders, setOrders] = useState([]);
+  const [selectedOrderId, setSelectedOrderId] = useState(null);
+  const [errors, setErrors] = useState("");
+  const [userId, setUserID] = useState("");
+  const [token, seToken] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [username, setUserName] = useState('');
+
+  // @desc: States for Timer
   const [time, setTime] = useState({
     hours: "00",
     minutes: "00",
@@ -18,6 +30,58 @@ const Dashboard = () => {
     year: 2023,
   });
 
+  // @desc: fetching user pickup orders
+  useEffect(() => {
+    const userSession = JSON.parse(localStorage.getItem("userSession"));
+    seToken(userSession?.token);
+    setUserID(userSession?.id);
+  }, []);
+
+  const fetchUserOrdersHandler = useCallback(async () => {
+    if (!userId || !token) return;
+
+    try {
+      setIsLoading(true);
+      const response = await fetch(
+        `http://localhost:5500/api/user/all-user-pickups/${userId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const { pickupData, error, message, name, email, username, phoneNumber } = await response.json();
+
+      if (!response.ok) {
+        setErrors("Something happened, Try Again Later");
+        console.log(error);
+      }
+
+      if (message === "No pickups found.") {
+        setErrors("No pickups found.");
+      }
+
+      // @desc: set profile information
+      setName(name);
+      setEmail(email);
+      setUserName(username);
+      setPhoneNumber(phoneNumber);
+      
+      // @des: set user pickup order
+      setOrders(pickupData);
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [token, userId]);
+
+  useEffect(() => {
+    fetchUserOrdersHandler();
+  }, [fetchUserOrdersHandler]);
+
+  // start timer
   useEffect(() => {
     const updateDateTime = () => {
       const now = new Date();
@@ -56,62 +120,7 @@ const Dashboard = () => {
     const intervalId = setInterval(updateDateTime, 1000);
     return () => clearInterval(intervalId); // Cleanup interval on unmount
   }, []);
-
   // end timer
-
-  const [showNotification, setShowNotification] = useState(false);
-  const [orders, setOrders] = useState([
-    {
-      id: 1001,
-      date: "7 July 2024",
-      items: 20,
-      category: "Recyclable",
-      status: "Pending",
-    },
-    {
-      id: 1002,
-      date: "7 July 2024",
-      items: 10,
-      category: "Recyclable",
-      status: "Pending",
-    },
-    {
-      id: 1003,
-      date: "7 July 2024",
-      items: 8,
-      category: "Recyclable",
-      status: "Pending",
-    },
-    {
-      id: 1004,
-      date: "7 July 2024",
-      items: 4,
-      category: "Hazardous",
-      status: "Completed",
-    },
-    {
-      id: 1005,
-      date: "7 July 2024",
-      items: 16,
-      category: "Organic",
-      status: "Completed",
-    },
-    {
-      id: 1006,
-      date: "7 July 2024",
-      items: 18,
-      category: "Hazardous",
-      status: "Completed",
-    },
-    {
-      id: 1007,
-      date: "7 July 2024",
-      items: 20,
-      category: "Organic",
-      status: "Completed",
-    },
-  ]);
-  const [selectedOrderId, setSelectedOrderId] = useState(null);
 
   const toggleNotification = () => {
     setShowNotification(!showNotification);
@@ -246,7 +255,7 @@ const Dashboard = () => {
                   Full Name
                 </h2>
                 <h1 className=" text-[#212121] text-[14px] font-[400] text-start">
-                  Khalid Rabiu
+                  {name}
                 </h1>
               </div>
 
@@ -255,7 +264,7 @@ const Dashboard = () => {
                   User Name
                 </h2>
                 <h1 className=" text-[#212121] text-[14px] font-[400] text-start">
-                  Eng. Khalid
+                  {username}
                 </h1>
               </div>
             </div>
@@ -266,16 +275,16 @@ const Dashboard = () => {
                   Email
                 </h2>
                 <h1 className=" text-[#212121] text-[14px] font-[400] text-start">
-                  khalidrabiu@gmail.com
+                  {email}
                 </h1>
               </div>
 
               <div className="rounded-[4px] w-[25rem] bg-white shadow-inner [box-shadow:0px_0px_4px_0px_#83818E_inset] px-4 py-1">
                 <h2 className=" text-[#666] text-[12px] font-[500] text-start">
-                  Phone number
+                  Phone Number
                 </h2>
                 <h1 className=" text-[#212121] text-[14px] font-[400] text-start">
-                  08085499803
+                  {phoneNumber}
                 </h1>
               </div>
             </div>
@@ -311,11 +320,19 @@ const Dashboard = () => {
               </thead>
               <tbody>
                 {orders.map((order) => (
-                  <tr key={order.id} className="border-b">
-                    <td className="px-4 py-2 text-[#23272E] text-[15px] font-[400] font-sans">{order.id}</td>
-                    <td className="px-4 py-2 text-[#23272E] text-[15px] font-[400] font-sans">{order.date}</td>
-                    <td className="px-4 py-2 text-[#23272E] text-[15px] font-[400] font-sans">{order.items}</td>
-                    <td className="px-4 py-2 text-[#23272E] text-[15px] font-[400] font-sans">{order.category}</td>
+                  <tr key={order._id} className="border-b">
+                    <td className="px-4 py-2 text-[#23272E] text-[15px] font-[400] font-sans">
+                      {order.searchId}
+                    </td>
+                    <td className="px-4 py-2 text-[#23272E] text-[15px] font-[400] font-sans">
+                      {order.time}
+                    </td>
+                    <td className="px-4 py-2 text-[#23272E] text-[15px] font-[400] font-sans">
+                      {order.capacity}
+                    </td>
+                    <td className="px-4 py-2 text-[#23272E] text-[15px] font-[400] font-sans">
+                      {order.category}
+                    </td>
                     <td className="px-4 py-2 text-[#23272E] text-[15px] font-[400] font-sans">
                       {order.status === "Pending" ? (
                         <span className="text-yellow-500 bg-yellow-50 p-1">
@@ -331,12 +348,12 @@ const Dashboard = () => {
                       {order.status === "Pending" && (
                         <div className="relative">
                           <button
-                            onClick={() => setSelectedOrderId(order.id)}
+                            onClick={() => setSelectedOrderId(order._id)}
                             className="text-gray-500"
                           >
                             &#x22EE;
                           </button>
-                          {selectedOrderId === order.id && (
+                          {selectedOrderId === order._id && (
                             <div className="absolute right-0 mt-2 w-[100px] bg-white shadow-md border border-gray-200">
                               <button
                                 onClick={() => handleDelete(order.id)}
@@ -354,6 +371,11 @@ const Dashboard = () => {
               </tbody>
             </table>
           </div>
+          {!isLoading && errors && (
+            <div className="flex justify-center items-center text-red-500 my-32 text-xl">
+              <p>{errors}</p>
+            </div>
+          )}
         </div>
       </main>
     </div>

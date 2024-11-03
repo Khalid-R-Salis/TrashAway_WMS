@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import axios from "../../services/api";
+import { useState, useEffect } from "react";
+// import axios from "../../services/api";
 import { useNavigate } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import formbg from "../../assets/formsbg.png";

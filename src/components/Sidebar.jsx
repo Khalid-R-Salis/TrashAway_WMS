@@ -1,6 +1,4 @@
-import React from "react";
 import { Link } from "react-router-dom";
-
 import dashboarddb from "../assets/dashboarddb.png";
 import settingdb from "../assets/settingdb.png";
 import shopdb from "../assets/shopdb.png";
@@ -8,6 +6,7 @@ import logoutdb from "../assets/logoutdb.png";
 import cartdb from "../assets/cartdb.png";
 import profiledb1 from "../assets/profiledb1.png";
 
+// eslint-disable-next-line react/prop-types
 const Sidebar = ({ activePage }) => {
   return (
     <>

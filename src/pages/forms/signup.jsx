@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "../../services/api";
+// import axios from "../../services/api";
 import logo from "../../assets/logo.png";
 import formbg from "../../assets/formsbg.png";
 import googleicon from "../../assets/googleicon.png";
