@@ -61,7 +61,7 @@ const Orders = () => {
 
   const [showNotification, setShowNotification] = useState(false);
   const toggleNotification = () => {
-    setShowNotification(!showNotification);
+    setShowNotification(prevValue => !prevValue);
   };
 
   // Orders logic

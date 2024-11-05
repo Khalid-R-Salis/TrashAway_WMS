@@ -39,8 +39,6 @@ const Login = () => {
 
       const data = await response.json();
 
-      console.log(data)
-
       // if (response.data.token) {
       //   const user = {
       //     email,
@@ -53,11 +51,7 @@ const Login = () => {
       
         // Store the token in localStorage for authenticated requests
         localStorage.setItem("userSession", JSON.stringify(user));
-        console.log(
-          "Stored user session:",
-          JSON.parse(localStorage.getItem("userSession"))
-        );
-
+      
         // Redirect based on the user's role
         if (user.role === "admin") {
           navigate("/admindashboard");

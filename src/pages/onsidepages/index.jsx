@@ -268,17 +268,8 @@ const Landing = () => {
               required
             />
 
-              <input
-                type="text"
-                className="outline-none rounded-[5.917px] pl-[7.4px] py-[11px] w-[476px] h-[37px] border-[#549877] border-[1px] mb-3 capitalize"
-                placeholder="Category of Waste"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                required
-              />
-
             <select
-              className="outline-none rounded-[5.917px] pl-[7.4px] py-[11px] w-[476px] h-[37px] border-[#549877] border-[1px] mb-3"
+              className="outline-none rounded-[5.917px] pl-[7.4px] py-[9px] w-[476px] h-[37px] border-[#549877] border-[1px] mb-3"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
               required
@@ -286,9 +277,9 @@ const Landing = () => {
               <option value="" disabled>
                 Select Category
               </option>
-              <option value="organic">organic</option>
-              <option value="recyclable">recyclable</option>
-              <option value="hazardous">hazardous</option>
+              <option value="Organic">Organic</option>
+              <option value="Recyclable">Recyclable</option>
+              <option value="Hazardous">Hazardous</option>
             </select>
 
             {error && <p className="text-red-500">{error}</p>}

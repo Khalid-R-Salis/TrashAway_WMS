@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import dashboarddb from "../assets/dashboarddb.png";
 import settingdb from "../assets/settingdb.png";
@@ -8,6 +9,18 @@ import profiledb1 from "../assets/profiledb1.png";
 
 // eslint-disable-next-line react/prop-types
 const Sidebar = ({ activePage }) => {
+  const [userDetails, setUserDetails] = useState({
+    name: '',
+    email: ''
+  });
+
+  useEffect(() => {
+    const userSession = JSON.parse(localStorage.getItem("userSession"));
+    setUserDetails({
+      name: userSession.name,
+      email: userSession.email
+    });
+  }, [userDetails.name, userDetails.email]);
   return (
     <>
       <div className=" flex justify-start items-start">
@@ -70,7 +83,7 @@ const Sidebar = ({ activePage }) => {
                   }`}
                 >
                   <img src={logoutdb} alt="Icon" />
-                  <Link to="/loginhome">Log Out</Link>
+                  <Link to="/">Log Out</Link>
                 </div>
               </li>
               <li>
@@ -116,9 +129,9 @@ const Sidebar = ({ activePage }) => {
                 >
                   <img src={profiledb1} alt="Icon" />
                   <Link to="/settings">
-                    <h2 className=" text-[12px] font-[400]">Khalid Rabiu</h2>
+                    <h2 className=" text-[12px] font-[400]">{userDetails.name}</h2>
                     <p className=" text-[12px] font-[400]">
-                      khalidrabiu@gmail.com
+                    {userDetails.email}
                     </p>
                   </Link>
                 </div>

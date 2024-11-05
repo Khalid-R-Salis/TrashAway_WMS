@@ -35,7 +35,7 @@ const Dashboard = () => {
     const userSession = JSON.parse(localStorage.getItem("userSession"));
     seToken(userSession?.token);
     setUserID(userSession?.id);
-  }, []);
+  }, [token, userId]);
 
   const fetchUserOrdersHandler = useCallback(async () => {
     if (!userId || !token) return;

@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
+import Modal from "../../components/UI/Modal/Modal";
 import eyeicon from "../../assets/eyeicon.png";
 
 const SecuritySettings = () => {
@@ -7,6 +8,10 @@ const SecuritySettings = () => {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [isLoading, setIsLoading] = useState('');
+  const [showModal, setShowModal] = useState(false);
 
   const toggleCurrentPasswordVisibility = () => {
     setShowCurrentPassword(!showCurrentPassword);
@@ -16,15 +21,50 @@ const SecuritySettings = () => {
     setShowNewPassword(!showNewPassword);
   };
 
-  const handleLogin = (e) => {
+  const handlePasswordHandler = async (e) => {
     e.preventDefault();
 
-    // authentication process
-    const user = { currentPassword, newPassword };
-    console.log(user);
+    try {
+      setIsLoading(true);
+      const userSession = JSON.parse(localStorage.getItem("userSession"));
+      const token = userSession?.token;
+      const userId = userSession?.id;
+
+      // authentication process
+      const response = await fetch(`http://localhost:5500/api/users/${userId}/password`, {
+        method: 'PUT',
+        body: JSON.stringify({ currentPassword, newPassword }),
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      const data = await response.json();
+      console.log(data);
+
+      if (!response.ok && data.message) {
+        setIsLoading(false);
+        setShowModal(true);
+        throw new Error(data.message || 'Server Error, Please Try Again Later');
+      }
+
+      setSuccessMessage(data.success);
+      setShowModal(true);
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+      setError(error.message);
+      setIsLoading(false);
+    }
   };
 
+  // @desc: hide modal handler
+  const toggleModalHandler = () => {
+    setShowModal(false);
+  };
   return (
+    <>
     <div>
       <div className="p-6 bg-[#f1f4f8]/35 w-[80%] h-full">
         <h2 className="text-[#141417] font-semibold text-2xl font-Inter text-[20px] ">
@@ -40,6 +80,7 @@ const SecuritySettings = () => {
           </h3>
         </div>
 
+        <form onSubmit={handlePasswordHandler}>
         <div className="flex flex-col justify-start gap-4">
           {/* Current Password Input */}
           <div className="relative">
@@ -50,7 +91,6 @@ const SecuritySettings = () => {
               placeholder="Current password"
               value={currentPassword}
               onChange={(e) => setCurrentPassword(e.target.value)}
-              required
             />
             <button
               type="button"
@@ -69,7 +109,6 @@ const SecuritySettings = () => {
               placeholder="New password"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
-              required
             />
             <button
               type="button"
@@ -89,13 +128,20 @@ const SecuritySettings = () => {
           </button>
           <button
             className="bg-black text-white px-4 py-2 rounded"
-            onClick={handleLogin} // Call the login function on Save
           >
             Save
           </button>
         </div>
+        </form>
       </div>
     </div>
+    {!isLoading && error && showModal && (
+        <Modal onClickBg={toggleModalHandler}>{error}</Modal>
+      )}
+      {!isLoading && successMessage && showModal && (
+        <Modal onClickBg={toggleModalHandler}>{successMessage}</Modal>
+      )}
+    </>
   );
 };
 
