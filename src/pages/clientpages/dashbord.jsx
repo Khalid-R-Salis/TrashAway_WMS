@@ -11,12 +11,12 @@ const Dashboard = () => {
   const [selectedOrderId, setSelectedOrderId] = useState(null);
   const [errors, setErrors] = useState("");
   const [userId, setUserID] = useState("");
-  const [token, seToken] = useState("");
+  const [token, setToken] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [username, setUserName] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [username, setUserName] = useState("");
 
   // @desc: States for Timer
   const [time, setTime] = useState({
@@ -33,9 +33,13 @@ const Dashboard = () => {
   // @desc: fetching user pickup orders
   useEffect(() => {
     const userSession = JSON.parse(localStorage.getItem("userSession"));
-    seToken(userSession?.token);
+    setToken(userSession?.token);
     setUserID(userSession?.id);
-  }, [token, userId]);
+    setName(userSession?.name);
+    setEmail(userSession?.email);
+    setUserName(userSession?.username);
+    setPhoneNumber(userSession?.phone);
+  }, [token, userId, name, email, phoneNumber, username]);
 
   const fetchUserOrdersHandler = useCallback(async () => {
     if (!userId || !token) return;
@@ -43,7 +47,7 @@ const Dashboard = () => {
     try {
       setIsLoading(true);
       const response = await fetch(
-        `http://localhost:5500/api/user/all-user-pickups/${userId}`,
+        `https://waste-mangement-backend-3qg6.onrender.com/api/user/all-user-pickups/${userId}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -52,28 +56,27 @@ const Dashboard = () => {
         }
       );
 
-      const { pickupData, error, message, name, email, username, phoneNumber } = await response.json();
+      const { pickupData, error, message } = await response.json();
 
-      if (!response.ok) {
-        setErrors("Something happened, Try Again Later");
-        console.log(error);
+      if (!response.ok && error) {
+        setIsLoading(false);
+        throw new Error(error);
       }
 
       if (message === "No pickups found.") {
-        setErrors("No pickups found.");
+        setIsLoading(false);
+        throw new Error("No pickups found. Try by adding some.");
       }
 
-      // @desc: set profile information
-      setName(name);
-      setEmail(email);
-      setUserName(username);
-      setPhoneNumber(phoneNumber);
-      
       // @des: set user pickup order
       setOrders(pickupData);
+      setErrors(null);
       setIsLoading(false);
     } catch (error) {
-      console.log(error);
+      console.log("Error from dashboard", error);
+      setErrors(error.message);
+      setOrders([]);
+      setIsLoading(false);
     }
   }, [token, userId]);
 
@@ -131,6 +134,15 @@ const Dashboard = () => {
     setOrders(filteredOrders);
   };
 
+  const showError = (
+    <div className="absolute right-[35rem] bottom-[15rem] mt-[23rem] w-[370px] bg-white  p-6 rounded-lg shadow-sm z-10">
+      <div className="flex justify-between items-center pb-[32px]">
+        <h3 className="text-[#1E1E1E] font-Inter text-[20px] font-semibold capitalize">
+          {errors}
+        </h3>
+      </div>
+    </div>
+  );
   return (
     <div className="flex h-screen overflow-hidden">
       <Sidebar activePage="dashboard" />
@@ -241,7 +253,7 @@ const Dashboard = () => {
         </div>
 
         <div
-          className="bg-no-repeat bg-cover bg-center w-full h-full px-5 py-2 font-Inter"
+          className="bg-no-repeat bg-cover bg-center w-full px-5 py-2 font-Inter" //min-h-full
           style={{ backgroundImage: `url(${formbg})` }}
         >
           <div className=" text-[#141417] font-Inter text-[20px] font-[600] mb-2">
@@ -290,7 +302,7 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <div className="RecentPickUpOrders mt-4">
+          <div className="RecentPickUpOrders mt-4 h-[30rem] overflow-y-scroll">
             <h2 className="text-[20px] font-semibold text-[#212121] font-Inter">
               Recent Pick Up Orders
             </h2>
@@ -371,11 +383,7 @@ const Dashboard = () => {
               </tbody>
             </table>
           </div>
-          {!isLoading && errors && (
-            <div className="flex justify-center items-center text-red-500 my-32 text-xl">
-              <p>{errors}</p>
-            </div>
-          )}
+          {!isLoading && errors && showError}
         </div>
       </main>
     </div>

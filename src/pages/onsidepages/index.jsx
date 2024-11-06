@@ -79,23 +79,31 @@ const Landing = () => {
       //   category,
       // });
 
-      const categoryValue = category.charAt(0).toUpperCase() + category.slice(1).toLowerCase();
-      const response = await fetch(`http://localhost:5500/api/user/request-pickup/${userId}`, {
-        method: 'POST',
-        body: JSON.stringify({ capacity, location, time, category: categoryValue }),
-        headers: { 'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
+      const categoryValue =
+        category.charAt(0).toUpperCase() + category.slice(1).toLowerCase();
+      const response = await fetch(
+        `https://waste-mangement-backend-3qg6.onrender.com/api/user/request-pickup/${userId}`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            capacity,
+            location,
+            time,
+            category: categoryValue,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
         }
-      });
-      
-      if(!response.ok) {
-        setError(
-          "Failed to create pickup request"
-        );
+      );
+
+      if (!response.ok) {
+        setError("Failed to create pickup request");
       }
 
       const data = await response.json();
-      console.log(data)
+      console.log(data);
 
       // // Handle success response
       if (data && data.message) {
@@ -104,7 +112,7 @@ const Landing = () => {
       }
     } catch (error) {
       console.error("Pickup request failed:", error);
-      setError(error.message)
+      setError(error.message);
     } finally {
       setIsSubmitting(false);
     }
@@ -229,7 +237,7 @@ const Landing = () => {
           >
             <button
               type="button"
-              className="absolute right-0 top-0 mt-[205px] mr-[530px]"
+              className="absolute right-0 bottom-[27rem] mt-[205px] mr-[530px]"
               onClick={() => setShowForm(false)}
             >
               Close
@@ -361,23 +369,23 @@ const Landing = () => {
             </p>
           </div>
 
-            <div className=" flex flex-col justify-start gap-4 p-[24px] bg-white rounded-md shadow-lg w-[19rem]">
-              <div className="h-[42px] w-[42px] bg-light-green bg-opacity-10 rounded-full flex items-center justify-center">
-                <img src={settingIcon} alt="" className="h-[30px] w-[30px]" />
-              </div>
-              <h2 className=" text-[24px] font-bold text-section-black">
-                Sustainable
-                <br />
-                Practices
-              </h2>
-              <p className=" w-[14rem] text-[16px]  text-section-gray">
-                Contribute to Kano&apos;s sustainability efforts by categorizing your
-                waste correctly.
-              </p>
+          <div className=" flex flex-col justify-start gap-4 p-[24px] bg-white rounded-md shadow-lg w-[19rem]">
+            <div className="h-[42px] w-[42px] bg-light-green bg-opacity-10 rounded-full flex items-center justify-center">
+              <img src={settingIcon} alt="" className="h-[30px] w-[30px]" />
             </div>
+            <h2 className=" text-[24px] font-bold text-section-black">
+              Sustainable
+              <br />
+              Practices
+            </h2>
+            <p className=" w-[14rem] text-[16px]  text-section-gray">
+              Contribute to Kano&apos;s sustainability efforts by categorizing
+              your waste correctly.
+            </p>
           </div>
         </div>
-        {/* ---------------------------END--------------------------------------- */}
+      </div>
+      {/* ---------------------------END--------------------------------------- */}
 
       {/* ---------------------------START--------------------------------------- */}
       <div
@@ -465,27 +473,27 @@ const Landing = () => {
             Statistics
           </h4>
 
-            <h1 className=" text-[35px] font-semibold text-light-black">
-              Impact Statistics
-            </h1>
-            <p className=" w-[60rem] text-center text-[20px] text-gray-black">
-              Explore the significant strides {`we've`} made in waste management,
-              from reducing pollution to enhancing community health and
-              sustainability across the state.
-            </p>
-          </div>
-          <div className=" flex justify-center items-center gap-[32px] mt-[32px]">
-            <div className=" flex flex-col justify-center items-center">
-              <div className="relative flex justify-center items-center">
-                <img
-                  src={group1}
-                  alt=""
-                  className="w-full h-full object-contain"
-                />
-                <p className="absolute inset-0 flex justify-center items-center text-section-gray text-[20px] font-semibold">
-                  15,000 kg
-                </p>
-              </div>
+          <h1 className=" text-[35px] font-semibold text-light-black">
+            Impact Statistics
+          </h1>
+          <p className=" w-[60rem] text-center text-[20px] text-gray-black">
+            Explore the significant strides {`we've`} made in waste management,
+            from reducing pollution to enhancing community health and
+            sustainability across the state.
+          </p>
+        </div>
+        <div className=" flex justify-center items-center gap-[32px] mt-[32px]">
+          <div className=" flex flex-col justify-center items-center">
+            <div className="relative flex justify-center items-center">
+              <img
+                src={group1}
+                alt=""
+                className="w-full h-full object-contain"
+              />
+              <p className="absolute inset-0 flex justify-center items-center text-section-gray text-[20px] font-semibold">
+                15,000 kg
+              </p>
+            </div>
 
             <p className=" mt-6 text-[20px] text-light-black text-center">
               Total Plastic Recycled

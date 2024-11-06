@@ -36,16 +36,24 @@ const Signup = () => {
 
     try {
       // const response = await axios.post("/register", formData);
-      const response = await fetch('http://localhost:5500/api/register', {
-        method: 'POST',
-        body: JSON.stringify({ name: formData.name, email: formData.email, phone: formData.phone, password: formData.password }),
-        headers: { 'Content-Type': 'application/json'}
-      });
+      const response = await fetch(
+        "https://waste-mangement-backend-3qg6.onrender.com/api/register",
+        {
+          method: "POST",
+          body: JSON.stringify({
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone,
+            password: formData.password,
+          }),
+          headers: { "Content-Type": "application/json" },
+        }
+      );
 
       // console.log({ name: formData.name, email: formData.email, phone: formData.phone, password: formData.password })
 
       const data = await response.json();
-      console.log(data)
+      console.log(data);
       setSuccess("Registration successful! You can now log in.");
       setFormData({ name: "", email: "", phone: "", password: "" });
     } catch (error) {
@@ -60,7 +68,7 @@ const Signup = () => {
     if (success) {
       const timer = setTimeout(() => {
         navigate("/login");
-      }, 3000); // Redirect after 3 seconds
+      }, 1500); // Redirect after 3 seconds
 
       // Clear the timer if the component unmounts
       return () => clearTimeout(timer);

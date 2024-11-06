@@ -20,38 +20,25 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError("");
 
     try {
-      // const response = await axios.post(
-      //   "https://waste-mangement-backend-j7t0.onrender.com/api/login",
-      //   {
-      //     email,
-      //     password,
-      //   }
-      // );
-
-      const response = await fetch('http://localhost:5500/api/login', {
-        method: 'POST',
-        body: JSON.stringify({ email, password }),
-        headers: { 'Content-Type': 'application/json'}
-      });
+      const response = await fetch(
+        "https://waste-mangement-backend-3qg6.onrender.com/api/login",
+        {
+          method: "POST",
+          body: JSON.stringify({ email, password }),
+          headers: { "Content-Type": "application/json" },
+        }
+      );
 
       const data = await response.json();
 
-      // if (response.data.token) {
-      //   const user = {
-      //     email,
-      //     token: response.data.token,
-      //     ...response.data.user,
-      //   };
-
       if (data.token) {
-        const user = { email, token: data.token, ...data.user }
-      
+        const user = { email, token: data.token, ...data.user };
+
         // Store the token in localStorage for authenticated requests
         localStorage.setItem("userSession", JSON.stringify(user));
-      
+
         // Redirect based on the user's role
         if (user.role === "admin") {
           navigate("/admindashboard");
@@ -63,7 +50,7 @@ const Login = () => {
       }
     } catch (err) {
       setError("Please check your credentials and try again.");
-      console.log(err)
+      console.log(err);
     }
   };
 

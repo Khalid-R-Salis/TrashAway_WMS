@@ -1,4 +1,3 @@
-import React from "react";
 import logo from "../../assets/logo.png";
 import bgcontact from "../../assets/bgcontact.png";
 import icons_phone from "../../assets/icons-phone.png";
@@ -98,7 +97,7 @@ const Contact = () => {
                     </h2>
                   </div>
                   <p className=" w-[18rem] text-[15px] text-[#1E1E1E]">
-                    Email us about any concern, or any questions. We're here to
+                    Email us about any concern, or any questions. We&apos;re here to
                     help.
                   </p>
                   <p className=" text-[#1E1E1E] font-[400]">

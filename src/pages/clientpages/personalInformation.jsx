@@ -22,7 +22,7 @@ const PersonalInformation = () => {
       const userId = userSession?.id;
 
       const response = await fetch(
-        `http://localhost:5500/api/users/${userId}`,
+        `https://waste-mangement-backend-3qg6.onrender.com/api/users/${userId}`,
         {
           method: "PATCH",
           body: JSON.stringify({
