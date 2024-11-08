@@ -14,7 +14,7 @@ const Backdrop = ({ onClicks }) => {
 
 const ShowModal = (props) => {
   return (
-    <div className="absolute right-[35rem] bottom-[25rem] mt-[23rem] w-[370px] bg-white p-6 rounded-lg shadow-sm z-10">
+    <div className="fixed right-[35rem] bottom-[25rem] mt-[23rem] w-[370px] bg-white p-6 rounded-lg shadow-sm z-10">
       <div className="flex justify-between items-center pb-[32px]">
         <h3 className="text-[#1E1E1E] font-Inter text-[20px] font-semibold capitalize">
           {props.children}

@@ -1,9 +1,113 @@
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import Modal from "../../components/UI/Modal/Modal";
 import logo from "../../assets/logo.png";
 import bgcontact from "../../assets/bgcontact.png";
 import icons_phone from "../../assets/icons-phone.png";
 import icons_mail from "../../assets/icons-mail.png";
 
 const Contact = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [message, setMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [succesMessage, setSuccessMessage] = useState("");
+  const [phoneError, setPhoneError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
+
+  // desc: validate phone and email on input
+  const phoneChangeHanlder = (event) => {
+    const phone = event.target.value;
+
+    const validatePhone = (value) => {
+      const regex = /^(0\d{10}|(\+234)\d{10})$/;
+      return regex.test(value);
+    };
+
+    if (validatePhone(phone)) {
+      setPhoneNumber(phone);
+      setPhoneError("");
+    } else setPhoneError("Invalid Phone Format.");
+  };
+
+  const emailChangeHanlder = (event) => {
+    const emailValue = event.target.value;
+
+    const validateEmail = (value) => {
+      const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return regex.test(value);
+    };
+
+    if (validateEmail(emailValue)) {
+      setEmail(emailValue);
+      setEmailError("");
+    } else setEmailError("Invalid Email.");
+  };
+
+  // @desc: handling modal visibility to show success message
+  const toggleModalHandler = () => {
+    setShowModal(false);
+  };
+
+  const handleSubmissionHandler = async (event) => {
+    event.preventDefault();
+    setIsLoading(true);
+    setError("");
+    setSuccessMessage("");
+
+    // Retrieve token and userId from localStorage
+    const userSession = JSON.parse(localStorage.getItem("userSession"));
+    const token = userSession?.token;
+
+    try {
+      if (!token) return;
+
+      const response = await fetch(
+        "https://waste-mangement-backend-3qg6.onrender.com/api/user/get-in-touch",
+        {
+          method: "POST",
+          body: JSON.stringify({ name, email, phoneNumber, message }),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok && data.error) {
+        setIsLoading(false);
+        throw new Error(data.error);
+      }
+
+      if (data.errCode === 11000) {
+        setIsLoading(false);
+        throw new Error(
+          "Submission already recieved, we will be in touch shorly."
+        );
+      }
+
+      if (data.message === "jwt expired") {
+        navigate("/login");
+      }
+
+      setSuccessMessage(data.successMessage);
+      setShowModal(true);
+      setError("");
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+      setError(error.message);
+      setShowModal(true);
+      setIsLoading(false);
+    }
+  };
+
   return (
     <>
       <div
@@ -97,19 +201,21 @@ const Contact = () => {
                     </h2>
                   </div>
                   <p className=" w-[18rem] text-[15px] text-[#1E1E1E]">
-                    Email us about any concern, or any questions. We&apos;re here to
-                    help.
+                    Email us about any concern, or any questions. We&apos;re
+                    here to help.
                   </p>
                   <p className=" text-[#1E1E1E] font-[400]">
                     Emails: trashaway@gmail.com.com
                   </p>
                 </div>
-                <form>
+                <form onSubmit={handleSubmissionHandler}>
                   <div className="rounded-[32px] shadow-[custom-sh2] h-[410px] px-[27px] py-[35px] bg-white/30 flex justify-center items-end flex-col gap-[24px]">
                     <div className="flex justify-between items-center gap-[14.3px]">
                       <input
                         className="w-[203px] h-[43px] pl-[14px] py-[11px] rounded-[4px] text-gray-700 outline-none"
                         type="text"
+                        value={name}
+                        onChange={(event) => setName(event.target.value)}
                         placeholder="Your Name"
                         required
                       />
@@ -117,24 +223,29 @@ const Contact = () => {
                         className="w-[203px] h-[43px] pl-[14px] py-[11px] rounded-[4px] text-gray-700 outline-none"
                         type="email"
                         placeholder="Your Email"
+                        onChange={emailChangeHanlder}
                         required
                       />
+                      {emailError && (
+                        <p className=" text-[red] font-[400]">{emailError}</p>
+                      )}
                       <input
                         className="w-[203px] h-[43px] pl-[14px] py-[11px] rounded-[4px] text-gray-700 outline-none"
-                        type="number"
+                        type="text"
                         placeholder="Your Phone"
-                        onInput={(e) => {
-                          if (e.target.value.length > 11) {
-                            e.target.value = e.target.value.slice(0, 11);
-                          }
-                        }}
+                        onChange={phoneChangeHanlder}
                         required
                       />
+                      {phoneError && (
+                        <p className=" text-[red] font-[400]">{phoneError}</p>
+                      )}
                     </div>
                     <div className="flex justify-between items-center">
                       <textarea
                         className="w-[638px] h-[179px] px-[14px] py-[14px] rounded-[4px] text-gray-700 outline-none resize-none overflow-hidden"
                         placeholder="Your Message"
+                        value={message}
+                        onChange={(event) => setMessage(event.target.value)}
                         required
                       ></textarea>
                     </div>
@@ -151,6 +262,14 @@ const Contact = () => {
           </div>
         </div>
       </div>
+      {!isLoading && succesMessage && showModal && (
+        <Modal onClickBg={toggleModalHandler}>{succesMessage}</Modal>
+      )}
+
+      {/* showing error modal on error */}
+      {!isLoading && error && showModal && (
+        <Modal onClickBg={toggleModalHandler}>{error}</Modal>
+      )}
     </>
   );
 };

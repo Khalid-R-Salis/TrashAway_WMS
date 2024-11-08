@@ -1,5 +1,6 @@
 // import React from "react";
-import React, { useState } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import bgLogo from "../../assets/bg1About.png";
 import logo from "../../assets/logo.png";
@@ -9,7 +10,7 @@ import aboutbg1 from "../../assets/aboutbg1.png";
 import aboutbg2 from "../../assets/aboutbg2.png";
 import abouticon1 from "../../assets/abouticon1.svg";
 import raechusabout from "../../assets/raechusAbout.png";
-import location from "../../assets/location.png";
+import locationImage from "../../assets/location.png";
 import cancel_onlogin from "../../assets/cancel_onlogin.png";
 import profileicon from "../../assets/profileicon.png";
 import arrow_down from "../../assets/arrow_down.svg";
@@ -24,8 +25,81 @@ const scrollToValues = () => {
 const About = () => {
   // State to track the form's visibility
   const [showForm, setShowForm] = useState(false);
-
   const [isOpen, setIsOpen] = useState(false);
+  const [capacity, setCapacity] = useState(1);
+  const [location, setLocation] = useState("");
+  const [time, setTime] = useState("");
+  const [category, setCategory] = useState("");
+  const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
+
+  // @desc: handling pickup requests
+  const handlePickupRequest = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setError("");
+
+    try {
+      // Retrieve token and userId from localStorage
+      const userSession = JSON.parse(localStorage.getItem("userSession"));
+      const token = userSession?.token;
+      const userId = userSession?.id;
+
+      // Check for token and userId
+      if (!token || !userId) {
+        alert("User not authenticated");
+        setIsSubmitting(false);
+        console.log("Tokon and Id matched");
+        return;
+      }
+
+      const categoryValue =
+        category.charAt(0).toUpperCase() + category.slice(1).toLowerCase();
+
+      const response = await fetch(
+        `https://waste-mangement-backend-3qg6.onrender.com/api/user/request-pickup/${userId}`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            capacity,
+            location,
+            time,
+            category: categoryValue,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+      console.log(data);
+
+      if (!response.ok) {
+        setIsSubmitting(false);
+        console.log(data.error);
+        throw new Error(data.error);
+      }
+
+      if (data.message === "jwt expired") {
+        navigate("/login");
+      }
+
+      // // Handle success response
+      if (data && data.message) {
+        alert(data.message);
+        setShowForm(false); // Close form
+      }
+
+      setIsSubmitting(false);
+    } catch (error) {
+      console.error("Pickup request failed:", error);
+      setError(error.message);
+      setIsSubmitting(false);
+    }
+  };
   return (
     <>
       <div
@@ -125,7 +199,10 @@ const About = () => {
 
       {showForm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-30 flex justify-center items-center overflow-hidden">
-          <form className="font-Inter bg-[#EEF5F1] flex flex-col py-[14.793px] px-[11.834px] justify-center items-center rounded-[11.834px] gap-[17.751px]">
+          <form
+            onSubmit={handlePickupRequest}
+            className="font-Inter bg-[#EEF5F1] flex flex-col py-[14.793px] px-[11.834px] justify-center items-center rounded-[11.834px] gap-[17.751px]"
+          >
             {/* Cancel Button to close the form */}
             <button
               type="button"
@@ -145,10 +222,13 @@ const About = () => {
 
             <input
               type="number"
-              placeholder="1"
+              placeholder="Capacity"
               min={1}
-              max={20}
+              max={99}
               className="outline-none w-[59px] h-[52px] py-[11.834px] px-[8.876px] rounded-[5.917px] border-[0.74px] border-solid border-[#626262] bg-[#549877] text-white"
+              value={capacity}
+              onChange={(e) => setCapacity(e.target.value)}
+              required
             />
 
             <div className="relative">
@@ -156,29 +236,44 @@ const About = () => {
                 type="text"
                 className="bg-no-repeat bg-[20px_center] bg-[length:20px_20px] outline-none rounded-[5.917px] pl-[48px] pr-[16px] py-[11px] w-[476px] h-[37px] border-[#549877] border-[1px]"
                 placeholder="Location"
-                style={{ backgroundImage: `url(${location})` }}
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                style={{ backgroundImage: `url(${locationImage})` }}
                 required
               />
             </div>
 
             <input
-              type="text"
+              type="date"
               className="outline-none rounded-[5.917px] pl-[7.4px] py-[11px] w-[476px] h-[37px] border-[#549877] border-[1px]"
               placeholder="Pickup Time"
+              value={time}
+              onChange={(e) => setTime(e.target.value)}
               required
             />
-            <input
-              type="text"
-              className="outline-none rounded-[5.917px] pl-[7.4px] py-[11px] w-[476px] h-[37px] border-[#549877] border-[1px] mb-3"
-              placeholder="Category of Waste"
+
+            <select
+              className="outline-none rounded-[5.917px] pl-[7.4px] py-[9px] w-[476px] h-[37px] border-[#549877] border-[1px] mb-3"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
               required
-            />
+            >
+              <option value="" disabled>
+                Select Category
+              </option>
+              <option value="Organic">Organic</option>
+              <option value="Recyclable">Recyclable</option>
+              <option value="Hazardous">Hazardous</option>
+            </select>
+
+            {error && <p className="text-red-500">{error}</p>}
 
             <button
               className="text-white font-Inter text-[600] text-[16.646px] bg-[#549877] py-[8.136px] px-[96.893px] rounded-[2.959px] w-[476px] h-[37px]"
               type="submit"
+              disabled={isSubmitting}
             >
-              Request for pickup
+              {isSubmitting ? "Submitting..." : "Request for Pickup"}
             </button>
           </form>
         </div>
