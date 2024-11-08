@@ -4,6 +4,7 @@ import formbg from "../../assets/formsbg.png";
 import notificationdb from "../../assets/notificationdb.png";
 import cancelIcon from "../../assets/close.svg";
 import profile2 from "../../assets/profiledb2.png";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const [showNotification, setShowNotification] = useState(false);
@@ -17,6 +18,7 @@ const Dashboard = () => {
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [username, setUserName] = useState("");
+  const navigate = useNavigate();
 
   // @desc: States for Timer
   const [time, setTime] = useState({
@@ -42,10 +44,11 @@ const Dashboard = () => {
   }, [token, userId, name, email, phoneNumber, username]);
 
   const fetchUserOrdersHandler = useCallback(async () => {
+    setIsLoading(true);
+
     if (!userId || !token) return;
 
     try {
-      setIsLoading(true);
       const response = await fetch(
         `https://waste-mangement-backend-3qg6.onrender.com/api/user/all-user-pickups/${userId}`,
         {
@@ -68,8 +71,14 @@ const Dashboard = () => {
         throw new Error("No pickups found. Try by adding some.");
       }
 
+      if (message === "jwt expired") {
+        setIsLoading(false);
+        navigate('/login');
+      }
+
       // @des: set user pickup order
-      setOrders(pickupData);
+      const data = pickupData.slice(0, 6)
+      setOrders(data);
       setErrors(null);
       setIsLoading(false);
     } catch (error) {
@@ -78,7 +87,7 @@ const Dashboard = () => {
       setOrders([]);
       setIsLoading(false);
     }
-  }, [token, userId]);
+  }, [token, userId, navigate]);
 
   useEffect(() => {
     fetchUserOrdersHandler();
@@ -253,7 +262,7 @@ const Dashboard = () => {
         </div>
 
         <div
-          className="bg-no-repeat bg-cover bg-center w-full px-5 py-2 font-Inter" //min-h-full
+          className="bg-no-repeat min-h-full bg-cover bg-center w-full px-5 py-2 font-Inter" 
           style={{ backgroundImage: `url(${formbg})` }}
         >
           <div className=" text-[#141417] font-Inter text-[20px] font-[600] mb-2">
@@ -302,7 +311,7 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <div className="RecentPickUpOrders mt-4 h-[30rem] overflow-y-scroll">
+          <div className="RecentPickUpOrders mt-4 h-[30rem]">
             <h2 className="text-[20px] font-semibold text-[#212121] font-Inter">
               Recent Pick Up Orders
             </h2>

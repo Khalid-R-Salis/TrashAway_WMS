@@ -1,5 +1,3 @@
-import React from "react";
-import { useRef } from "react";
 import bgLogo from "../../assets/bg1.png";
 import logo from "../../assets/logo.png";
 import vector1 from "../../assets/Vector1.png";
@@ -39,14 +37,14 @@ const scrollToTestimonials = () => {
 
 const Landing = () => {
   return (
-    <div className="new">
+    <main className="new">
       <h2 className="md:hidden sm:block text-wrap text-[5rem] p-5 text-center flex justify-center items-center">
         MOBILE VIEW COMING SOON
       </h2>
       <p className=" md:hidden sm:block text-center">
         please view on wide screen
       </p>
-      <body className="hidden md:block">
+      <div className="hidden md:block">
         {/* ---------------------------START--------------------------------------- */}
         <div
           className=" rounded-b-[25px] bg-no-repeat bg-cover bg-center w-full  min-h-screen pt-12"
@@ -199,7 +197,7 @@ const Landing = () => {
                 Practices
               </h2>
               <p className=" w-[14rem] text-[16px]  text-section-gray">
-                Contribute to Kano's sustainability efforts by categorizing your
+                Contribute to Kano&apos;s sustainability efforts by categorizing your
                 waste correctly.
               </p>
             </div>
@@ -297,7 +295,7 @@ const Landing = () => {
               Impact Statistics
             </h1>
             <p className=" w-[60rem] text-center text-[20px] text-gray-black">
-              Explore the significant strides we've made in waste management,
+              Explore the significant strides we&apos;ve made in waste management,
               from reducing pollution to enhancing community health and
               sustainability across the state.
             </p>
@@ -516,8 +514,8 @@ const Landing = () => {
 
           {/* ---------------------------END--------------------------------------- */}
         </div>
-      </body>
-    </div>
+      </div>
+    </main>
   );
 };
 

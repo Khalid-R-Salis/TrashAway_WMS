@@ -83,7 +83,7 @@ const Sidebar = ({ activePage }) => {
                   }`}
                 >
                   <img src={logoutdb} alt="Icon" />
-                  <Link to="/">Log Out</Link>
+                  <Link to="/loginhome">Log Out</Link>
                 </div>
               </li>
               <li>

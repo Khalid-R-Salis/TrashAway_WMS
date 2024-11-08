@@ -4,6 +4,7 @@ import formbg from "../../assets/formsbg.png";
 import notificationdb from "../../assets/notificationdb.png";
 import cancelIcon from "../../assets/close.svg";
 import search from "../../assets/Search.png";
+import { useNavigate } from "react-router-dom";
 
 /* const [orders, setOrders]= useState([
   {
@@ -154,6 +155,12 @@ const Orders = () => {
   const [userId, setUserID] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+  const [isSearch, setIsSearch] = useState(false);
+  const [searchResult, setSearchResult] = useState({});
+  const [searchError, setSearchError] = useState("");
+  const [searchId, setSearchId] = useState("");
+  const [inputValue, setInputValue] = useState("");
 
   // start timer
   const [time, setTime] = useState({
@@ -243,6 +250,11 @@ const Orders = () => {
         throw new Error("No pickups found. Try by adding some.");
       }
 
+      if (message === "jwt expired") {
+        setIsLoading(false);
+        navigate("/login");
+      }
+
       setOrders(pickupData);
       setError(null);
       setIsLoading(false);
@@ -252,7 +264,7 @@ const Orders = () => {
       setOrders([]);
       setIsLoading(false);
     }
-  }, [userId, token]);
+  }, [userId, token, navigate]);
 
   // desc: calling fetch orders to only re-render only once and when there is a change
   useEffect(() => {
@@ -298,6 +310,7 @@ const Orders = () => {
     }
   };
 
+  // @desc: showing error conditionally
   const showError = (
     <div className="absolute right-[34rem] bottom-[20rem] mt-[23rem] w-[370px] bg-white  p-6 rounded-lg shadow-sm z-10">
       <div className="flex justify-between items-center pb-[32px]">
@@ -308,6 +321,79 @@ const Orders = () => {
     </div>
   );
 
+  // @desc: showing search error conditionally
+  const showSearchError = (
+    <div className="absolute right-[34rem] bottom-[20rem] mt-[23rem] w-[370px] bg-white  p-6 rounded-lg shadow-sm z-10">
+      <div className="flex justify-between items-center pb-[32px]">
+        <h3 className="text-[#1E1E1E] font-Inter text-[20px] font-semibold capitalize">
+          {searchError}
+        </h3>
+      </div>
+    </div>
+  );
+
+  // @desc: handling search order to get the ID the user provides
+  const searchOrderHandler = async (event) => {
+    event.preventDefault();
+    const value = event.target.value.slice(0, 4);
+    setInputValue(value);
+  };
+
+  // @desc: useEffect hook from getting the exact data and set it to searchId state for accessibility
+  useEffect(() => {
+    if (inputValue !== "" && inputValue.length === 4) {
+      setSearchId(inputValue);
+    } else if (inputValue === "") {
+      setSearchId("");
+    }
+  }, [inputValue]);
+
+  // @desc: sending the search request when the searchId is only available
+  useEffect(() => {
+    const searchResults = async () => {
+      setIsLoading(true);
+      setIsSearch(true);
+
+      if (searchId === "") {
+        return;
+      }
+
+      const searchIDUppercase = searchId.toUpperCase();
+      try {
+        const response = await fetch(
+          "https://waste-mangement-backend-3qg6.onrender.com/api/user/search-pickup",
+          {
+            method: "POST",
+            body: JSON.stringify({ searchID: searchIDUppercase }),
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const { data, message } = await response.json();
+        if (!response.ok && message) {
+          setIsLoading(false);
+          setIsSearch(false);
+          throw new Error(message);
+        }
+
+        setSearchResult(data);
+        setIsSearch(false);
+        setIsLoading(false);
+        setSearchError('');
+      } catch (error) {
+        console.log(error.message);
+        setSearchError(error.message);
+        setSearchResult({});
+        setIsLoading(false);
+        setIsSearch(false);
+      }
+    };
+
+    searchResults();
+  }, [searchId, token]);
   return (
     <div className="flex h-screen overflow-hidden">
       <Sidebar activePage="orders" />
@@ -427,19 +513,15 @@ const Orders = () => {
               Orders
             </h1>
             <input
-              type="number"
+              type="text"
               min={1}
               max={9999}
+              value={inputValue}
               maxLength={4}
               placeholder="Search by ID"
               className="px-[16px] py-[8px] outline-none rounded-[4px] w-[200px] h-[37px] bg-white bg-no-repeat bg-[20px_center] bg-[length:20px_20px] pl-[48px] pr-[16px] shadow-[0px_0px_3px_0px_rgba(0,0,0,0.10)]"
               style={{ backgroundImage: `url(${search})` }}
-              onInput={(e) => {
-                if (e.target.value.length > 4) {
-                  e.target.value = e.target.value.slice(0, 4);
-                  console.log(e.target.value);
-                }
-              }}
+              onChange={searchOrderHandler}
             />
           </div>
 
@@ -502,23 +584,78 @@ const Orders = () => {
                   <th className="px-0 py-2"></th>
                 </tr>
               </thead>
-              <tbody>
-                {currentOrders.map((order) => (
-                  <tr key={order._id} className="border-b">
+              {isSearch && (
+                <tbody>
+                  {currentOrders.map((order) => (
+                    <tr key={order._id} className="border-b">
+                      <td className="px-[45px] py-2 text-[#23272E] text-[15px] font-[400] font-sans">
+                        {order.searchId}
+                      </td>
+                      <td className="px-[45px] py-2 text-[#23272E] text-[15px] font-[400] font-sans">
+                        {order.time}
+                      </td>
+                      <td className="px-[45px] py-2 text-[#23272E] text-[15px] font-[400] font-sans">
+                        {order.capacity}
+                      </td>
+                      <td className="px-[45px] py-2 text-[#23272E] text-[15px] font-[400] font-sans">
+                        {order.category}
+                      </td>
+                      <td className="px-[45px] py-2 text-[#23272E] text-[15px] font-[400] font-sans">
+                        {order.status === "Pending" ? (
+                          <span className="text-yellow-500 bg-yellow-50 p-1">
+                            Pending
+                          </span>
+                        ) : (
+                          <span className="text-green-500 bg-green-50 p-1">
+                            Completed
+                          </span>
+                        )}
+                      </td>
+                      <td className="px-4 py-2">
+                        {order.status === "Pending" && (
+                          <div className="relative">
+                            <button
+                              onClick={() => setSelectedOrderId(order._id)}
+                              className="text-gray-500"
+                            >
+                              &#x22EE;
+                            </button>
+                            {selectedOrderId === order._id && (
+                              <div className="absolute right-0 mt-2 w-[100px] bg-white shadow-md border border-gray-200">
+                                <button
+                                  onClick={() => handleDelete(order._id)}
+                                  className="w-full text-red-500 py-2 hover:bg-gray-100"
+                                >
+                                  Delete
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              )}
+
+              {!isSearch && searchResult === '' ? null : (
+                <>
+                {!isSearch && searchResult && searchResult._id && <tbody>
+                  <tr key={searchResult._id} className="border-b">
                     <td className="px-[45px] py-2 text-[#23272E] text-[15px] font-[400] font-sans">
-                      {order.searchId}
+                      {searchResult.searchId}
                     </td>
                     <td className="px-[45px] py-2 text-[#23272E] text-[15px] font-[400] font-sans">
-                      {order.time}
+                      {searchResult.time}
                     </td>
                     <td className="px-[45px] py-2 text-[#23272E] text-[15px] font-[400] font-sans">
-                      {order.capacity}
+                      {searchResult.capacity}
                     </td>
                     <td className="px-[45px] py-2 text-[#23272E] text-[15px] font-[400] font-sans">
-                      {order.category}
+                      {searchResult.category}
                     </td>
                     <td className="px-[45px] py-2 text-[#23272E] text-[15px] font-[400] font-sans">
-                      {order.status === "Pending" ? (
+                      {searchResult.status === "Pending" ? (
                         <span className="text-yellow-500 bg-yellow-50 p-1">
                           Pending
                         </span>
@@ -529,18 +666,18 @@ const Orders = () => {
                       )}
                     </td>
                     <td className="px-4 py-2">
-                      {order.status === "Pending" && (
+                      {searchResult.status === "Pending" && (
                         <div className="relative">
                           <button
-                            onClick={() => setSelectedOrderId(order._id)}
+                            onClick={() => setSelectedOrderId(searchResult._id)}
                             className="text-gray-500"
                           >
                             &#x22EE;
                           </button>
-                          {selectedOrderId === order._id && (
+                          {selectedOrderId === searchResult._id && (
                             <div className="absolute right-0 mt-2 w-[100px] bg-white shadow-md border border-gray-200">
                               <button
-                                onClick={() => handleDelete(order._id)}
+                                onClick={() => handleDelete(searchResult._id)}
                                 className="w-full text-red-500 py-2 hover:bg-gray-100"
                               >
                                 Delete
@@ -551,10 +688,12 @@ const Orders = () => {
                       )}
                     </td>
                   </tr>
-                ))}
-              </tbody>
+                </tbody>}
+                </>
+              )}
             </table>
             {!isLoading && error && showError}
+            {!isLoading && searchError && showSearchError}
           </div>
         </div>
         {/* Pagination Content here */}

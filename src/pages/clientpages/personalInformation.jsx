@@ -1,6 +1,7 @@
 import { useState } from "react";
 import profiledb1 from "../../assets/profiledb1.png";
 import Modal from "../../components/UI/Modal/Modal";
+import { useNavigate } from "react-router-dom";
 
 const PersonalInformation = () => {
   const [fullName, setFullName] = useState("");
@@ -11,6 +12,7 @@ const PersonalInformation = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
 
   const updateProfileHandler = async (e) => {
     e.preventDefault();
@@ -46,6 +48,11 @@ const PersonalInformation = () => {
         throw new Error(
           data.message || "Sorry something happened, Try again later"
         );
+      }
+
+      if (data.message === "jwt expired") {
+        setIsLoading(false);
+        navigate('/login');
       }
 
       setSuccessMessage("Profile Updated Successfully");

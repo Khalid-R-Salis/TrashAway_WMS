@@ -32,6 +32,7 @@ import sundayPic from "../../assets/SundayPic.png";
 // import cancel_onlogin from "../../assets/cancel_onlogin.png";
 import profileicon from "../../assets/profileicon.png";
 import arrow_down from "../../assets/arrow_down.svg";
+import { useNavigate } from "react-router-dom";
 
 const scrollToTestimonials = () => {
   const testimonialsSection = document.getElementById("testimonials");
@@ -50,6 +51,7 @@ const Landing = () => {
   const [category, setCategory] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   // Handle form submission
   const handlePickupRequest = async (e) => {
@@ -71,16 +73,9 @@ const Landing = () => {
         return;
       }
 
-      // API request
-      // const response = await api.post(`/user/request-pickup/${userId}`, {
-      //   capacity,kageyoshi
-      //   location,
-      //   time,
-      //   category,
-      // });
-
       const categoryValue =
         category.charAt(0).toUpperCase() + category.slice(1).toLowerCase();
+
       const response = await fetch(
         `https://waste-mangement-backend-3qg6.onrender.com/api/user/request-pickup/${userId}`,
         {
@@ -98,22 +93,29 @@ const Landing = () => {
         }
       );
 
-      if (!response.ok) {
-        setError("Failed to create pickup request");
-      }
-
       const data = await response.json();
       console.log(data);
+
+      if (!response.ok) {
+        setIsSubmitting(false);
+        console.log(data.error);
+        throw new Error(data.error);
+      }
+
+      if (data.message === "jwt expired") {
+        navigate("/login");
+      }
 
       // // Handle success response
       if (data && data.message) {
         alert(data.message);
         setShowForm(false); // Close form
       }
+
+      setIsSubmitting(false);
     } catch (error) {
       console.error("Pickup request failed:", error);
       setError(error.message);
-    } finally {
       setIsSubmitting(false);
     }
   };

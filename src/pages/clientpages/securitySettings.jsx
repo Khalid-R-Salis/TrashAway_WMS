@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import Modal from "../../components/UI/Modal/Modal";
 import eyeicon from "../../assets/eyeicon.png";
+import { useNavigate } from "react-router-dom";
 
 const SecuritySettings = () => {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
@@ -12,6 +13,7 @@ const SecuritySettings = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [isLoading, setIsLoading] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
 
   const toggleCurrentPasswordVisibility = () => {
     setShowCurrentPassword(!showCurrentPassword);
@@ -52,6 +54,10 @@ const SecuritySettings = () => {
         throw new Error(data.message || "Server Error, Please Try Again Later");
       }
 
+      if (data.message === "jwt expired") {
+        setIsLoading(false);
+        navigate('/login');
+      }
       setSuccessMessage(data.success);
       setShowModal(true);
       setIsLoading(false);
