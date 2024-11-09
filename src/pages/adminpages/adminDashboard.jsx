@@ -1,11 +1,71 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import SidebarAdmin from "../../components/SidebarAdmin";
 import formbg from "../../assets/formsbg.png";
 import notificationdb from "../../assets/notificationdb.png";
 import cancelIcon from "../../assets/close.svg";
 import iconSet from "../../assets/iconSet.png";
+import { useNavigate } from 'react-router-dom'
+
+/* 
+const orders = [
+  {
+    id: 1001,
+    date: "7 July 2024",
+    items: 20,
+    category: "Recyclable",
+    status: "Pending",
+  },
+  {
+    id: 1002,
+    date: "7 July 2024",
+    items: 10,
+    category: "Recyclable",
+    status: "Pending",
+  },
+  {
+    id: 1003,
+    date: "7 July 2024",
+    items: 8,
+    category: "Recyclable",
+    status: "Pending",
+  },
+  {
+    id: 1004,
+    date: "7 July 2024",
+    items: 4,
+    category: "Hazardous",
+    status: "Completed",
+  },
+  {
+    id: 1005,
+    date: "7 July 2024",
+    items: 16,
+    category: "Organic",
+    status: "Completed",
+  },
+  {
+    id: 1006,
+    date: "7 July 2024",
+    items: 18,
+    category: "Hazardous",
+    status: "Completed",
+  },
+  {
+    id: 1007,
+    date: "7 July 2024",
+    items: 20,
+    category: "Organic",
+    status: "Completed",
+  },
+] */
 
 const AdminDashboard = () => {
+  const [showNotification, setShowNotification] = useState(false);
+  const [orders, setOrders] = useState([]);
+  const [errors, setErrors] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+
   // start timer
   const [time, setTime] = useState({
     hours: "00",
@@ -58,70 +118,82 @@ const AdminDashboard = () => {
   }, []);
 
   // end timer
-
-  const [showNotification, setShowNotification] = useState(false);
-  const [orders, setOrders] = useState([
-    {
-      id: 1001,
-      date: "7 July 2024",
-      items: 20,
-      category: "Recyclable",
-      status: "Pending",
-    },
-    {
-      id: 1002,
-      date: "7 July 2024",
-      items: 10,
-      category: "Recyclable",
-      status: "Pending",
-    },
-    {
-      id: 1003,
-      date: "7 July 2024",
-      items: 8,
-      category: "Recyclable",
-      status: "Pending",
-    },
-    {
-      id: 1004,
-      date: "7 July 2024",
-      items: 4,
-      category: "Hazardous",
-      status: "Completed",
-    },
-    {
-      id: 1005,
-      date: "7 July 2024",
-      items: 16,
-      category: "Organic",
-      status: "Completed",
-    },
-    {
-      id: 1006,
-      date: "7 July 2024",
-      items: 18,
-      category: "Hazardous",
-      status: "Completed",
-    },
-    {
-      id: 1007,
-      date: "7 July 2024",
-      items: 20,
-      category: "Organic",
-      status: "Completed",
-    },
-  ]);
-  const [selectedOrderId, setSelectedOrderId] = useState(null);
-
+  
   const toggleNotification = () => {
     setShowNotification(!showNotification);
+    console.log(orders)
   };
+  
+  // @desc: fetching pickup orders from the backend
+  const fetchUserOrdersHandler = useCallback(async () => {
+    const userSession = JSON.parse(localStorage.getItem('userSession'));
+    const token = userSession?.token;
 
-  // const handleDelete = (id) => {
-  //   const filteredOrders = orders.filter((order) => order.id !== id);
-  //   setOrders(filteredOrders);
-  // };
+    setIsLoading(true);
 
+    if  (!token) return;
+
+    try {
+      const response = await fetch(
+        `http://localhost:9090/api/admin/all-pickup`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const { updatedPickUpRequest, error, message } = await response.json();
+      console.log(updatedPickUpRequest);
+      if (!response.ok && error) {
+        setIsLoading(false);
+        throw new Error(error);
+      }
+
+      if (message === "No pick up requests found.") {
+        setIsLoading(false);
+        throw new Error("No pick up requests found at the moment.");
+      }
+
+      if (message === "jwt expired") {
+        setIsLoading(false);
+        navigate('/login');
+      }
+
+      // @des: set user pickup order
+      const data = updatedPickUpRequest.slice(0, 7)
+      setOrders(data);
+      setErrors(null);
+      setIsLoading(false);
+    } catch (error) {
+      console.log("Error from dashboard", error);
+      setErrors(error.message);
+      setOrders([]);
+      setIsLoading(false);
+    }
+  }, [navigate]);
+
+  useEffect(() => {
+    fetchUserOrdersHandler();
+  }, [fetchUserOrdersHandler]);
+
+  /* 
+  const [selectedOrderId, setSelectedOrderId] = useState(null);
+  const handleDelete = (id) => {
+    const filteredOrders = orders.filter((order) => order.id !== id);
+    setOrders(filteredOrders);
+  }; */
+
+  const showError = (
+    <div className="absolute right-[35rem] bottom-[15rem] mt-[23rem] w-[370px] bg-white  p-6 rounded-lg shadow-sm z-10">
+      <div className="flex justify-between items-center pb-[32px]">
+        <h3 className="text-[#1E1E1E] font-Inter text-[20px] font-semibold capitalize">
+          {errors}
+        </h3>
+      </div>
+    </div>
+  );
+  
   return (
     <div className="flex h-screen overflow-hidden">
       <SidebarAdmin activePage="adminDashboard" />
@@ -362,16 +434,16 @@ const AdminDashboard = () => {
               </thead>
               <tbody>
                 {orders.map((order) => (
-                  <tr key={order.id} className="border-b">
+                  <tr key={order.searchId} className="border-b">
                     <td className="px-4 py-2 text-[#23272E] text-[15px] font-[400] font-sans">
-                      {order.id}
+                      {order.searchId}
                     </td>
                     <td className="px-4 py-2 text-[#23272E] text-[15px] font-[400] font-sans">
-                      {order.date}
+                      {order.time}
                     </td>
                     <td className="px-4 py-2 text-[#23272E] text-[15px] font-[400] font-sans">
-                      {order.items}
-                    </td>
+                      {order.capacity}
+                    </td>Organic
                     <td className="px-4 py-2 text-[#23272E] text-[15px] font-[400] font-sans">
                       {order.category}
                     </td>
@@ -396,6 +468,7 @@ const AdminDashboard = () => {
               </tbody>
             </table>
           </div>
+          {!isLoading && errors && showError}
         </div>
       </main>
     </div>
