@@ -64,6 +64,9 @@ const AdminDashboard = () => {
   const [orders, setOrders] = useState([]);
   const [errors, setErrors] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [totalOrganicOrders, setTotalOrganicOrders] = useState(0);
+  const [totalRecycledOrders, setTotalRecycledOrders] = useState(0);
+  const [totalHazardousOrders, setTotalHazardousOrders] = useState(0);
   const navigate = useNavigate();
 
   // start timer
@@ -135,16 +138,17 @@ const AdminDashboard = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:9090/api/admin/all-pickup`,
+        `https://waste-mangement-backend-3qg6.onrender.com/api/admin/all-pickup`,
         {
           headers: {
+            'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
           },
         }
       );
 
-      const { updatedPickUpRequest, error, message } = await response.json();
-      console.log(updatedPickUpRequest);
+      const { updatedPickUpRequest, error, message, ordersCount } = await response.json();
+      
       if (!response.ok && error) {
         setIsLoading(false);
         throw new Error(error);
@@ -160,8 +164,11 @@ const AdminDashboard = () => {
         navigate('/login');
       }
 
-      // @des: set user pickup order
       const data = updatedPickUpRequest.slice(0, 7)
+
+      setTotalRecycledOrders(ordersCount.allRecycledOrders);
+      setTotalHazardousOrders(ordersCount.allHazardousOrders);
+      setTotalOrganicOrders(ordersCount.allOrganicOrders);
       setOrders(data);
       setErrors(null);
       setIsLoading(false);
@@ -185,7 +192,7 @@ const AdminDashboard = () => {
   }; */
 
   const showError = (
-    <div className="absolute right-[35rem] bottom-[15rem] mt-[23rem] w-[370px] bg-white  p-6 rounded-lg shadow-sm z-10">
+    <div className="absolute right-[35rem] bottom-[5rem] mt-[23rem] w-[370px] bg-white  p-6 rounded-lg shadow-sm z-10">
       <div className="flex justify-between items-center pb-[32px]">
         <h3 className="text-[#1E1E1E] font-Inter text-[20px] font-semibold capitalize">
           {errors}
@@ -381,7 +388,7 @@ const AdminDashboard = () => {
                     Total Plastic Recycled
                   </p>
                   <h1 className="font-sans text-[16px] font-[700] text-[#FFF] tracking-[-0.311px]">
-                    25
+                    {totalRecycledOrders}
                   </h1>
                 </div>
                 <div className="absolute w-[100px] h-[100px] flex flex-col justify-center items-center gap-[3px] bg-[#D3E9FE] rounded-full text-center z-20 top-[7px] right-[3rem]">
@@ -389,7 +396,7 @@ const AdminDashboard = () => {
                     Hazardous Waste
                   </p>
                   <h1 className="font-sans text-[16px] font-[700] text-gray-600 tracking-[-0.311px]">
-                    10
+                    {totalHazardousOrders}
                   </h1>
                 </div>
                 <div className="absolute w-[80px] h-[80px] flex flex-col justify-center items-center gap-[3px] bg-[#1E63B5] rounded-full text-center z-30 top-[3rem] right-[8rem]">
@@ -397,7 +404,7 @@ const AdminDashboard = () => {
                     Organic Waste
                   </p>
                   <h1 className="font-sans text-[16px] font-[700] text-[#FFF] tracking-[-0.311px]">
-                    15
+                    {totalOrganicOrders}
                   </h1>
                 </div>
               </div>
@@ -434,7 +441,7 @@ const AdminDashboard = () => {
               </thead>
               <tbody>
                 {orders.map((order) => (
-                  <tr key={order.searchId} className="border-b">
+                  <tr key={order._id} className="border-b">
                     <td className="px-4 py-2 text-[#23272E] text-[15px] font-[400] font-sans">
                       {order.searchId}
                     </td>
@@ -443,7 +450,7 @@ const AdminDashboard = () => {
                     </td>
                     <td className="px-4 py-2 text-[#23272E] text-[15px] font-[400] font-sans">
                       {order.capacity}
-                    </td>Organic
+                    </td>
                     <td className="px-4 py-2 text-[#23272E] text-[15px] font-[400] font-sans">
                       {order.category}
                     </td>
