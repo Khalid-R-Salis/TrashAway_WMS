@@ -1,4 +1,4 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import schedulingicon from "../assets/schedulingicon.png";
@@ -12,7 +12,21 @@ import settingdb from "../assets/settingdb.png";
 import logoutdb from "../assets/logoutdb.png";
 import profiledb1 from "../assets/profiledb1.png";
 
+// eslint-disable-next-line react/prop-types
 const SidebarAdmin = ({ activePage }) => {
+  const [userDetails, setUserDetails] = useState({
+    name: '',
+    email: ''
+  });
+
+  useEffect(() => {
+    const userSession = JSON.parse(localStorage.getItem("userSession"));
+    setUserDetails({
+      name: userSession.name,
+      email: userSession.email
+    });
+  }, [userDetails.name, userDetails.email]);
+
   return (
     <>
       <div className=" flex justify-start items-start">
@@ -144,9 +158,9 @@ const SidebarAdmin = ({ activePage }) => {
                 >
                   <img src={profiledb1} alt="Icon" />
                   <Link to="/adminsettings">
-                    <h2 className=" text-[12px] font-[400]">Khalid Rabiu</h2>
+                    <h2 className=" text-[12px] font-[400]">{userDetails.name}</h2>
                     <p className=" text-[12px] font-[400]">
-                      khalidrabiu@gmail.com
+                    {userDetails.email}
                     </p>
                   </Link>
                 </div>

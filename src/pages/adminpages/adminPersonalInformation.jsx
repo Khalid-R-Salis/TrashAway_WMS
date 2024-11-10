@@ -1,17 +1,93 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import Modal from "../../components/UI/Modal/Modal";
 import profiledb1 from "../../assets/profiledb1.png";
 
 const AdminPersonalInformation = () => {
-  const [fullName, setFullName] = useState("Khalid Rabiu");
+  const [fullName, setFullName] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
 
-  const handleSave = () => {
-    console.log({ fullName, username, email, phoneNumber });
+  const updateProfileHandler = async (event) => {
+    event.preventDefault();
+    
+    try {
+      setIsLoading(true);
+      const userSession = JSON.parse(localStorage.getItem("userSession"));
+      const token = userSession?.token;
+      const userId = userSession?.id;
+
+      const response = await fetch(
+        `https://waste-mangement-backend-3qg6.onrender.com/api/users/${userId}`,
+        {
+          method: "PATCH",
+          body: JSON.stringify({
+            name: fullName,
+            email,
+            phone: phoneNumber,
+            username,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok && data.message) {
+        setIsLoading(false);
+        setShowModal(true);
+        throw new Error(
+          data.message || "Sorry something happened, Try again later"
+        );
+      }
+
+      if (data.message === "jwt expired") {
+        setIsLoading(false);
+        navigate('/login');
+      }
+
+      setSuccessMessage("Profile Updated Successfully");
+      setShowModal(true);
+
+      // @desc: updating user details in local storage
+      let updateUserSession = localStorage.getItem("userSession");
+
+      if (updateUserSession) {
+        updateUserSession = JSON.parse(updateUserSession);
+
+        updateUserSession.name = data.user.name;
+        updateUserSession.email = data.user.email;
+        updateUserSession.phone = data.user.phone;
+        updateUserSession.username = data.user.username;
+
+        localStorage.setItem("userSession", JSON.stringify(updateUserSession));
+
+        // @desc: set loading to false to show the modal
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.log(error.message);
+      setError(error.message);
+    }
   };
 
+    // @desc: hide modal handler
+    const toggleModalHandler = () => {
+      setShowModal(false);
+    };  
+
   return (
+    <>
     <div className="p-6 bg-[#f1f4f8]/35 w-[80%] h-full">
       <h2 className="text-[#141417] font-semibold text-2xl font-Inter text-[20px] ">
         Personal information
@@ -39,7 +115,7 @@ const AdminPersonalInformation = () => {
         </div>
 
         {/* Form */}
-        <div className="space-y-4">
+        <form className="space-y-4">
           <div>
             <label className="block text-gray-700 text-sm mb-1">
               Full Name
@@ -69,7 +145,6 @@ const AdminPersonalInformation = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-[50%] p-2 border border-gray-300 rounded-[4px] shadow-sm outline-none"
-              required
             />
           </div>
           <div>
@@ -81,24 +156,30 @@ const AdminPersonalInformation = () => {
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
               className="w-[50%] p-2 border border-gray-300 rounded-[4px] shadow-sm outline-none"
-              required
             />
           </div>
-        </div>
-      </div>
-
-      <div className="flex justify-end space-x-4">
+          <div className="flex justify-end space-x-4">
         <button className="text-gray-500" onClick={() => console.log("Cancel")}>
           Cancel
         </button>
         <button
           className="bg-black text-white px-4 py-2 rounded"
-          onClick={handleSave}
+          onClick={updateProfileHandler}
         >
           Save
         </button>
       </div>
+        </form>
+      </div>
+
     </div>
+    {!isLoading && error && showModal && (
+        <Modal onClickBg={toggleModalHandler}>{error}</Modal>
+      )}
+      {!isLoading && successMessage && showModal && (
+        <Modal onClickBg={toggleModalHandler}>{successMessage}</Modal>
+      )}
+    </>
   );
 };
 

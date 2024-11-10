@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import SidebarAdmin from "../../components/SidebarAdmin.jsx";
 import AdminPersonalInformation from "../adminpages/adminPersonalInformation.jsx";
 import AdminNotificationPreferences from "../adminpages/adminNotificationPreferences.jsx";
