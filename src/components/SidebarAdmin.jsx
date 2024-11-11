@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-import schedulingicon from "../assets/schedulingicon.png";
+// import schedulingicon from "../assets/schedulingicon.png";s
 import stafficon from "../assets/stafficon.png";
 import umicon from "../assets/umicon.png";
 import home2 from "../assets/home2.png";
@@ -104,7 +104,7 @@ const SidebarAdmin = ({ activePage }) => {
                 </div>
               </li>
 
-              <li>
+              {/* <li>
                 <div
                   className={`flex justify-start items-center gap-[16px] rounded-[4px] py-[12px] pl-[12px] w-[18rem] ${
                     activePage === "scheduling"
@@ -115,7 +115,7 @@ const SidebarAdmin = ({ activePage }) => {
                   <img src={schedulingicon} alt="Icon" />
                   <Link to="/scheduling">Scheduling</Link>
                 </div>
-              </li>
+              </li> */}
             </ul>
           </nav>
           {/* ------------------------------------------------------------------- */}

@@ -1,11 +1,131 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+
 import formbg from "../../assets/formsbg.png";
 import notificationdb from "../../assets/notificationdb.png";
 import cancelIcon from "../../assets/close.svg";
 import search from "../../assets/Search.png";
 import SidebarAdmin from "../../components/SidebarAdmin";
 
+// Orders logic
+/* const orders = [{
+  id: 1001,
+  date: "7 July 2024",
+  items: 20,
+  category: "Recyclable",
+  status: "Pending",
+},
+{
+  id: 1002,
+  date: "7 July 2024",
+  items: 10,
+  category: "Recyclable",
+  status: "Pending",
+},
+{
+  id: 1003,
+  date: "7 July 2024",
+  items: 8,
+  category: "Recyclable",
+  status: "Pending",
+},
+{
+  id: 1004,
+  date: "7 July 2024",
+  items: 4,
+  category: "Hazardous",
+  status: "Completed",
+},
+{
+  id: 1005,
+  date: "7 July 2024",
+  items: 16,
+  category: "Organic",
+  status: "Completed",
+},
+{
+  id: 1006,
+  date: "7 July 2024",
+  items: 18,
+  category: "Hazardous",
+  status: "Completed",
+},
+{
+  id: 1007,
+  date: "7 July 2024",
+  items: 20,
+  category: "Organic",
+  status: "Completed",
+},
+
+{
+  id: 1008,
+  date: "7 July 2024",
+  items: 20,
+  category: "Recyclable",
+  status: "Pending",
+},
+{
+  id: 1009,
+  date: "7 July 2024",
+  items: 10,
+  category: "Recyclable",
+  status: "Pending",
+},
+{
+  id: 1010,
+  date: "7 July 2024",
+  items: 8,
+  category: "Recyclable",
+  status: "Pending",
+},
+{
+  id: 1011,
+  date: "7 July 2024",
+  items: 4,
+  category: "Hazardous",
+  status: "Completed",
+},
+{
+  id: 1012,
+  date: "7 July 2024",
+  items: 16,
+  category: "Organic",
+  status: "Completed",
+},
+{
+  id: 1013,
+  date: "7 July 2024",
+  items: 18,
+  category: "Hazardous",
+  status: "Completed",
+},
+{
+  id: 1014,
+  date: "7 July 2024",
+  items: 20,
+  category: "Organic",
+  status: "Completed",
+},] */
+
 const WasteManagment = () => {
+  const [orders, setOrders] = useState([]);
+  const [showNotification, setShowNotification] = useState(false);
+  const [selectedOrderId, setSelectedOrderId] = useState(null);
+  const [errors, setErrors] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [filterStatus, setFilterStatus] = useState("All");
+  const [currentPage, setCurrentPage] = useState(1);
+  const navigate = useNavigate();
+  const [showForm, setShowForm] = useState(false);
+  const [allocationDetails, setAllocationDetails] = useState({
+    location: "",
+    items: "",
+    category: "",
+    contactNumber: "",
+    driver: "",
+  });
+
   // Start timer
   const [time, setTime] = useState({
     hours: "00",
@@ -58,126 +178,64 @@ const WasteManagment = () => {
   }, []);
 
   // Notification logic
-  const [showNotification, setShowNotification] = useState(false);
   const toggleNotification = () => {
     setShowNotification(!showNotification);
   };
 
-  // Orders logic
-  const [orders, setOrders] = useState([
-    {
-      id: 1001,
-      date: "7 July 2024",
-      items: 20,
-      category: "Recyclable",
-      status: "Pending",
-    },
-    {
-      id: 1002,
-      date: "7 July 2024",
-      items: 10,
-      category: "Recyclable",
-      status: "Pending",
-    },
-    {
-      id: 1003,
-      date: "7 July 2024",
-      items: 8,
-      category: "Recyclable",
-      status: "Pending",
-    },
-    {
-      id: 1004,
-      date: "7 July 2024",
-      items: 4,
-      category: "Hazardous",
-      status: "Completed",
-    },
-    {
-      id: 1005,
-      date: "7 July 2024",
-      items: 16,
-      category: "Organic",
-      status: "Completed",
-    },
-    {
-      id: 1006,
-      date: "7 July 2024",
-      items: 18,
-      category: "Hazardous",
-      status: "Completed",
-    },
-    {
-      id: 1007,
-      date: "7 July 2024",
-      items: 20,
-      category: "Organic",
-      status: "Completed",
-    },
+  // @desc: fetching pickup orders from the backend
+  const fetchUserOrdersHandler = useCallback(async () => {
+    const userSession = JSON.parse(localStorage.getItem('userSession'));
+    const token = userSession?.token;
 
-    {
-      id: 1008,
-      date: "7 July 2024",
-      items: 20,
-      category: "Recyclable",
-      status: "Pending",
-    },
-    {
-      id: 1009,
-      date: "7 July 2024",
-      items: 10,
-      category: "Recyclable",
-      status: "Pending",
-    },
-    {
-      id: 1010,
-      date: "7 July 2024",
-      items: 8,
-      category: "Recyclable",
-      status: "Pending",
-    },
-    {
-      id: 1011,
-      date: "7 July 2024",
-      items: 4,
-      category: "Hazardous",
-      status: "Completed",
-    },
-    {
-      id: 1012,
-      date: "7 July 2024",
-      items: 16,
-      category: "Organic",
-      status: "Completed",
-    },
-    {
-      id: 1013,
-      date: "7 July 2024",
-      items: 18,
-      category: "Hazardous",
-      status: "Completed",
-    },
-    {
-      id: 1014,
-      date: "7 July 2024",
-      items: 20,
-      category: "Organic",
-      status: "Completed",
-    },
-  ]);
+    setIsLoading(true);
 
-  const [selectedOrderId, setSelectedOrderId] = useState(null);
-  const [showForm, setShowForm] = useState(false);
+    if  (!token) return;
+
+    // https://waste-mangement-backend-3qg6.onrender.com
+    try {
+      const response = await fetch(
+        `http://localhost:9090/api/admin/all-pickup`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const { updatedPickUpRequest, error, message } = await response.json();
+      
+      if (!response.ok && error) {
+        setIsLoading(false);
+        throw new Error(error);
+      }
+
+      if (message === "No pick up requests found.") {
+        setIsLoading(false);
+        throw new Error("No pick up requests found at the moment.");
+      }
+
+      if (message === "jwt expired") {
+        setIsLoading(false);
+        navigate('/login');
+      }
+
+      setOrders(updatedPickUpRequest);
+      setErrors(null);
+      setIsLoading(false);
+    } catch (error) {
+      console.log("Error from dashboard", error);
+      setErrors(error.message);
+      setOrders([]);
+      setIsLoading(false);
+    }
+  }, [navigate]);
+
+  useEffect(() => {
+    fetchUserOrdersHandler();
+  }, [fetchUserOrdersHandler]);
 
   // Allocation form logic
-  const [allocationDetails, setAllocationDetails] = useState({
-    location: "",
-    items: "",
-    category: "",
-    contactNumber: "",
-    driver: "",
-  });
-
   const handleInputChange = (e) => {
     setAllocationDetails({
       ...allocationDetails,
@@ -196,20 +254,18 @@ const WasteManagment = () => {
   };
 
   const handleAllocate = (id) => {
+    console.log(id);
     setSelectedOrderId(id);
     setShowForm(true);
   };
 
   // Orders filtering
-  const [filterStatus, setFilterStatus] = useState("All");
-
   const filteredOrders = orders.filter((order) => {
     if (filterStatus === "All") return true;
     return order.status === filterStatus;
   });
 
   // Pagination logic
-  const [currentPage, setCurrentPage] = useState(1);
   const ordersPerPage = 6;
 
   const indexOfLastOrder = currentPage * ordersPerPage;
@@ -232,6 +288,17 @@ const WasteManagment = () => {
       setCurrentPage(currentPage - 1);
     }
   };
+
+  const showError = (
+    <div className="absolute right-[35rem] bottom-[5rem] mt-[23rem] w-[370px] bg-white  p-6 rounded-lg shadow-sm z-10">
+      <div className="flex justify-between items-center pb-[32px]">
+        <h3 className="text-[#1E1E1E] font-Inter text-[20px] font-semibold capitalize">
+          {errors}
+        </h3>
+      </div>
+    </div>
+  );
+  
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -299,7 +366,7 @@ const WasteManagment = () => {
         >
           <div className="flex justify-between items-center px-5 py-2">
             <h1 className="text-[#1E1E1E] text-[24px] font-Inter font-[600] tracking-[-0.48px]">
-            Pick up Requests
+              Pick up Requests
             </h1>
             <input
               type="number"
@@ -339,8 +406,6 @@ const WasteManagment = () => {
             >
               Pending
             </h2>
-
-            
           </div>
           <hr className=" h-3 w-full" />
 
@@ -359,12 +424,22 @@ const WasteManagment = () => {
               </thead>
               <tbody className=" px-4 py-2 text-[#23272E] text-[15px] font-[400] font-sans">
                 {currentOrders.map((order) => (
-                  <tr key={order.id} className="border-b">
-                    <td className="py-3 px-4 text-left">{order.id}</td>
-                    <td className="py-3 px-4 text-left">{order.date}</td>
-                    <td className="py-3 px-4 text-left">{order.items}</td>
+                  <tr key={order._id} className="border-b">
+                    <td className="py-3 px-4 text-left">{order.searchId}</td>
+                    <td className="py-3 px-4 text-left">{order.time}</td>
+                    <td className="py-3 px-4 text-left">{order.capacity}</td>
                     <td className="py-3 px-4 text-left">{order.category}</td>
-                    <td className="py-3 px-4 text-left">{order.status}</td>
+                    <td className="py-3 px-4 text-left">
+                      {order.status === "Pending" ? (
+                        <span className="text-yellow-500 bg-yellow-50 p-1">
+                          Pending
+                        </span>
+                      ) : (
+                        <span className="text-green-500 bg-green-50 p-1">
+                          Completed
+                        </span>
+                      )}
+                    </td>
                     <td className="py-3 px-4 text-center">
                       {order.status === "Pending" && (
                         <button
@@ -379,6 +454,9 @@ const WasteManagment = () => {
                 ))}
               </tbody>
             </table>
+
+            {/* Showing error conditionally */}
+            {!isLoading && errors && showError}
 
             {/* Pagination */}
             <div className="flex justify-between items-center py-4">

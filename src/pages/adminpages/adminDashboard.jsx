@@ -67,6 +67,8 @@ const AdminDashboard = () => {
   const [totalOrganicOrders, setTotalOrganicOrders] = useState(0);
   const [totalRecycledOrders, setTotalRecycledOrders] = useState(0);
   const [totalHazardousOrders, setTotalHazardousOrders] = useState(0);
+  const [totalUsers, setTotalUsers] = useState(0);
+  const [totalStaff, setTotalStaff] = useState(0);
   const navigate = useNavigate();
 
   // start timer
@@ -136,9 +138,10 @@ const AdminDashboard = () => {
 
     if  (!token) return;
 
+    // https://waste-mangement-backend-3qg6.onrender.com
     try {
       const response = await fetch(
-        `https://waste-mangement-backend-3qg6.onrender.com/api/admin/all-pickup`,
+        `http://localhost:9090/api/admin/all-pickup`,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -147,7 +150,7 @@ const AdminDashboard = () => {
         }
       );
 
-      const { updatedPickUpRequest, error, message, ordersCount } = await response.json();
+      const { updatedPickUpRequest, error, message, ordersCount, allRoles } = await response.json();
       
       if (!response.ok && error) {
         setIsLoading(false);
@@ -169,6 +172,8 @@ const AdminDashboard = () => {
       setTotalRecycledOrders(ordersCount.allRecycledOrders);
       setTotalHazardousOrders(ordersCount.allHazardousOrders);
       setTotalOrganicOrders(ordersCount.allOrganicOrders);
+      setTotalStaff(allRoles.allStaffs);
+      setTotalUsers(allRoles.allUsers);
       setOrders(data);
       setErrors(null);
       setIsLoading(false);
@@ -349,7 +354,7 @@ const AdminDashboard = () => {
                   <h1 className="text-[17px] font-[600]">Total Users</h1>
                 </div>
                 <div className="flex justify-between items-center w-full">
-                  <h1 className="text-[40px] font-[700]">20</h1>
+                  <h1 className="text-[40px] font-[700]">{totalUsers}</h1>
                   <div className="flex items-center gap-1 text-[14px] font-[400]">
                     <p>+6.08%</p>
                     <img src={iconSet} alt="iconSet" />
@@ -363,7 +368,7 @@ const AdminDashboard = () => {
                   <h1 className="text-[17px] font-[600]">Staffs</h1>
                 </div>
                 <div className="flex justify-between items-center w-full">
-                  <h1 className="text-[40px] font-[700]">25</h1>
+                  <h1 className="text-[40px] font-[700]">{totalStaff}</h1>
                   <div className="flex items-center gap-1 text-[14px] font-[400]">
                     <p>+15.03%</p>
                     <img src={iconSet} alt="iconSet" />
