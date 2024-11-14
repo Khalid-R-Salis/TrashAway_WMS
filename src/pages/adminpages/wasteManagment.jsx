@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import formbg from "../../assets/formsbg.png";
@@ -118,13 +118,16 @@ const WasteManagment = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
   const [showForm, setShowForm] = useState(false);
+  const [refresh, setRefresh] = useState(false);
+  const [showSuccessMessage, setSuccessMessage] = useState(false);
   const [allocationDetails, setAllocationDetails] = useState({
     location: "",
     items: "",
     category: "",
     contactNumber: "",
-    driver: "",
   });
+
+  const driverInputRef = useRef();
 
   // Start timer
   const [time, setTime] = useState({
@@ -184,27 +187,26 @@ const WasteManagment = () => {
 
   // @desc: fetching pickup orders from the backend
   const fetchUserOrdersHandler = useCallback(async () => {
-    const userSession = JSON.parse(localStorage.getItem('userSession'));
+    const userSession = JSON.parse(localStorage.getItem("userSession"));
     const token = userSession?.token;
 
     setIsLoading(true);
 
-    if  (!token) return;
+    if (!token) return;
 
-    // https://waste-mangement-backend-3qg6.onrender.com
     try {
       const response = await fetch(
-        `http://localhost:9090/api/admin/all-pickup`,
+        `https://waste-mangement-backend-3qg6.onrender.com/api/admin/all-pickup`,
         {
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         }
       );
 
       const { updatedPickUpRequest, error, message } = await response.json();
-      
+
       if (!response.ok && error) {
         setIsLoading(false);
         throw new Error(error);
@@ -217,46 +219,139 @@ const WasteManagment = () => {
 
       if (message === "jwt expired") {
         setIsLoading(false);
-        navigate('/login');
+        navigate("/login");
       }
 
       setOrders(updatedPickUpRequest);
       setErrors(null);
       setIsLoading(false);
+      console.log(refresh)
     } catch (error) {
       console.log("Error from dashboard", error);
       setErrors(error.message);
       setOrders([]);
       setIsLoading(false);
     }
-  }, [navigate]);
+  }, [navigate, refresh]);
 
   useEffect(() => {
     fetchUserOrdersHandler();
   }, [fetchUserOrdersHandler]);
 
-  // Allocation form logic
-  const handleInputChange = (e) => {
+  // Allocation form logic (already handled in the allocate function down below)
+  // const handleInputChange = (e) => {
+  //   setAllocationDetails({
+  //     ...allocationDetails,
+  //     [e.target.name]: e.target.value,
+  //   });
+  // };
+
+  const handleAllocate = (id) => {
+    setShowForm(true);
+    setSelectedOrderId(id);
+
+    const selectedOrder = orders.filter((order) => {
+      return order._id === id;
+    });
+
     setAllocationDetails({
       ...allocationDetails,
-      [e.target.name]: e.target.value,
+      location: selectedOrder[0].location,
+      items: selectedOrder[0].capacity,
+      category: selectedOrder[0].category,
+      contactNumber: selectedOrder[0].phone,
     });
   };
 
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    console.log("Allocation Details Submitted: ", allocationDetails);
-    setShowForm(false);
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+    setShowForm(true);
+    setIsLoading(true);
+
+    const driver = driverInputRef.current.value;
+
+    const userSession = JSON.parse(localStorage.getItem("userSession"));
+    const token = userSession?.token;
+
+    try {
+      if (!token) return;
+
+      const response = await fetch(
+        `https://waste-mangement-backend-3qg6.onrender.com/api/admin/update-pickup-request/${selectedOrderId}`,
+        {
+          method: "PATCH",
+          body: JSON.stringify({
+            driverName: driver,
+            capacity: allocationDetails.items,
+            location: allocationDetails.location,
+            category: allocationDetails.category,
+            userPhoneNumber: allocationDetails.contactNumber
+          }),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+      console.log(data);
+
+      if (!response.ok && data.error) {
+        setIsLoading(false);
+        setShowForm(false);
+        throw new Error(data.error);
+      }
+
+      if (data.message === "Pick up request point not found") {
+        setIsLoading(false);
+        setShowForm(false);
+        throw new Error("Pick up request point not found.");
+      }
+      
+      if (data.message === "Something happened. Try again later") {
+        setIsLoading(false);
+        setShowForm(false);
+        throw new Error("Something happened. Try again later.");
+      }
+
+      if (data.message === "Driver not found") {
+        setIsLoading(false);
+        setShowForm(false);
+        throw new Error("Driver not found.");
+      }
+      
+
+      if (data.message === "jwt expired") {
+        navigate("/login");
+      }
+      setIsLoading(false);
+      setShowForm(false);
+      setErrors("");
+      setRefresh(prevVal => !prevVal);
+      setSuccessMessage(true);
+    } catch (error) {
+      console.log(error);
+      setOrders([]);
+      setErrors(error.message);
+      setIsLoading(false);
+      setShowForm(false);
+    }
   };
 
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSuccessMessage(false);
+    }, 1500);
+
+    console.log(refresh)
+
+    return () => clearTimeout(timer);
+  }, [refresh]);
+  
   const handleCancel = () => {
     setShowForm(false);
-  };
-
-  const handleAllocate = (id) => {
-    console.log(id);
-    setSelectedOrderId(id);
-    setShowForm(true);
   };
 
   // Orders filtering
@@ -290,15 +385,25 @@ const WasteManagment = () => {
   };
 
   const showError = (
-    <div className="absolute right-[35rem] bottom-[5rem] mt-[23rem] w-[370px] bg-white  p-6 rounded-lg shadow-sm z-10">
+    <div className="absolute right-[30rem] bottom-[26rem] mt-[23rem] w-[370px] bg-[#549877]  p-6 rounded-lg shadow-sm z-10">
       <div className="flex justify-between items-center pb-[32px]">
-        <h3 className="text-[#1E1E1E] font-Inter text-[20px] font-semibold capitalize">
+        <h3 className="text-white font-Inter text-[20px] font-semibold capitalize">
           {errors}
         </h3>
       </div>
     </div>
   );
-  
+
+  // @desc: showing success message afer allocation has been made
+  const showStaffCreatedMessage = (
+    <div className="absolute right-[35rem] bottom-[45rem] mt-[23rem] w-[300px] bg-[#549877] p-6 rounded-lg shadow-sm z-10">
+      <div className="flex justify-between items-center pb-[-1px]">
+        <h3 className="text-white font-Inter text-[16px] capitalize">
+          Allocation submitted successfully.
+        </h3>
+      </div>
+    </div>
+  );
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -434,6 +539,10 @@ const WasteManagment = () => {
                         <span className="text-yellow-500 bg-yellow-50 p-1">
                           Pending
                         </span>
+                      ) : order.status === "Driver Allocated" ? (
+                        <span className="text-orange-500 bg-orange-50 p-1">
+                          Driver Allocated
+                        </span>
                       ) : (
                         <span className="text-green-500 bg-green-50 p-1">
                           Completed
@@ -444,7 +553,7 @@ const WasteManagment = () => {
                       {order.status === "Pending" && (
                         <button
                           className="text-gray-green underline font-semibold tracking-wide"
-                          onClick={() => handleAllocate(order.id)}
+                          onClick={() => handleAllocate(order._id)}
                         >
                           Allocate
                         </button>
@@ -457,6 +566,9 @@ const WasteManagment = () => {
 
             {/* Showing error conditionally */}
             {!isLoading && errors && showError}
+
+            {/* Showing staff created modal */}
+            {!isLoading && showSuccessMessage && showStaffCreatedMessage}
 
             {/* Pagination */}
             <div className="flex justify-between items-center py-4">
@@ -504,9 +616,9 @@ const WasteManagment = () => {
                         type="text"
                         name="location"
                         value={allocationDetails.location}
-                        onChange={handleInputChange}
-                        className="w-full p-2 border border-gray-300 rounded"
+                        className="w-full p-2 text-[#666] border border-gray-300 rounded"
                         placeholder="YUMSUK main campus"
+                        disabled
                         required
                       />
                     </div>
@@ -517,10 +629,10 @@ const WasteManagment = () => {
                         type="number"
                         name="items"
                         value={allocationDetails.items}
-                        onChange={handleInputChange}
-                        className="w-full p-2 border border-gray-300 rounded"
+                        className="w-full p-2 border text-[#666] border-gray-300 rounded"
                         placeholder="Must not be more than 20"
                         required
+                        disabled
                         max={20}
                       />
                     </div>
@@ -530,11 +642,11 @@ const WasteManagment = () => {
                       <select
                         name="category"
                         value={allocationDetails.category}
-                        onChange={handleInputChange}
                         className="w-full p-2 border border-gray-300 rounded"
+                        disabled
                         required
                       >
-                        <option value="" disabled>
+                        <option defaultValue={"Select Category"} disabled>
                           Select Category
                         </option>
                         <option value="Hazardous">Hazardous</option>
@@ -549,36 +661,37 @@ const WasteManagment = () => {
                         type="number"
                         name="contactNumber"
                         value={allocationDetails.contactNumber}
-                        onChange={handleInputChange}
-                        className="w-full p-2 border border-gray-300 rounded"
+                        className="w-full p-2 border text-[#666] border-gray-300 rounded"
                         maxLength={12}
                         pattern="\d{10,12}"
                         title="Contact number should be between 10 to 12 digits."
                         placeholder="090909090909"
+                        disabled
                         required
                       />
                     </div>
 
                     <div className="mb-4">
-                      <label className="block mb-1">Driver:</label>
+                      <label htmlFor="driver" className="block mb-1">
+                        Driver:
+                      </label>
                       <select
                         name="driver"
-                        value={allocationDetails.driver}
-                        onChange={handleInputChange}
                         className="w-full p-2 border border-gray-300 rounded"
+                        ref={driverInputRef}
                         required
                       >
                         <option value="" disabled>
-                          Select a driver
+                          Select Driver
                         </option>
                         <option value="Khalid Rabiu" className=" uppercase">
                           Khalid Rabiu
                         </option>
-                        <option value="ISA Musa" className=" uppercase">
+                        <option value="Isa Musa" className=" uppercase">
                           ISA Musa
                         </option>
-                        <option value="ADAM ISA">ADAM ISA</option>
-                        <option value="KAST MAN BIGBOSS">
+                        <option value="Adam Isa">ADAM ISA</option>
+                        <option value="Kast Man Bigboss">
                           KAST MAN BIGBOSS
                         </option>
                       </select>
