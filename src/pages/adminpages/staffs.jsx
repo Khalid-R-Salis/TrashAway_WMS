@@ -1,10 +1,38 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import formbg from "../../assets/formsbg.png";
 import cancelIcon from "../../assets/close.svg";
 import notificationdb from "../../assets/notificationdb.png";
 import SidebarAdmin from "../../components/SidebarAdmin";
+import { useNavigate } from "react-router-dom";
+
+// const staff = [
+//   { id: 1001, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
+//   { id: 1002, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
+//   { id: 1003, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
+//   { id: 1004, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
+//   { id: 1005, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
+//   { id: 1006, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
+//   { id: 1007, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
+//   { id: 1008, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
+//   { id: 1009, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
+//   { id: 1010, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
+//   { id: 1011, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
+//   { id: 1012, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
+//   { id: 1013, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
+//   { id: 1014, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
+//   { id: 1015, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
+// ]
 
 const Staffs = () => {
+  const [showNotification, setShowNotification] = useState(false);
+  const [staff, setStaff] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedOrderId, setSelectedOrderId] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteReason, setDeleteReason] = useState("");
+  const [refresh, setRefresh] = useState(false);
+  const [showSuccessMessage, setSuccessMessage] = useState(false);
   const [time, setTime] = useState({
     hours: "00",
     minutes: "00",
@@ -15,6 +43,18 @@ const Staffs = () => {
     month: "Jan",
     year: 2023,
   });
+  const [fullname, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
+  const [formError, setFormError] = useState("");
+  const [formFieldError, setFormFieldError] = useState({
+    email: "",
+    phone: "",
+  });
+  const navigate = useNavigate();
 
   useEffect(() => {
     const updateDateTime = () => {
@@ -51,51 +91,152 @@ const Staffs = () => {
     return () => clearInterval(intervalId);
   }, []);
 
-  const [showNotification, setShowNotification] = useState(false);
   const toggleNotification = () => {
     setShowNotification(!showNotification);
   };
 
-  const [orders, setOrders] = useState([
-    { id: 1001, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
-    { id: 1002, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
-    { id: 1003, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
-    { id: 1004, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
-    { id: 1005, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
-    { id: 1006, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
-    { id: 1007, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
-    { id: 1008, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
-    { id: 1009, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
-    { id: 1010, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
-    { id: 1011, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
-    { id: 1012, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
-    { id: 1013, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
-    { id: 1014, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
-    { id: 1015, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
-  ]);
-
-  const [selectedOrderId, setSelectedOrderId] = useState(null);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [deleteReason, setDeleteReason] = useState("");
-
   const handleDelete = (id) => {
-    setOrders(orders.filter((order) => order.id !== id));
+    setStaff(staff.filter((order) => order.id !== id));
     setShowDeleteModal(false); // Close modal after delete
     setDeleteReason(""); // Clear reason input
+    console.log(id);
   };
 
-  const [filterStatus] = useState("All");
-  const filteredOrders = orders.filter((order) => filterStatus === "All");
+  // @desc: fetching all staffs
+  const fetchStaffHandler = useCallback(async () => {
+    setIsLoading(true);
+    setError("");
+    setShowErrorMessage(false);
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const ordersPerPage = 6;
-  const indexOfLastOrder = currentPage * ordersPerPage;
-  const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
-  const currentOrders = filteredOrders.slice(
-    indexOfFirstOrder,
-    indexOfLastOrder
-  );
-  const totalPages = Math.ceil(filteredOrders.length / ordersPerPage);
+    const userSession = JSON.parse(localStorage.getItem("userSession"));
+    const token = userSession?.token;
+
+    try {
+      if (!token) return;
+
+      const response = await fetch(
+        "https://waste-mangement-backend-3qg6.onrender.com/api/admin/all-staff",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok && data.error) {
+        setIsLoading(false);
+        throw new Error(data.error);
+      }
+
+      if (data.message === "No staff available at the moment.") {
+        setIsLoading(false);
+        throw new Error("No staff available at the moment.");
+      }
+      if (data.message === "jwt expired") {
+        navigate("/login");
+      }
+
+      setStaff(data.staffs);
+      setIsLoading(false);
+      setError("");
+      setShowErrorMessage(false);
+      console.log(refresh)
+    } catch (error) {
+      console.log(error);
+      setStaff([]);
+      setIsLoading(false);
+      setShowErrorMessage(true);
+      setError(error.message);
+    }
+  }, [navigate, refresh]);
+
+  useEffect(() => {
+    fetchStaffHandler();
+  }, [fetchStaffHandler]);
+
+  // @desc: creating a new staff
+  const submitStaffHandler = async (event) => {
+    event.preventDefault();
+
+    setIsLoading(true);
+    setShowErrorMessage(false);
+    setFormError("");
+
+    const userSession = JSON.parse(localStorage.getItem("userSession"));
+    const token = userSession?.token;
+
+    try {
+      if (!token) return;
+
+      const response = await fetch(
+        "https://waste-mangement-backend-3qg6.onrender.com/api/admin/create-new-staff",
+        {
+          method: "POST",
+          body: JSON.stringify({ name: fullname, email, phone: phoneNumber }),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok && data.error) {
+        setIsLoading(false);
+        setShowErrorMessage(false); 
+        throw new Error(data.error);
+      }
+
+      if (data.message === 'User already exists with this email') {
+        setIsLoading(false);
+        setShowErrorMessage(false); 
+        throw new Error('User with email already exists.')
+      }
+
+      if (data.message === 'jwt expired') {
+        setIsLoading(false);
+        setShowErrorMessage(false); 
+        navigate('/login')
+
+      }
+
+      
+      setRefresh(prevVal => !prevVal);
+      setIsLoading(false);
+      setShowErrorMessage(false);
+      setFormError('');
+      setShowModal(false);
+      setSuccessMessage(true);
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+      setFormError(error.message);
+    }
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSuccessMessage(false);
+    }, 1500);
+
+    console.log(refresh)
+
+    return () => clearTimeout(timer);
+  }, [refresh]);
+
+  // @desc: removed beacuses nothing is being filtered
+  // const [filterStatus] = useState("All");
+  // const filteredOrders = staff.filter((order) => filterStatus === "All");
+
+  const ordersPerStaff = 6;
+  const indexOfLastStaff = currentPage * ordersPerStaff;
+  const indexOfFirstStaff = indexOfLastStaff - ordersPerStaff;
+  const currentStaff = staff.slice(indexOfFirstStaff, indexOfLastStaff);
+  const totalPages = Math.ceil(staff.length / ordersPerStaff);
 
   const handleNext = () => {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
@@ -105,11 +246,42 @@ const Staffs = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
 
-  const [showModal, setShowModal] = useState(false);
+  const openModal = () => {
+    setShowModal(true);
+    setShowErrorMessage(false);
+  };
 
-  const openModal = () => setShowModal(true);
-  const closeModal = () => setShowModal(false);
+  const closeModal = useCallback(() => {
+    setShowModal(false);
+    setShowErrorMessage(true);
+    setFormError('')
+  }, []);
 
+  useEffect(() => {
+    closeModal();
+  }, [closeModal]);
+
+  // @desc: showing error modal conditionally
+  const showError = (
+    <div className="absolute right-[35rem] bottom-[25rem] mt-[23rem] w-[370px] bg-[#549877] p-6 rounded-lg shadow-sm z-10">
+      <div className="flex justify-between items-center pb-[32px]">
+        <h3 className="text-white font-Inter text-[20px] font-semibold capitalize">
+          {error}
+        </h3>
+      </div>
+    </div>
+  );
+
+  // @desc: showing success message afer staff has been created
+  const showStaffCreatedMessage = (
+    <div className="absolute right-[35rem] bottom-[45rem] mt-[23rem] w-[300px] bg-[#549877] p-6 rounded-lg shadow-sm z-10">
+      <div className="flex justify-between items-center pb-[-1px]">
+        <h3 className="text-white font-Inter text-[16px] capitalize">
+          Staff successfully created.
+        </h3>
+      </div>
+    </div>
+  );
   return (
     <div className="flex h-screen overflow-hidden">
       <SidebarAdmin activePage="staffs" />
@@ -196,25 +368,25 @@ const Staffs = () => {
                 </tr>
               </thead>
               <tbody>
-                {currentOrders.map((order) => (
-                  <tr key={order.id} className="border-b">
+                {currentStaff.map((order) => (
+                  <tr key={order._id} className="border-b">
                     <td className="px-[45px] py-2 text-[#23272E] text-[15px] font-[400]">
-                      {order.id}
+                      {order.driverID}
                     </td>
                     <td className="px-[45px] py-2 text-[#23272E] text-[15px] font-[400]">
                       {order.name}
                     </td>
                     <td className="px-[45px] py-2 text-[#23272E] text-[15px] font-[400]">
-                      {order.phoneNumber}
+                      {order.phone}
                     </td>
                     <td className="px-[45px] py-2 text-[#23272E] text-[15px] font-[400]">
-                      {order.role}
+                      Driver
                     </td>
                     <td className="px-4 py-2">
                       <div className="relative">
                         <button
                           onClick={() => {
-                            setSelectedOrderId(order.id);
+                            setSelectedOrderId(order._id);
                             setShowDeleteModal(true);
                           }}
                           className="text-gray-500"
@@ -227,6 +399,11 @@ const Staffs = () => {
                 ))}
               </tbody>
             </table>
+            {/* Showing error conditionally */}
+            {!isLoading && showErrorMessage && showError}
+
+            {/* Showing staff created modal */}
+            {!isLoading && showSuccessMessage && showStaffCreatedMessage}
           </div>
         </div>
 
@@ -291,13 +468,14 @@ const Staffs = () => {
               <h2 className="text-[16px] font-Inter font-[500] mb-4">
                 Add Staff
               </h2>
-              <form className="">
+              <form className="" onSubmit={submitStaffHandler}>
                 <div className="mb-4">
                   <label className="block text-gray-700">Full Name</label>
                   <input
                     type="text"
                     className="w-full border border-gray-300 p-2 rounded outline-none"
                     placeholder="Enter Full Name"
+                    onChange={(event) => setFullName(event.target.value)}
                     required
                   />
                 </div>
@@ -308,19 +486,59 @@ const Staffs = () => {
                     type="email"
                     className="w-full border border-gray-300 p-2 rounded outline-none"
                     placeholder="Enter Email"
+                    onChange={(event) => {
+                      const emailValue = event.target.value;
+
+                      const validateEmail = (value) => {
+                        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                        return regex.test(value);
+                      };
+
+                      if (validateEmail(emailValue)) {
+                        setEmail(emailValue);
+                        setFormFieldError({
+                          ...formFieldError,
+                          email: ''
+                        });
+                      } else setFormFieldError({
+                        ...formFieldError,
+                        email: 'Invalid Email.'
+                      });;
+                    }}
                     required
                   />
                 </div>
+                <p className="text-red-600">{formFieldError.email}</p>
 
                 <div className="mb-4">
                   <label className="block text-gray-700">Contact Number</label>
                   <input
-                    type="number"
+                    type="text"
                     className="w-full border border-gray-300 p-2 rounded outline-none"
                     placeholder="Enter Contact Number"
+                    onChange={(event) => {
+                      const phone = event.target.value;
+
+                      const validatePhone = (value) => {
+                        const regex = /^(0\d{10}|(\+234)\d{10})$/;
+                        return regex.test(value);
+                      };
+
+                      if (validatePhone(phone)) {
+                        setPhoneNumber(phone);
+                        setFormFieldError({
+                          ...formFieldError,
+                          phone: ''
+                        });
+                      } else setFormFieldError({
+                        ...formFieldError,
+                        phone: 'Invaid Phone Format'
+                      });
+                    }}
                     required
                   />
                 </div>
+                <p className="text-red-600">{formFieldError.phone}</p>
 
                 <div className="mb-4">
                   <label className="block text-gray-700">Role</label>
@@ -332,6 +550,7 @@ const Staffs = () => {
                     disabled
                   />
                 </div>
+                <p className="text-red-600">{formError}</p>
 
                 <div className="flex justify-between">
                   <button

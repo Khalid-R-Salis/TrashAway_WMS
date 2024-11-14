@@ -138,10 +138,9 @@ const AdminDashboard = () => {
 
     if  (!token) return;
 
-    // https://waste-mangement-backend-3qg6.onrender.com
     try {
       const response = await fetch(
-        `http://localhost:9090/api/admin/all-pickup`,
+        `https://waste-mangement-backend-3qg6.onrender.com/api/admin/all-pickup`,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -197,7 +196,7 @@ const AdminDashboard = () => {
   }; */
 
   const showError = (
-    <div className="absolute right-[35rem] bottom-[5rem] mt-[23rem] w-[370px] bg-white  p-6 rounded-lg shadow-sm z-10">
+    <div className="absolute right-[35rem] bottom-[5rem] mt-[23rem] w-[370px] bg-[#549877]  p-6 rounded-lg shadow-sm z-10">
       <div className="flex justify-between items-center pb-[32px]">
         <h3 className="text-[#1E1E1E] font-Inter text-[20px] font-semibold capitalize">
           {errors}

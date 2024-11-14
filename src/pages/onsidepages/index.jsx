@@ -113,6 +113,10 @@ const Landing = () => {
       }
 
       setIsSubmitting(false);
+      setCapacity('');
+      setLocation('');
+      setTime('');
+      setCategory('');
     } catch (error) {
       console.error("Pickup request failed:", error);
       setError(error.message);
