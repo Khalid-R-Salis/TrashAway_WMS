@@ -221,7 +221,7 @@ const Staffs = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setSuccessMessage(false);
-    }, 1500);
+    }, 2500);
 
     console.log(refresh)
 
