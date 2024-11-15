@@ -199,7 +199,7 @@ const AdminDashboard = () => {
   const showError = (
     <div className="absolute right-[35rem] bottom-[5rem] mt-[23rem] w-[370px] bg-[#549877]  p-6 rounded-lg shadow-sm z-10">
       <div className="flex justify-between items-center pb-[32px]">
-        <h3 className="text-[#1E1E1E] font-Inter text-[20px] font-semibold capitalize">
+        <h3 className="text-white font-Inter text-[20px] font-semibold capitalize">
           {errors}
         </h3>
       </div>
@@ -463,6 +463,10 @@ const AdminDashboard = () => {
                       {order.status === "Pending" ? (
                         <span className="text-yellow-500 bg-yellow-50 p-1">
                           Pending
+                        </span>
+                      ) : order.status === "Driver Allocated" ? (
+                        <span className="text-orange-500 bg-orange-50 p-1">
+                          Driver Allocated
                         </span>
                       ) : (
                         <span className="text-green-500 bg-green-50 p-1">

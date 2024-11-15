@@ -1,84 +1,92 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+
 import formbg from "../../assets/formsbg.png";
 import notificationdb from "../../assets/notificationdb.png";
 import cancelIcon from "../../assets/close.svg";
 import SidebarAdmin from "../../components/SidebarAdmin";
 
-const data = [
-  {
-    id: "US001",
-    name: "John Joe",
-    pickups: 10,
-    phoneNumber: "08111111111",
-    category: "Hazardous",
-  },
-  {
-    id: "US002",
-    name: "Jane Doe",
-    pickups: 8,
-    phoneNumber: "08122222222",
-    category: "Organic",
-  },
-  {
-    id: "US003",
-    name: "Khalid Rabiu",
-    pickups: 12,
-    phoneNumber: "08133333333",
-    category: "Recyclable",
-  },
-  {
-    id: "US004",
-    name: "Khalid Rabiu",
-    pickups: 12,
-    phoneNumber: "08133333333",
-    category: "Recyclable",
-  },
-  {
-    id: "US005",
-    name: "Khalid Rabiu",
-    pickups: 12,
-    phoneNumber: "08133333333",
-    category: "Recyclable",
-  },
-  {
-    id: "US006",
-    name: "Khalid Rabiu",
-    pickups: 12,
-    phoneNumber: "08133333333",
-    category: "Recyclable",
-  },
-  {
-    id: "US007",
-    name: "Khalid Rabiu",
-    pickups: 12,
-    phoneNumber: "08133333333",
-    category: "Recyclable",
-  },
-  {
-    id: "US008",
-    name: "Khalid Rabiu",
-    pickups: 12,
-    phoneNumber: "08133333333",
-    category: "Recyclable",
-  },
-  {
-    id: "US009",
-    name: "Khalid Rabiu",
-    pickups: 12,
-    phoneNumber: "08133333333",
-    category: "Recyclable",
-  },
-  {
-    id: "US010",
-    name: "Khalid Rabiu",
-    pickups: 12,
-    phoneNumber: "08133333333",
-    category: "Recyclable",
-  },
-];
+// const data = [
+//   {
+//     id: "US001",
+//     name: "John Joe",
+//     pickups: 10,
+//     phoneNumber: "08111111111",
+//     category: "Hazardous",
+//   },
+//   {
+//     id: "US002",
+//     name: "Jane Doe",
+//     pickups: 8,
+//     phoneNumber: "08122222222",
+//     category: "Organic",
+//   },
+//   {
+//     id: "US003",
+//     name: "Khalid Rabiu",
+//     pickups: 12,
+//     phoneNumber: "08133333333",
+//     category: "Recyclable",
+//   },
+//   {
+//     id: "US004",
+//     name: "Khalid Rabiu",
+//     pickups: 12,
+//     phoneNumber: "08133333333",
+//     category: "Recyclable",
+//   },
+//   {
+//     id: "US005",
+//     name: "Khalid Rabiu",
+//     pickups: 12,
+//     phoneNumber: "08133333333",
+//     category: "Recyclable",
+//   },
+//   {
+//     id: "US006",
+//     name: "Khalid Rabiu",
+//     pickups: 12,
+//     phoneNumber: "08133333333",
+//     category: "Recyclable",
+//   },
+//   {
+//     id: "US007",
+//     name: "Khalid Rabiu",
+//     pickups: 12,
+//     phoneNumber: "08133333333",
+//     category: "Recyclable",
+//   },
+//   {
+//     id: "US008",
+//     name: "Khalid Rabiu",
+//     pickups: 12,
+//     phoneNumber: "08133333333",
+//     category: "Recyclable",
+//   },
+//   {
+//     id: "US009",
+//     name: "Khalid Rabiu",
+//     pickups: 12,
+//     phoneNumber: "08133333333",
+//     category: "Recyclable",
+//   },
+//   {
+//     id: "US010",
+//     name: "Khalid Rabiu",
+//     pickups: 12,
+//     phoneNumber: "08133333333",
+//     category: "Recyclable",
+//   },
+// ];
 
-const userManagement = () => {
-  // start timer
+const UserManagement = () => {
+  const [showNotification, setShowNotification] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [users, setUsers] = useState([]);
+  const [errors, setErrors] = useState("");
+  const [isLoading, setIsLoading] = useState(false);  
+  const navigate = useNavigate();
+
   const [time, setTime] = useState({
     hours: "00",
     minutes: "00",
@@ -90,6 +98,7 @@ const userManagement = () => {
     year: 2023,
   });
 
+  // start timer
   useEffect(() => {
     const updateDateTime = () => {
       const now = new Date();
@@ -131,25 +140,88 @@ const userManagement = () => {
 
   // end timer
 
-  const [showNotification, setShowNotification] = useState(false);
   const toggleNotification = () => {
     setShowNotification(!showNotification);
   };
 
-  const [currentPage, setCurrentPage] = useState(1);
+  // @desc: fetching all users
+  const fetchUsersHandler = useCallback(async () => {
+    const userSession = JSON.parse(localStorage.getItem("userSession"));
+    const token = userSession?.token;
+
+    setIsLoading(true);
+    setErrors('');
+
+    if (!token) return;
+
+    try {
+      const response = await fetch('https://waste-mangement-backend-3qg6.onrender.com/api/admin/all-pickup', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      const data = await response.json();
+
+      if (!response.ok && data.error) {
+        setIsLoading(false);
+        throw new Error('Server Error. Please try again later');
+      }
+
+      if (data.message === 'No users found') {
+        setIsLoading(false);
+        throw new Error('User orders not available.');
+      }
+
+      if (data.message === "No pick up requests found.") {
+        setIsLoading(false);
+        throw new Error("No pick up requests found at the moment.");
+      }
+
+      if (data.message === 'jwt expired') {
+        navigate('/login');
+      }
+
+      setUsers(data.updatedPickUpRequest);
+      setErrors('');
+      setIsLoading(false);
+    } catch (error) {
+      setUsers([])
+      setErrors(error.message);
+      setIsLoading(false)
+      console.log(error);
+    }
+  }, [navigate]);
+
+  useEffect(() => {
+    fetchUsersHandler();
+  }, [fetchUsersHandler]);
+
   const rowsPerPage = 6;
 
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentRows = data.slice(indexOfFirstRow, indexOfLastRow);
+  const currentRows = users.slice(indexOfFirstRow, indexOfLastRow);
 
   const handleNextPage = () => {
-    if (indexOfLastRow < data.length) setCurrentPage(currentPage + 1);
+    if (indexOfLastRow < users.length) setCurrentPage(currentPage + 1);
   };
 
   const handlePreviousPage = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
+
+  // @desc: showing error modal conditionally
+  const showError = (
+    <div className="absolute right-[35rem] bottom-[19rem] mt-[23rem] w-[370px] bg-[#549877] p-6 rounded-lg shadow-sm z-10">
+      <div className="flex justify-between items-center pb-[32px]">
+        <h3 className="text-white font-Inter text-[20px] font-semibold capitalize">
+          {errors}
+        </h3>
+      </div>
+    </div>
+  );
+
   return (
     <div className="flex h-screen overflow-hidden">
       <SidebarAdmin activePage="userManagement" />
@@ -281,10 +353,10 @@ const userManagement = () => {
               <tbody className="px-4 py-2 text-[#23272E] text-[15px] font-[400] font-sans">
                 {currentRows.map((row, index) => (
                   <tr key={index} className="border-b hover:bg-gray-100">
-                    <td className="py-3 px-4 text-left">{row.id}</td>
-                    <td className="py-3 px-4 text-left">{row.name}</td>
-                    <td className="py-3 px-4 text-left">{row.pickups}</td>
-                    <td className="py-3 px-4 text-left">{row.phoneNumber}</td>
+                    <td className="py-3 px-4 text-left">{row.searchId}</td>
+                    <td className="py-3 px-4 text-left">{row.user_name}</td>
+                    <td className="py-3 px-4 text-left">{row.capacity}</td>
+                    <td className="py-3 px-4 text-left">{row.phone}</td>
                     <td className="py-3 px-4 text-left">{row.category}</td>
                     <td className="py-3 px-4 text-center"></td>
                   </tr>
@@ -305,9 +377,9 @@ const userManagement = () => {
               </button>
               <button
                 onClick={handleNextPage}
-                disabled={indexOfLastRow >= data.length}
+                disabled={indexOfLastRow >= users.length}
                 className={`px-4 py-2 border ${
-                  indexOfLastRow >= data.length
+                  indexOfLastRow >= users.length
                     ? "text-gray-400"
                     : "text-gray-green"
                 } hover:bg-gray-100`}
@@ -316,10 +388,11 @@ const userManagement = () => {
               </button>
             </div>
           </div>
+          {!isLoading && errors && showError}
         </div>
       </main>
     </div>
   );
 };
 
-export default userManagement;
+export default UserManagement;
