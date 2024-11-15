@@ -209,8 +209,8 @@ const Staffs = () => {
       setIsLoading(false);
       setShowErrorMessage(false);
       setFormError('');
-      setShowModal(false);
       setSuccessMessage(true);
+      setShowModal(false);
     } catch (error) {
       console.log(error);
       setIsLoading(false);
@@ -253,13 +253,16 @@ const Staffs = () => {
 
   const closeModal = useCallback(() => {
     setShowModal(false);
-    setShowErrorMessage(true);
+    setShowErrorMessage(false);
+    setRefresh(true);
     setFormError('')
   }, []);
 
   useEffect(() => {
     closeModal();
-  }, [closeModal]);
+
+    console.log(refresh)
+  }, [closeModal, refresh]);
 
   // @desc: showing error modal conditionally
   const showError = (
