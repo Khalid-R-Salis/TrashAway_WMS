@@ -4,7 +4,7 @@ import formbg from "../../assets/formsbg.png";
 import notificationdb from "../../assets/notificationdb.png";
 import cancelIcon from "../../assets/close.svg";
 import iconSet from "../../assets/iconSet.png";
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
 
 /* 
 const orders = [
@@ -123,34 +123,35 @@ const AdminDashboard = () => {
   }, []);
 
   // end timer
-  
+
   const toggleNotification = () => {
     setShowNotification(!showNotification);
-    console.log(orders)
+    console.log(orders);
   };
-  
+
   // @desc: fetching pickup orders from the backend
   const fetchUserOrdersHandler = useCallback(async () => {
-    const userSession = JSON.parse(localStorage.getItem('userSession'));
+    const userSession = JSON.parse(localStorage.getItem("userSession"));
     const token = userSession?.token;
 
     setIsLoading(true);
 
-    if  (!token) return;
+    if (!token) return;
 
     try {
       const response = await fetch(
         `https://waste-mangement-backend-3qg6.onrender.com/api/admin/all-pickup`,
         {
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         }
       );
 
-      const { updatedPickUpRequest, error, message, ordersCount, allRoles } = await response.json();
-      
+      const { updatedPickUpRequest, error, message, ordersCount, allRoles } =
+        await response.json();
+
       if (!response.ok && error) {
         setIsLoading(false);
         throw new Error(error);
@@ -163,10 +164,10 @@ const AdminDashboard = () => {
 
       if (message === "jwt expired") {
         setIsLoading(false);
-        navigate('/login');
+        navigate("/login");
       }
 
-      const data = updatedPickUpRequest.slice(0, 7)
+      const data = updatedPickUpRequest.slice(0, 7);
 
       setTotalRecycledOrders(ordersCount.allRecycledOrders);
       setTotalHazardousOrders(ordersCount.allHazardousOrders);
@@ -204,7 +205,7 @@ const AdminDashboard = () => {
       </div>
     </div>
   );
-  
+
   return (
     <div className="flex h-screen overflow-hidden">
       <SidebarAdmin activePage="adminDashboard" />
@@ -462,6 +463,10 @@ const AdminDashboard = () => {
                       {order.status === "Pending" ? (
                         <span className="text-yellow-500 bg-yellow-50 p-1">
                           Pending
+                        </span>
+                      ) : order.status === "Driver Allocated" ? (
+                        <span className="text-orange-500 bg-orange-50 p-1">
+                          Driver Allocated
                         </span>
                       ) : (
                         <span className="text-green-500 bg-green-50 p-1">
