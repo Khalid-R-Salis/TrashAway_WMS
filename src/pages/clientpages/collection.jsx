@@ -5,7 +5,6 @@ import notificationdb from "../../assets/notificationdb.png";
 import cancelIcon from "../../assets/close.svg";
 import search from "../../assets/Search.png";
 
-
 const Collection = () => {
   // start timer
   const [time, setTime] = useState({
@@ -67,7 +66,7 @@ const Collection = () => {
   };
 
   // collections logic
-  const [collections]= useState([
+  const [collections] = useState([
     {
       id: 1,
       name: "Yusuf Sale",
@@ -75,7 +74,6 @@ const Collection = () => {
       number: 8032030303,
       time: "8:00am-6:00pm",
       category: "Hazardous",
-
     },
     {
       id: 2,
@@ -84,178 +82,164 @@ const Collection = () => {
       number: 8032030303,
       time: "8:00am-5:00pm",
       category: "Recyclable",
-
-    },    {
+    },
+    {
       id: 3,
       name: "Musa Isa",
       location: "G/kaya",
       number: 8032030303,
-       time: "8:00am-5:00pm",
+      time: "8:00am-5:00pm",
       category: "Organic",
-
-    },    {
+    },
+    {
       id: 4,
       name: "John Akawu",
       location: "Tarauni",
       number: 8032030303,
-       time: "8:00am-5:00pm",
+      time: "8:00am-5:00pm",
       category: "Organic",
-
-    },    {
+    },
+    {
       id: 5,
       name: "Kabeer Ayub",
       location: "G/kaya",
       number: 8032030303,
-       time: "8:00am-5:00pm",
+      time: "8:00am-5:00pm",
       category: "Organic",
-
-    },    {
+    },
+    {
       id: 6,
       name: "Edgon Akpo",
       location: "Tarauni",
       number: 8032030303,
-       time: "8:00am-6:00pm",
+      time: "8:00am-6:00pm",
       category: "Hazardous",
-
-    },    {
+    },
+    {
       id: 7,
       name: "L. Umar",
       location: "Dan Agundi",
       number: 8032030303,
-       time: "8:00am-6:00pm",
+      time: "8:00am-6:00pm",
       category: "Recyclable",
-
-    },    
+    },
     {
       id: 8,
       name: "Sageer Kamis",
       location: "G/kaya",
       number: 8032030303,
-       time: "8:00am-5:00pm",
+      time: "8:00am-5:00pm",
       category: "Recyclable",
-
     },
-        {
+    {
       id: 9,
       name: "Sunday Devine",
       location: "Tarauni",
       number: 8032030303,
-       time: "8:00am-5:00pm",
+      time: "8:00am-5:00pm",
       category: "Hazardous",
-
-    }, 
-       {
+    },
+    {
       id: 10,
       name: "Faith Akanji",
       location: "G/kaya",
       number: 8032030303,
-       time: "8:00am-6:00pm",
+      time: "8:00am-6:00pm",
       category: "Recyclable",
-
-    },  
-      {
+    },
+    {
       id: 11,
       name: "Bammali Babawo",
       location: "YUMSUK M/C",
       number: 8032030303,
-       time: "8:00am-4:00pm",
+      time: "8:00am-4:00pm",
       category: "Recyclable",
-
-    },  
-      {
+    },
+    {
       id: 12,
       name: "Garba Abubakar",
       location: "Tarauni",
       number: 8032030303,
-       time: "8:00am-4:00pm",
+      time: "8:00am-4:00pm",
       category: "Hazardous",
-
-    },  
-      {
+    },
+    {
       id: 13,
       name: "M. Ahmad",
       location: "Dan Agundi",
       number: 8032030303,
-       time: "8:00am-4:00pm",
+      time: "8:00am-4:00pm",
       category: "Organic",
-
-    },  
-      {
+    },
+    {
       id: 14,
       name: "Abdullahi Sani",
       location: "Dan Agundi",
       number: 8032030303,
-       time: "8:00am-5:00pm",
+      time: "8:00am-5:00pm",
       category: "Recyclable",
-
-    },  
-      {
+    },
+    {
       id: 15,
       name: "Jerry Olugbumi",
       location: "Shaka",
       number: 8032030303,
-       time: "8:00am-6:00pm",
+      time: "8:00am-6:00pm",
       category: "Recyclable",
-
-    },  
-      {
+    },
+    {
       id: 16,
       name: "Khalifa Muhammad",
       location: "Shaka",
       number: 8032030303,
-       time: "8:00am-6:00pm",
+      time: "8:00am-6:00pm",
       category: "Hazardous",
-
-    },   
-     {
+    },
+    {
       id: 17,
       name: "Abbas Salo",
       location: "Tarauni",
       number: 8032030303,
       time: "8:00am-6:00pm",
       category: "Organic",
-
     },
-    
-
   ]);
   const [selectedCollectionId, setSelectedCollectionId] = useState(null);
 
   const [filterStatus, setFilterStatus] = useState("All");
-
 
   const filteredCollections = collections.filter((collection) => {
     if (filterStatus === "All") return true;
     return collection.status === filterStatus;
   });
 
-   // Pagination state
-   const [currentPage, setCurrentPage] = useState(1);
-   const collectionsPerPage = 6;
- 
- 
-   const indexOfLastCollection = currentPage * collectionsPerPage;
-   const indexOfFirstCollection = indexOfLastCollection - collectionsPerPage;
-   const currentCollections = filteredCollections.slice(indexOfFirstCollection, indexOfLastCollection);
- 
- 
-   // Calculate total pages
-   const totalPages = Math.ceil(filteredCollections.length / collectionsPerPage);
- 
-   // Navigate to next page
-   const handleNext = () => {
-     if (currentPage < totalPages) {
-       setCurrentPage(currentPage + 1);
-     }
-   };
- 
-   // Navigate to previous page
-   const handlePrevious = () => {
-     if (currentPage > 1) {
-       setCurrentPage(currentPage - 1);
-     }
-   };
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const collectionsPerPage = 6;
 
+  const indexOfLastCollection = currentPage * collectionsPerPage;
+  const indexOfFirstCollection = indexOfLastCollection - collectionsPerPage;
+  const currentCollections = filteredCollections.slice(
+    indexOfFirstCollection,
+    indexOfLastCollection
+  );
+
+  // Calculate total pages
+  const totalPages = Math.ceil(filteredCollections.length / collectionsPerPage);
+
+  // Navigate to next page
+  const handleNext = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  // Navigate to previous page
+  const handlePrevious = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -344,8 +328,6 @@ const Collection = () => {
                   </div>
                 </div>
                 <hr className="w-full border-b-[1px] border-[#E9E9E9]  mb-4" />
-
-               
               </div>
             </>
           )}
@@ -358,7 +340,7 @@ const Collection = () => {
           {/* CONTENT HERE */}
           <div className=" flex justify-between items-center px-5 py-2">
             <h1 className=" text-[#1E1E1E] text-[24px] font-Inter font-[600] tracking-[-0.48px]">
-            Collection Points
+              Collection Points
             </h1>
             <input
               type="number"
@@ -386,59 +368,66 @@ const Collection = () => {
                     NO.
                   </th>
                   <th className="font-sans text-[#8B909A] text-[13px] font-[500] px-0 py-2">
-                  NAME
+                    NAME
                   </th>
                   <th className="font-sans text-[#8B909A] text-[13px] font-[500] px-0 py-2">
-                  LOCATION
+                    LOCATION
                   </th>
                   <th className="font-sans text-[#8B909A] text-[13px] font-[500] px-0 py-2 uppercase">
-                 PHONE NUMBER
+                    PHONE NUMBER
                   </th>
                   <th className="font-sans text-[#8B909A] text-[13px] font-[500] px-0 py-2 uppercase">
-                  COLLECTION TIME
+                    COLLECTION TIME
                   </th>
                   <th className="font-sans text-[#8B909A] text-[13px] font-[500] px-0 py-2 uppercase">
-                  CATEGORY
+                    CATEGORY
                   </th>
-                  
                 </tr>
               </thead>
               <tbody>
-              {currentCollections.map((collection) => (
-    <tr key={collection.id} className="border-b">
-                    <td className="px-[45px] py-4 text-[#23272E] text-[16px] font-[400] font-sans">{collection.id}</td>
-                    <td className="px-[45px] py-4 text-[#23272E] text-[16px] font-[600] font-sans">{collection.name}</td>
-                    <td className="px-[45px] py-4 text-[#23272E] text-[16px] font-[400] font-sans">{collection.location}</td>
-                    <td className="px-[45px] py-4 text-[#23272E] text-[16px] font-[400] font-sans">{collection.number}</td>
-                    <td className="px-[45px] py-4 text-[#23272E] text-[16px] font-[400] font-sans">{collection.time}</td>
-                    <td className="px-[45px] py-4 text-[#23272E] text-[16px] font-[400] font-sans">{collection.category}</td>
-
-
-                   
-                  
+                {currentCollections.map((collection) => (
+                  <tr key={collection.id} className="border-b">
+                    <td className="px-[45px] py-4 text-[#23272E] text-[16px] font-[400] font-sans">
+                      {collection.id}
+                    </td>
+                    <td className="px-[45px] py-4 text-[#23272E] text-[16px] font-[600] font-sans">
+                      {collection.name}
+                    </td>
+                    <td className="px-[45px] py-4 text-[#23272E] text-[16px] font-[400] font-sans">
+                      {collection.location}
+                    </td>
+                    <td className="px-[45px] py-4 text-[#23272E] text-[16px] font-[400] font-sans">
+                      {collection.number}
+                    </td>
+                    <td className="px-[45px] py-4 text-[#23272E] text-[16px] font-[400] font-sans">
+                      {collection.time}
+                    </td>
+                    <td className="px-[45px] py-4 text-[#23272E] text-[16px] font-[400] font-sans">
+                      {collection.category}
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
         </div>
-         {/* Pagination Content here */}
-  <div className="flex justify-around items-center">
-    <button
-      onClick={handlePrevious}
-      className="bg-gray-200 text-gray-700 px-4 py-2 mt-[-350px] rounded-md hover:bg-gray-300"
-      disabled={currentPage === 1} // Disable if on the first page
-    >
-      Previous
-    </button>
-    <button
-      onClick={handleNext}
-       className="bg-gray-200 text-gray-700 px-4 py-2 mt-[-350px] rounded-md hover:bg-gray-300"
-      disabled={currentPage === totalPages} // Disable if on the last page
-    >
-      Next
-    </button>
-    </div>
+        {/* Pagination Content here */}
+        <div className="flex justify-around items-center">
+          <button
+            onClick={handlePrevious}
+            className="bg-gray-200 text-gray-700 px-4 py-2 mt-[-350px] rounded-md hover:bg-gray-300"
+            disabled={currentPage === 1} // Disable if on the first page
+          >
+            Previous
+          </button>
+          <button
+            onClick={handleNext}
+            className="bg-gray-200 text-gray-700 px-4 py-2 mt-[-350px] rounded-md hover:bg-gray-300"
+            disabled={currentPage === totalPages} // Disable if on the last page
+          >
+            Next
+          </button>
+        </div>
       </main>
     </div>
   );

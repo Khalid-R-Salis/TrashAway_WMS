@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 // import api from "../../services/api";
 import bgLogo from "../../assets/bg1.png";
 import logo from "../../assets/logo.png";
@@ -34,6 +34,32 @@ import profileicon from "../../assets/profileicon.png";
 import arrow_down from "../../assets/arrow_down.svg";
 import { useNavigate } from "react-router-dom";
 
+// Num Animate
+const Counter = ({ target, duration }) => {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    const increment = target / (duration * 100); // Slow down by increasing the denominator
+    let current = 0;
+
+    const interval = setInterval(() => {
+      current += increment;
+      if (current >= target) {
+        clearInterval(interval); // Stop counting once we reach the target
+        setCount(target);
+      } else {
+        setCount(Math.floor(current));
+      }
+    }, 10); // Update every 10 milliseconds (~100 updates per second)
+
+    return () => clearInterval(interval); // Clean up interval on component unmount
+  }, [target, duration]);
+
+  return <span>{count.toLocaleString()}</span>; // Format number with commas
+};
+
+//
+
 const scrollToTestimonials = () => {
   const testimonialsSection = document.getElementById("testimonials");
   if (testimonialsSection) {
@@ -52,6 +78,14 @@ const Landing = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
+
+  // const SignUpForm = () => {
+  //   const [email, setEmail] = useState("");
+
+  //   const handleEmailChange = (event) => {
+  //     setEmail(event.target.value);
+  //   };
+  // };
 
   // Handle form submission
   const handlePickupRequest = async (e) => {
@@ -113,10 +147,10 @@ const Landing = () => {
       }
 
       setIsSubmitting(false);
-      setCapacity('');
-      setLocation('');
-      setTime('');
-      setCategory('');
+      setCapacity("");
+      setLocation("");
+      setTime("");
+      setCategory("");
     } catch (error) {
       console.error("Pickup request failed:", error);
       setError(error.message);
@@ -152,7 +186,7 @@ const Landing = () => {
             <nav className=" font-Inter tracking-widest">
               <ul className="flex gap-[35px] text-white ml-[120px]">
                 <li className="border-[2.5px] border-transparent hover:border-[2.5px] hover:text-light-green hover:border-b-custom ">
-                  <a href="/loginhome" className="">
+                  <a href="/loginhome" className=" underline">
                     Home
                   </a>
                 </li>
@@ -243,7 +277,7 @@ const Landing = () => {
           >
             <button
               type="button"
-              className="absolute right-0 bottom-[27rem] mt-[205px] mr-[530px]"
+              className="absolute right-0 bottom-[33rem] mt-[205px] mr-[530px]"
               onClick={() => setShowForm(false)}
             >
               Close
@@ -488,8 +522,8 @@ const Landing = () => {
             sustainability across the state.
           </p>
         </div>
-        <div className=" flex justify-center items-center gap-[32px] mt-[32px]">
-          <div className=" flex flex-col justify-center items-center">
+        <div className="flex justify-center items-center gap-[32px] mt-[32px]">
+          <div className="flex flex-col justify-center items-center">
             <div className="relative flex justify-center items-center">
               <img
                 src={group1}
@@ -497,15 +531,14 @@ const Landing = () => {
                 className="w-full h-full object-contain"
               />
               <p className="absolute inset-0 flex justify-center items-center text-section-gray text-[20px] font-semibold">
-                15,000 kg
+                <Counter target={15000} duration={5} /> kg
               </p>
             </div>
-
-            <p className=" mt-6 text-[20px] text-light-black text-center">
+            <p className="mt-6 text-[20px] text-light-black text-center">
               Total Plastic Recycled
             </p>
           </div>
-          <div className=" flex flex-col justify-center items-center">
+          <div className="flex flex-col justify-center items-center">
             <div className="relative flex justify-center items-center">
               <img
                 src={group2}
@@ -513,15 +546,14 @@ const Landing = () => {
                 className="w-full h-full object-contain"
               />
               <p className="absolute inset-0 flex justify-center items-center text-section-gray text-[20px] font-semibold">
-                70,000 kg
+                <Counter target={70000} duration={10} /> kg
               </p>
             </div>
-
-            <p className=" mt-6 text-[20px] text-light-black text-center">
+            <p className="mt-6 text-[20px] text-light-black text-center">
               Plastic Waste into New Products
             </p>
           </div>
-          <div className=" flex flex-col justify-center items-center">
+          <div className="flex flex-col justify-center items-center">
             <div className="relative flex justify-center items-center">
               <img
                 src={group3}
@@ -529,11 +561,10 @@ const Landing = () => {
                 className="w-full h-full object-contain"
               />
               <p className="absolute inset-0 flex justify-center items-center text-section-gray text-[20px] font-semibold text-center">
-                20% compared to last month
+                <Counter target={20} duration={5} />% compared to last month
               </p>
             </div>
-
-            <p className=" mt-6 text-[20px] text-light-black text-center">
+            <p className="mt-6 text-[20px] text-light-black text-center">
               Increase in Recycling Rate
             </p>
           </div>

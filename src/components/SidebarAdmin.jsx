@@ -15,15 +15,15 @@ import profiledb1 from "../assets/profiledb1.png";
 // eslint-disable-next-line react/prop-types
 const SidebarAdmin = ({ activePage }) => {
   const [userDetails, setUserDetails] = useState({
-    name: '',
-    email: ''
+    name: "",
+    email: "",
   });
 
   useEffect(() => {
     const userSession = JSON.parse(localStorage.getItem("userSession"));
     setUserDetails({
       name: userSession.name,
-      email: userSession.email
+      email: userSession.email,
     });
   }, [userDetails.name, userDetails.email]);
 
@@ -87,7 +87,7 @@ const SidebarAdmin = ({ activePage }) => {
                   }`}
                 >
                   <img src={umicon} alt="Icon" />
-                  <Link to="/usermanagment">User Management</Link>
+                  <Link to="/usermanagment">Pick Up History</Link>
                 </div>
               </li>
 
@@ -158,9 +158,11 @@ const SidebarAdmin = ({ activePage }) => {
                 >
                   <img src={profiledb1} alt="Icon" />
                   <Link to="/adminsettings">
-                    <h2 className=" text-[12px] font-[400]">{userDetails.name}</h2>
+                    <h2 className=" text-[12px] font-[400]">
+                      {userDetails.name}
+                    </h2>
                     <p className=" text-[12px] font-[400]">
-                    {userDetails.email}
+                      {userDetails.email}
                     </p>
                   </Link>
                 </div>

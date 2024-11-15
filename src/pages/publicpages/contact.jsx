@@ -138,7 +138,9 @@ const Contact = () => {
                   <a href="/services">Services</a>
                 </li>
                 <li className=" border-[2.5px] border-transparent hover:border-[2.5px] hover:text-light-green hover:border-b-custom ">
-                  <a href="/contact">Contact</a>
+                  <a href="/contact" className=" underline">
+                    Contact
+                  </a>
                 </li>
               </ul>
             </nav>

@@ -45,19 +45,30 @@ const Footer = () => {
               <h2 className="">Everyday from 10am to 6pm</h2>
             </div>
           </div>
-          <div className=" flex justify-center items-center gap-[32px]">
-            <button>
-              {" "}
-              <img src={facebookicon} alt="" />
-            </button>
+          <div className="flex justify-center items-center gap-[32px]">
+            <a
+              href="https://www.facebook.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img src={facebookicon} alt="Facebook" />
+            </a>
 
-            <button>
-              <img src={twittericon} alt="" />
-            </button>
-            <button>
-              {" "}
-              <img src={youtubeicon} alt="" />{" "}
-            </button>
+            <a
+              href="https://www.twitter.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img src={twittericon} alt="Twitter" />
+            </a>
+
+            <a
+              href="https://www.youtube.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img src={youtubeicon} alt="YouTube" />
+            </a>
           </div>
         </div>
         <div className=" flex justify-between items-center mt-[160px] opacity-[0.4] text-[10px]">

@@ -40,7 +40,9 @@ const Services = () => {
                   <a href="/about">About</a>
                 </li>
                 <li className=" border-[2.5px] border-transparent hover:border-[2.5px] hover:text-light-green hover:border-b-custom ">
-                  <a href="/services">Services</a>
+                  <a href="/services" className=" underline">
+                    Services
+                  </a>
                 </li>
                 <li className=" border-[2.5px] border-transparent hover:border-[2.5px] hover:text-light-green hover:border-b-custom ">
                   <a href="/contact">Contact</a>

@@ -123,7 +123,9 @@ const Services = () => {
                   <a href="/loginabout">About</a>
                 </li>
                 <li className=" border-[2.5px] border-transparent hover:border-[2.5px] hover:text-light-green hover:border-b-custom ">
-                  <a href="/loginservices">Services</a>
+                  <a href="/loginservices" className=" underline">
+                    Services
+                  </a>
                 </li>
                 <li className=" border-[2.5px] border-transparent hover:border-[2.5px] hover:text-light-green hover:border-b-custom ">
                   <a href="/logincontact">Contact</a>

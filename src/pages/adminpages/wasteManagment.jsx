@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-
 import formbg from "../../assets/formsbg.png";
 import notificationdb from "../../assets/notificationdb.png";
 import cancelIcon from "../../assets/close.svg";
@@ -184,12 +183,12 @@ const WasteManagment = () => {
 
   // @desc: fetching pickup orders from the backend
   const fetchUserOrdersHandler = useCallback(async () => {
-    const userSession = JSON.parse(localStorage.getItem('userSession'));
+    const userSession = JSON.parse(localStorage.getItem("userSession"));
     const token = userSession?.token;
 
     setIsLoading(true);
 
-    if  (!token) return;
+    if (!token) return;
 
     // https://waste-mangement-backend-3qg6.onrender.com
     try {
@@ -197,14 +196,14 @@ const WasteManagment = () => {
         `http://localhost:9090/api/admin/all-pickup`,
         {
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         }
       );
 
       const { updatedPickUpRequest, error, message } = await response.json();
-      
+
       if (!response.ok && error) {
         setIsLoading(false);
         throw new Error(error);
@@ -217,7 +216,7 @@ const WasteManagment = () => {
 
       if (message === "jwt expired") {
         setIsLoading(false);
-        navigate('/login');
+        navigate("/login");
       }
 
       setOrders(updatedPickUpRequest);
@@ -298,7 +297,6 @@ const WasteManagment = () => {
       </div>
     </div>
   );
-  
 
   return (
     <div className="flex h-screen overflow-hidden">

@@ -43,6 +43,13 @@ import UserManagement from "./pages/adminpages/userManagement";
 import VehicleTracking from "./pages/adminpages/vehicleTracking";
 import WasteManagment from "./pages/adminpages/wasteManagment";
 
+// Staff Pages
+import StaffDashboard from "./pages/staffpages/staffdashbord";
+import StaffOrders from "./pages/staffpages/stafforders";
+import StaffSupport from "./pages/staffpages/staffsupport";
+import StaffSettings from "./pages/staffpages/staffsettings";
+import StaffReferral from "./pages/staffpages/staffreferral";
+
 // Footer Inport
 import Footer from "./components/Footer";
 
@@ -84,6 +91,13 @@ function App() {
           <Route path="/usermanagment" element={<UserManagement />} />
           <Route path="/vehicletracking" element={<VehicleTracking />} />
           <Route path="/wastemanagment" element={<WasteManagment />} />
+
+          {/* ------------------------------------------- */}
+          <Route path="/staffdashboard" element={<StaffDashboard />} />
+          <Route path="/stafforders" element={<StaffOrders />} />
+          <Route path="/staffsupport" element={<StaffSupport />} />
+          <Route path="/staffsettings" element={<StaffSettings />} />
+          <Route path="/staffreferral" element={<StaffReferral />} />
         </Routes>
         {/* ------------------------------------------------ */}
         {location.pathname !== "/login" &&
@@ -104,7 +118,12 @@ function App() {
           location.pathname !== "/adminsupport" &&
           location.pathname !== "/usermanagment" &&
           location.pathname !== "/vehicletracking" &&
-          location.pathname !== "/wastemanagment" && <Footer />}
+          location.pathname !== "/wastemanagment" &&
+          location.pathname !== "/staffdashboard" &&
+          location.pathname !== "/stafforders" &&
+          location.pathname !== "/staffsupport" &&
+          location.pathname !== "/staffsettings" &&
+          location.pathname !== "/staffreferral" && <Footer />}
       </div>
     </div>
   );

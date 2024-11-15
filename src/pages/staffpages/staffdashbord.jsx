@@ -1,77 +1,26 @@
 import { useState, useEffect, useCallback } from "react";
-import SidebarAdmin from "../../components/SidebarAdmin";
+import Sidebar from "../../components/SidebarStaff";
 import formbg from "../../assets/formsbg.png";
 import notificationdb from "../../assets/notificationdb.png";
 import cancelIcon from "../../assets/close.svg";
-import iconSet from "../../assets/iconSet.png";
+import profile2 from "../../assets/profiledb2.png";
 import { useNavigate } from "react-router-dom";
 
-/* 
-const orders = [
-  {
-    id: 1001,
-    date: "7 July 2024",
-    items: 20,
-    category: "Recyclable",
-    status: "Pending",
-  },
-  {
-    id: 1002,
-    date: "7 July 2024",
-    items: 10,
-    category: "Recyclable",
-    status: "Pending",
-  },
-  {
-    id: 1003,
-    date: "7 July 2024",
-    items: 8,
-    category: "Recyclable",
-    status: "Pending",
-  },
-  {
-    id: 1004,
-    date: "7 July 2024",
-    items: 4,
-    category: "Hazardous",
-    status: "Completed",
-  },
-  {
-    id: 1005,
-    date: "7 July 2024",
-    items: 16,
-    category: "Organic",
-    status: "Completed",
-  },
-  {
-    id: 1006,
-    date: "7 July 2024",
-    items: 18,
-    category: "Hazardous",
-    status: "Completed",
-  },
-  {
-    id: 1007,
-    date: "7 July 2024",
-    items: 20,
-    category: "Organic",
-    status: "Completed",
-  },
-] */
-
-const AdminDashboard = () => {
+const StaffDashboard = () => {
   const [showNotification, setShowNotification] = useState(false);
   const [orders, setOrders] = useState([]);
+  const [selectedOrderId, setSelectedOrderId] = useState(null);
   const [errors, setErrors] = useState("");
+  const [userId, setUserID] = useState("");
+  const [token, setToken] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [totalOrganicOrders, setTotalOrganicOrders] = useState(0);
-  const [totalRecycledOrders, setTotalRecycledOrders] = useState(0);
-  const [totalHazardousOrders, setTotalHazardousOrders] = useState(0);
-  const [totalUsers, setTotalUsers] = useState(0);
-  const [totalStaff, setTotalStaff] = useState(0);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [username, setUserName] = useState("");
   const navigate = useNavigate();
 
-  // start timer
+  // @desc: States for Timer
   const [time, setTime] = useState({
     hours: "00",
     minutes: "00",
@@ -83,6 +32,68 @@ const AdminDashboard = () => {
     year: 2023,
   });
 
+  // @desc: fetching user pickup orders
+  useEffect(() => {
+    const userSession = JSON.parse(localStorage.getItem("userSession"));
+    setToken(userSession?.token);
+    setUserID(userSession?.id);
+    setName(userSession?.name);
+    setEmail(userSession?.email);
+    setUserName(userSession?.username);
+    setPhoneNumber(userSession?.phone);
+  }, [token, userId, name, email, phoneNumber, username]);
+
+  const fetchUserOrdersHandler = useCallback(async () => {
+    setIsLoading(true);
+
+    if (!userId || !token) return;
+
+    try {
+      const response = await fetch(
+        `https://waste-mangement-backend-3qg6.onrender.com/api/user/all-user-pickups/${userId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const { pickupData, error, message } = await response.json();
+
+      if (!response.ok && error) {
+        setIsLoading(false);
+        throw new Error(error);
+      }
+
+      if (message === "No pickups found.") {
+        setIsLoading(false);
+        throw new Error("No pickups found. Try by adding some.");
+      }
+
+      if (message === "jwt expired") {
+        setIsLoading(false);
+        navigate("/login");
+      }
+
+      // @des: set user pickup order
+      const data = pickupData.slice(0, 6);
+      setOrders(data);
+      setErrors(null);
+      setIsLoading(false);
+    } catch (error) {
+      console.log("Error from dashboard", error);
+      setErrors(error.message);
+      setOrders([]);
+      setIsLoading(false);
+    }
+  }, [token, userId, navigate]);
+
+  useEffect(() => {
+    fetchUserOrdersHandler();
+  }, [fetchUserOrdersHandler]);
+
+  // start timer
   useEffect(() => {
     const updateDateTime = () => {
       const now = new Date();
@@ -121,83 +132,19 @@ const AdminDashboard = () => {
     const intervalId = setInterval(updateDateTime, 1000);
     return () => clearInterval(intervalId); // Cleanup interval on unmount
   }, []);
-
   // end timer
 
   const toggleNotification = () => {
     setShowNotification(!showNotification);
-    console.log(orders);
   };
 
-  // @desc: fetching pickup orders from the backend
-  const fetchUserOrdersHandler = useCallback(async () => {
-    const userSession = JSON.parse(localStorage.getItem("userSession"));
-    const token = userSession?.token;
-
-    setIsLoading(true);
-
-    if (!token) return;
-
-    try {
-      const response = await fetch(
-        `https://waste-mangement-backend-3qg6.onrender.com/api/admin/all-pickup`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      const { updatedPickUpRequest, error, message, ordersCount, allRoles } =
-        await response.json();
-
-      if (!response.ok && error) {
-        setIsLoading(false);
-        throw new Error(error);
-      }
-
-      if (message === "No pick up requests found.") {
-        setIsLoading(false);
-        throw new Error("No pick up requests found at the moment.");
-      }
-
-      if (message === "jwt expired") {
-        setIsLoading(false);
-        navigate("/login");
-      }
-
-      const data = updatedPickUpRequest.slice(0, 7);
-
-      setTotalRecycledOrders(ordersCount.allRecycledOrders);
-      setTotalHazardousOrders(ordersCount.allHazardousOrders);
-      setTotalOrganicOrders(ordersCount.allOrganicOrders);
-      setTotalStaff(allRoles.allStaffs);
-      setTotalUsers(allRoles.allUsers);
-      setOrders(data);
-      setErrors(null);
-      setIsLoading(false);
-    } catch (error) {
-      console.log("Error from dashboard", error);
-      setErrors(error.message);
-      setOrders([]);
-      setIsLoading(false);
-    }
-  }, [navigate]);
-
-  useEffect(() => {
-    fetchUserOrdersHandler();
-  }, [fetchUserOrdersHandler]);
-
-  /* 
-  const [selectedOrderId, setSelectedOrderId] = useState(null);
   const handleDelete = (id) => {
     const filteredOrders = orders.filter((order) => order.id !== id);
     setOrders(filteredOrders);
-  }; */
+  };
 
   const showError = (
-    <div className="absolute right-[35rem] bottom-[5rem] mt-[23rem] w-[370px] bg-[#549877]  p-6 rounded-lg shadow-sm z-10">
+    <div className="absolute right-[35rem] bottom-[15rem] mt-[23rem] w-[370px] bg-white  p-6 rounded-lg shadow-sm z-10">
       <div className="flex justify-between items-center pb-[32px]">
         <h3 className="text-[#1E1E1E] font-Inter text-[20px] font-semibold capitalize">
           {errors}
@@ -205,14 +152,13 @@ const AdminDashboard = () => {
       </div>
     </div>
   );
-
   return (
     <div className="flex h-screen overflow-hidden">
-      <SidebarAdmin activePage="adminDashboard" />
+      <Sidebar activePage="staffdashboard" />
       <main className="flex-1">
         <div className="flex justify-between items-center px-[32px] py-[12px] w-full bg-[#1E1E1E] h-20 relative">
           <h2 className="text-white font-Inter text-[20px] font-[600] tracking-[-0.4]">
-            Admin Dashboard
+            Staff Dashboard
           </h2>
 
           {/* Date and Time Display */}
@@ -241,7 +187,7 @@ const AdminDashboard = () => {
                 className="fixed inset-0 bg-black opacity-50 z-10"
                 onClick={toggleNotification}
               ></div>
-              <div className="absolute right-[30px] mt-[23rem]  w-[370px] bg-white p-6 rounded-lg shadow-sm z-50">
+              <div className="absolute right-[30px] mt-[23rem]  w-[370px] bg-white p-6 rounded-lg shadow-sm z-10">
                 <div className="flex justify-between items-center pb-[32px]">
                   <h3 className="text-[#1E1E1E] font-Inter text-[20px] font-semibold">
                     Notifications
@@ -316,112 +262,62 @@ const AdminDashboard = () => {
         </div>
 
         <div
-          className="bg-no-repeat bg-cover bg-center w-full h-full px-5 py-2 font-Inter"
+          className="bg-no-repeat min-h-full bg-cover bg-center w-full px-5 py-2 font-Inter"
           style={{ backgroundImage: `url(${formbg})` }}
         >
-          <div className="grid grid-cols-[2fr_1fr] gap-2">
-            <div className=" LEFT-CONTAINER flex flex-wrap gap-6">
-              <div className="flex flex-col justify-between w-[350px] items-start p-4 bg-[#F7F9FB] font-Inter text-[#1C1C1C] rounded-[16px] shadow-sm">
-                <div>
-                  <h1 className="text-[17px] font-[600]">Total Vehicles</h1>
-                </div>
-                <div className="flex justify-between items-center w-full">
-                  <h1 className="text-[40px] font-[700]">50</h1>
-                  <div className="flex items-center gap-1 text-[14px] font-[400]">
-                    <p>+0.03%</p>
-                    <img src={iconSet} alt="iconSet" />
-                  </div>
-                </div>
+          <div className=" text-[#141417] font-Inter text-[20px] font-[600] mb-2">
+            Personal information
+          </div>
+          <div className=" flex justify-center items-center gap-6 mb-1">
+            <img src={profile2} alt="" />
+            <div className="flex flex-col justify-center items-center gap-4">
+              <div className="rounded-[4px] w-[25rem] bg-white shadow-inner [box-shadow:0px_0px_4px_0px_#83818E_inset] px-4 py-1">
+                <h2 className=" text-[#666] text-[12px] font-[500] text-start">
+                  Full Name
+                </h2>
+                <h1 className=" text-[#212121] text-[14px] font-[400] text-start">
+                  {name}
+                </h1>
               </div>
 
-              {/* Card 2 */}
-              <div className="flex flex-col justify-between w-[350px] items-start p-4 bg-[#E3F5FF] font-Inter text-[#1C1C1C] rounded-[16px] shadow-sm ">
-                <div>
-                  <h1 className="text-[17px] font-[600]">Revenue</h1>
-                </div>
-                <div className="flex justify-between items-center w-full">
-                  <h1 className="text-[40px] font-[700]">37</h1>
-                  <div className="flex items-center gap-1 text-[14px] font-[400]">
-                    <p>+11.01%</p>
-                    <img src={iconSet} alt="iconSet" />
-                  </div>
-                </div>
-              </div>
-
-              {/* Card 3 */}
-              <div className="flex flex-col justify-between  w-[350px] items-start p-4 bg-[#F7F9FB] font-Inter text-[#1C1C1C] rounded-[16px] shadow-sm ">
-                <div>
-                  <h1 className="text-[17px] font-[600]">Total Users</h1>
-                </div>
-                <div className="flex justify-between items-center w-full">
-                  <h1 className="text-[40px] font-[700]">{totalUsers}</h1>
-                  <div className="flex items-center gap-1 text-[14px] font-[400]">
-                    <p>+6.08%</p>
-                    <img src={iconSet} alt="iconSet" />
-                  </div>
-                </div>
-              </div>
-
-              {/* Card 4 */}
-              <div className="flex flex-col justify-between  w-[350px] items-start p-4 bg-[#E5ECF6] font-Inter text-[#1C1C1C] rounded-[16px] shadow-sm ">
-                <div>
-                  <h1 className="text-[17px] font-[600]">Staffs</h1>
-                </div>
-                <div className="flex justify-between items-center w-full">
-                  <h1 className="text-[40px] font-[700]">{totalStaff}</h1>
-                  <div className="flex items-center gap-1 text-[14px] font-[400]">
-                    <p>+15.03%</p>
-                    <img src={iconSet} alt="iconSet" />
-                  </div>
-                </div>
+              <div className="rounded-[4px] w-[25rem] bg-white shadow-inner [box-shadow:0px_0px_4px_0px_#83818E_inset] px-4 py-1">
+                <h2 className=" text-[#666] text-[12px] font-[500] text-start">
+                  Role
+                </h2>
+                <h1 className=" text-[#212121] text-[14px] font-[400] text-start">
+                  {"Driver"}
+                  {/* {username} */}
+                </h1>
               </div>
             </div>
 
-            <div className="relative p-[30px] bg-[#EEF5F1] rounded-[8px]">
-              <div className="text-left">
-                <h2 className="text-[#1E1E1E] font-Inter text-[18px] font-[600] tracking-[-0.36px]">
-                  Pickups
+            <div className="flex flex-col justify-center items-center gap-4">
+              <div className="rounded-[4px] w-[25rem] bg-white shadow-inner [box-shadow:0px_0px_4px_0px_#83818E_inset] px-4 py-1">
+                <h2 className=" text-[#666] text-[12px] font-[500] text-start">
+                  Email
                 </h2>
-                <p className="text-[#888] text-[14px] font-[500] tracking-[-0.28px]">
-                  Last 24hours
-                </p>
+                <h1 className=" text-[#212121] text-[14px] font-[400] text-start">
+                  {email}
+                </h1>
               </div>
 
-              <div className="relative mt-6 flex justify-center items-center gap-4">
-                <div className="absolute w-[120px] h-[120px] flex flex-col justify-center items-center gap-[3px] bg-[#6389EB] rounded-full text-center z-10">
-                  <p className="text-[#EEF5F1] text-[12px] font-[400] font-Inter leading-[14px]">
-                    Total Plastic Recycled
-                  </p>
-                  <h1 className="font-sans text-[16px] font-[700] text-[#FFF] tracking-[-0.311px]">
-                    {totalRecycledOrders}
-                  </h1>
-                </div>
-                <div className="absolute w-[100px] h-[100px] flex flex-col justify-center items-center gap-[3px] bg-[#D3E9FE] rounded-full text-center z-20 top-[7px] right-[3rem]">
-                  <p className="text-black text-[10px] font-[400] font-Inter leading-[14px] ">
-                    Hazardous Waste
-                  </p>
-                  <h1 className="font-sans text-[16px] font-[700] text-gray-600 tracking-[-0.311px]">
-                    {totalHazardousOrders}
-                  </h1>
-                </div>
-                <div className="absolute w-[80px] h-[80px] flex flex-col justify-center items-center gap-[3px] bg-[#1E63B5] rounded-full text-center z-30 top-[3rem] right-[8rem]">
-                  <p className="text-[#EEF5F1] text-[12px] font-[400] font-Inter leading-[14px] w-full">
-                    Organic Waste
-                  </p>
-                  <h1 className="font-sans text-[16px] font-[700] text-[#FFF] tracking-[-0.311px]">
-                    {totalOrganicOrders}
-                  </h1>
-                </div>
+              <div className="rounded-[4px] w-[25rem] bg-white shadow-inner [box-shadow:0px_0px_4px_0px_#83818E_inset] px-4 py-1">
+                <h2 className=" text-[#666] text-[12px] font-[500] text-start">
+                  Phone Number
+                </h2>
+                <h1 className=" text-[#212121] text-[14px] font-[400] text-start">
+                  {phoneNumber}
+                </h1>
               </div>
             </div>
           </div>
 
-          <div className="RecentPickUpOrders mt-4">
+          <div className="RecentPickUpOrders mt-4 h-[30rem]">
             <h2 className="text-[20px] font-semibold text-[#212121] font-Inter">
-              Recent Pick Up Request
+              Recent Allocated Pick Up`s
             </h2>
             <p className=" text-[#666] font-Inter text-[14px] font-[500] mb-4">
-              Most recent order requests appear here
+              Recent Pickups assigned to you appear here
             </p>
             <table className="min-w-full table-auto bg-white shadow-md rounded-md py-5">
               <thead>
@@ -472,7 +368,24 @@ const AdminDashboard = () => {
                     </td>
                     <td className="px-4 py-2">
                       {order.status === "Pending" && (
-                        <div className="relative"></div>
+                        <div className="relative">
+                          {/* <button
+                            onClick={() => setSelectedOrderId(order._id)}
+                            className="text-gray-500"
+                          >
+                            &#x22EE;
+                          </button> */}
+                          {selectedOrderId === order._id && (
+                            <div className="absolute right-0 mt-2 w-[100px] bg-white shadow-md border border-gray-200">
+                              <button
+                                onClick={() => handleDelete(order.id)}
+                                className="w-full text-red-500 py-2 hover:bg-gray-100"
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          )}
+                        </div>
                       )}
                     </td>
                   </tr>
@@ -487,4 +400,4 @@ const AdminDashboard = () => {
   );
 };
 
-export default AdminDashboard;
+export default StaffDashboard;

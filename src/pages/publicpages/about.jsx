@@ -42,7 +42,9 @@ const About = () => {
                   </a>
                 </li>
                 <li className="  border-[2.5px] border-transparent hover:border-[2.5px] hover:text-light-green hover:border-b-custom ">
-                  <a href="/about">About</a>
+                  <a href="/about" className=" underline">
+                    About
+                  </a>
                 </li>
                 <li className=" border-[2.5px] border-transparent hover:border-[2.5px] hover:text-light-green hover:border-b-custom ">
                   <a href="/services">Services</a>
