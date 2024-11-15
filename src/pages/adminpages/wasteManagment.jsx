@@ -385,7 +385,7 @@ const WasteManagment = () => {
   };
 
   const showError = (
-    <div className="absolute right-[30rem] bottom-[20rem] mt-[23rem] w-[370px] bg-[#549877]  p-6 rounded-lg shadow-sm z-10">
+    <div className="absolute right-[30rem] bottom-[15rem] mt-[23rem] w-[370px] bg-[#549877]  p-6 rounded-lg shadow-sm z-10">
       <div className="flex justify-between items-center pb-[32px]">
         <h3 className="text-white font-Inter text-[20px] font-semibold capitalize">
           {errors}
