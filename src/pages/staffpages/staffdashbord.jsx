@@ -11,7 +11,7 @@ const StaffDashboard = () => {
   const [orders, setOrders] = useState([]);
   const [selectedOrderId, setSelectedOrderId] = useState(null);
   const [errors, setErrors] = useState("");
-  const [userId, setUserID] = useState("");
+  const [staffID, setStaffID] = useState("");
   const [token, setToken] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState("");
@@ -36,21 +36,21 @@ const StaffDashboard = () => {
   useEffect(() => {
     const userSession = JSON.parse(localStorage.getItem("userSession"));
     setToken(userSession?.token);
-    setUserID(userSession?.id);
+    setStaffID(userSession?.id);
     setName(userSession?.name);
     setEmail(userSession?.email);
     setUserName(userSession?.username);
     setPhoneNumber(userSession?.phone);
-  }, [token, userId, name, email, phoneNumber, username]);
+  }, [token, staffID, name, email, phoneNumber, username]);
 
   const fetchUserOrdersHandler = useCallback(async () => {
     setIsLoading(true);
 
-    if (!userId || !token) return;
+    if (!staffID || !token) return;
 
     try {
       const response = await fetch(
-        `https://waste-mangement-backend-3qg6.onrender.com/api/user/all-user-pickups/${userId}`,
+        `https://waste-mangement-backend-3qg6.onrender.com/api/staff/all-orders/${staffID}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -59,16 +59,20 @@ const StaffDashboard = () => {
         }
       );
 
-      const { pickupData, error, message } = await response.json();
-
+      const { updatedPickups, message, error, errorMessage } = await response.json();
+     
       if (!response.ok && error) {
         setIsLoading(false);
         throw new Error(error);
       }
 
-      if (message === "No pickups found.") {
+      if (errorMessage) {
         setIsLoading(false);
-        throw new Error("No pickups found. Try by adding some.");
+        throw new Error(errorMessage);
+      }
+
+      if (response.status === 403) {
+        navigate('/login');
       }
 
       if (message === "jwt expired") {
@@ -77,8 +81,8 @@ const StaffDashboard = () => {
       }
 
       // @des: set user pickup order
-      const data = pickupData.slice(0, 6);
-      setOrders(data);
+      const pickups = updatedPickups.slice(0, 6);
+      setOrders(pickups);
       setErrors(null);
       setIsLoading(false);
     } catch (error) {
@@ -87,7 +91,7 @@ const StaffDashboard = () => {
       setOrders([]);
       setIsLoading(false);
     }
-  }, [token, userId, navigate]);
+  }, [token, staffID, navigate]);
 
   useEffect(() => {
     fetchUserOrdersHandler();
@@ -140,13 +144,13 @@ const StaffDashboard = () => {
 
   const handleDelete = (id) => {
     const filteredOrders = orders.filter((order) => order.id !== id);
-    setOrders(filteredOrders);
+    setSelectedOrderId(filteredOrders);
   };
 
   const showError = (
-    <div className="absolute right-[35rem] bottom-[15rem] mt-[23rem] w-[370px] bg-white  p-6 rounded-lg shadow-sm z-10">
+    <div className="absolute right-[35rem] bottom-[15rem] mt-[23rem] w-[370px] bg-[#549877]  p-6 rounded-lg shadow-sm z-10">
       <div className="flex justify-between items-center pb-[32px]">
-        <h3 className="text-[#1E1E1E] font-Inter text-[20px] font-semibold capitalize">
+        <h3 className="text-[#fff] font-Inter text-[20px] font-semibold capitalize">
           {errors}
         </h3>
       </div>
@@ -343,19 +347,19 @@ const StaffDashboard = () => {
               <tbody>
                 {orders.map((order) => (
                   <tr key={order._id} className="border-b">
-                    <td className="px-4 py-2 text-[#23272E] text-[15px] font-[400] font-sans">
-                      {order.searchId}
+                    <td className="px-10 py-2 text-[#23272E] text-[15px] font-[400] font-sans">
+                      {order.collectionID}
                     </td>
-                    <td className="px-4 py-2 text-[#23272E] text-[15px] font-[400] font-sans">
+                    <td className="px-10 py-2 text-[#23272E] text-[15px] font-[400] font-sans">
                       {order.time}
                     </td>
-                    <td className="px-4 py-2 text-[#23272E] text-[15px] font-[400] font-sans">
+                    <td className="px-10 py-2 text-[#23272E] text-[15px] font-[400] font-sans">
                       {order.capacity}
                     </td>
-                    <td className="px-4 py-2 text-[#23272E] text-[15px] font-[400] font-sans">
+                    <td className="px-10 py-2 text-[#23272E] text-[15px] font-[400] font-sans">
                       {order.category}
                     </td>
-                    <td className="px-4 py-2 text-[#23272E] text-[15px] font-[400] font-sans">
+                    <td className="px-10 py-2 text-[#23272E] text-[15px] font-[400] font-sans">
                       {order.status === "Pending" ? (
                         <span className="text-yellow-500 bg-yellow-50 p-1">
                           Pending
@@ -366,7 +370,7 @@ const StaffDashboard = () => {
                         </span>
                       )}
                     </td>
-                    <td className="px-4 py-2">
+                    <td className="px-10 py-2">
                       {order.status === "Pending" && (
                         <div className="relative">
                           {/* <button

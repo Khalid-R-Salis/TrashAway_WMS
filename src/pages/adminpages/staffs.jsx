@@ -115,7 +115,7 @@ const Staffs = () => {
       if (!token) return;
 
       const response = await fetch(
-        "https://waste-mangement-backend-3qg6.onrender.com/api/admin/all-staff",
+        "http://localhost:9090/api/admin/all-staff",
         {
           headers: {
             "Content-Type": "application/json",
@@ -197,6 +197,10 @@ const Staffs = () => {
         throw new Error('User with email already exists.')
       }
 
+      if (response.status === 403) {
+        navigate('/login');
+      }
+      
       if (data.message === 'jwt expired') {
         setIsLoading(false);
         setShowErrorMessage(false); 

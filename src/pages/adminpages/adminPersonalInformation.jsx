@@ -51,6 +51,10 @@ const AdminPersonalInformation = () => {
         );
       }
 
+      if (response.status === 403) {
+        navigate('/login');
+      }
+
       if (data.message === "jwt expired") {
         setIsLoading(false);
         navigate('/login');

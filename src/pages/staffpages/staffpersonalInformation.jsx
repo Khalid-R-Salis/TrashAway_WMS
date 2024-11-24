@@ -77,6 +77,7 @@ const StaffPersonalInformation = () => {
     } catch (error) {
       console.log(error.message);
       setError(error.message);
+      setIsLoading(false);
     }
   };
 

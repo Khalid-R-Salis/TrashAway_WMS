@@ -250,6 +250,10 @@ const Orders = () => {
         throw new Error("No pickups found. Try by adding some.");
       }
 
+      if (response.status === 403) {
+        navigate('/login');
+      }
+
       if (message === "jwt expired") {
         setIsLoading(false);
         navigate("/login");
@@ -382,7 +386,7 @@ const Orders = () => {
         setSearchResult(data);
         setIsSearch(false);
         setIsLoading(false);
-        setSearchError('');
+        setSearchError("");
       } catch (error) {
         console.log(error.message);
         setSearchError(error.message);
@@ -605,6 +609,10 @@ const Orders = () => {
                           <span className="text-yellow-500 bg-yellow-50 p-1">
                             Pending
                           </span>
+                        ) : order.status === "Driver Allocated" ? (
+                          <span className="text-orange-500 bg-green-50 p-1">
+                            Driver Allocated
+                          </span>
                         ) : (
                           <span className="text-green-500 bg-green-50 p-1">
                             Completed
@@ -638,57 +646,67 @@ const Orders = () => {
                 </tbody>
               )}
 
-              {!isSearch && searchResult === '' ? null : (
+              {!isSearch && searchResult === "" ? null : (
                 <>
-                {!isSearch && searchResult && searchResult._id && <tbody>
-                  <tr key={searchResult._id} className="border-b">
-                    <td className="px-[45px] py-2 text-[#23272E] text-[15px] font-[400] font-sans">
-                      {searchResult.searchId}
-                    </td>
-                    <td className="px-[45px] py-2 text-[#23272E] text-[15px] font-[400] font-sans">
-                      {searchResult.time}
-                    </td>
-                    <td className="px-[45px] py-2 text-[#23272E] text-[15px] font-[400] font-sans">
-                      {searchResult.capacity}
-                    </td>
-                    <td className="px-[45px] py-2 text-[#23272E] text-[15px] font-[400] font-sans">
-                      {searchResult.category}
-                    </td>
-                    <td className="px-[45px] py-2 text-[#23272E] text-[15px] font-[400] font-sans">
-                      {searchResult.status === "Pending" ? (
-                        <span className="text-yellow-500 bg-yellow-50 p-1">
-                          Pending
-                        </span>
-                      ) : (
-                        <span className="text-green-500 bg-green-50 p-1">
-                          Completed
-                        </span>
-                      )}
-                    </td>
-                    <td className="px-4 py-2">
-                      {searchResult.status === "Pending" && (
-                        <div className="relative">
-                          <button
-                            onClick={() => setSelectedOrderId(searchResult._id)}
-                            className="text-gray-500"
-                          >
-                            &#x22EE;
-                          </button>
-                          {selectedOrderId === searchResult._id && (
-                            <div className="absolute right-0 mt-2 w-[100px] bg-white shadow-md border border-gray-200">
+                  {!isSearch && searchResult && searchResult._id && (
+                    <tbody>
+                      <tr key={searchResult._id} className="border-b">
+                        <td className="px-[45px] py-2 text-[#23272E] text-[15px] font-[400] font-sans">
+                          {searchResult.searchId}
+                        </td>
+                        <td className="px-[45px] py-2 text-[#23272E] text-[15px] font-[400] font-sans">
+                          {searchResult.time}
+                        </td>
+                        <td className="px-[45px] py-2 text-[#23272E] text-[15px] font-[400] font-sans">
+                          {searchResult.capacity}
+                        </td>
+                        <td className="px-[45px] py-2 text-[#23272E] text-[15px] font-[400] font-sans">
+                          {searchResult.category}
+                        </td>
+                        <td className="px-[45px] py-2 text-[#23272E] text-[15px] font-[400] font-sans">
+                          {searchResult.status === "Pending" ? (
+                            <span className="text-yellow-500 bg-yellow-50 p-1">
+                              Pending
+                            </span>
+                          ) : searchResult.status === "Driver Allocated" ? (
+                            <span className="text-orange-500 bg-green-50 p-1">
+                              Driver Allocated
+                            </span>
+                          ) : (
+                            <span className="text-green-500 bg-green-50 p-1">
+                              Completed
+                            </span>
+                          )}
+                        </td>
+                        <td className="px-4 py-2">
+                          {searchResult.status === "Pending" && (
+                            <div className="relative">
                               <button
-                                onClick={() => handleDelete(searchResult._id)}
-                                className="w-full text-red-500 py-2 hover:bg-gray-100"
+                                onClick={() =>
+                                  setSelectedOrderId(searchResult._id)
+                                }
+                                className="text-gray-500"
                               >
-                                Delete
+                                &#x22EE;
                               </button>
+                              {selectedOrderId === searchResult._id && (
+                                <div className="absolute right-0 mt-2 w-[100px] bg-white shadow-md border border-gray-200">
+                                  <button
+                                    onClick={() =>
+                                      handleDelete(searchResult._id)
+                                    }
+                                    className="w-full text-red-500 py-2 hover:bg-gray-100"
+                                  >
+                                    Delete
+                                  </button>
+                                </div>
+                              )}
                             </div>
                           )}
-                        </div>
-                      )}
-                    </td>
-                  </tr>
-                </tbody>}
+                        </td>
+                      </tr>
+                    </tbody>
+                  )}
                 </>
               )}
             </table>

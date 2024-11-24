@@ -154,7 +154,7 @@ const StaffOrders = () => {
   const [filterStatus, setFilterStatus] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
   const [token, setToken] = useState("");
-  const [userId, setUserID] = useState("");
+  const [staffID, setStaffID] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -229,17 +229,17 @@ const StaffOrders = () => {
   useEffect(() => {
     const userSession = JSON.parse(localStorage.getItem("userSession"));
     setToken(userSession?.token);
-    setUserID(userSession?.id);
+    setStaffID(userSession?.id);
   }, []);
 
   // @desc: fetching all user orders
   const fetchUserOrderHandler = useCallback(async () => {
-    if (!userId || !token) return;
+    if (!staffID || !token) return;
 
     try {
       setIsLoading(true);
       const response = await fetch(
-        `https://waste-mangement-backend-3qg6.onrender.com/api/user/all-user-pickups/${userId}`,
+        `https://waste-mangement-backend-3qg6.onrender.com/api/staff/all-orders/${staffID}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -248,7 +248,7 @@ const StaffOrders = () => {
         }
       );
 
-      const { pickupData, error, message } = await response.json();
+      const { updatedPickups, error, message } = await response.json();
 
       if (!response.ok && error) {
         setIsLoading(false);
@@ -265,7 +265,7 @@ const StaffOrders = () => {
         navigate("/login");
       }
 
-      setOrders(pickupData);
+      setOrders(updatedPickups);
       setError(null);
       setIsLoading(false);
     } catch (error) {
@@ -274,7 +274,7 @@ const StaffOrders = () => {
       setOrders([]);
       setIsLoading(false);
     }
-  }, [userId, token, navigate]);
+  }, [staffID, token, navigate]);
 
   // desc: calling fetch orders to only re-render only once and when there is a change
   useEffect(() => {
@@ -636,7 +636,7 @@ const StaffOrders = () => {
                   {currentOrders.map((order) => (
                     <tr key={order._id} className="border-b">
                       <td className="px-[45px] py-2 text-[#23272E] text-[15px] font-[400] font-sans">
-                        {order.searchId}
+                        {order.collectionID}
                       </td>
                       <td className="px-[45px] py-2 text-[#23272E] text-[15px] font-[400] font-sans">
                         {order.time}
@@ -664,7 +664,7 @@ const StaffOrders = () => {
                             className="text-gray-green font-semibold tracking-wide"
                             onClick={() => handleAllocate(order.id)}
                           >
-                            Completed!
+                            Take Order
                           </button>
                         )}
                       </td>

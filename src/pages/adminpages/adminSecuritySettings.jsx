@@ -54,6 +54,10 @@ const AdminSecuritySettings = () => {
         throw new Error(data.message || "Server Error, Please Try Again Later");
       }
 
+      if (response.status === 403) {
+        navigate('/login');
+      }
+
       if (data.message === "jwt expired") {
         setIsLoading(false);
         navigate('/login');

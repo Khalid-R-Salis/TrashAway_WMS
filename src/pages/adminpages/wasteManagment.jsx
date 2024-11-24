@@ -217,6 +217,10 @@ const WasteManagment = () => {
         throw new Error("No pick up requests found at the moment.");
       }
 
+      if (response.status === 403) {
+        navigate('/login');
+      }
+      
       if (message === "jwt expired") {
         setIsLoading(false);
         navigate("/login");
@@ -225,18 +229,17 @@ const WasteManagment = () => {
       setOrders(updatedPickUpRequest);
       setErrors(null);
       setIsLoading(false);
-      console.log(refresh)
     } catch (error) {
       console.log("Error from dashboard", error);
       setErrors(error.message);
       setOrders([]);
       setIsLoading(false);
     }
-  }, [navigate, refresh]);
+  }, [navigate]);
 
   useEffect(() => {
     fetchUserOrdersHandler();
-  }, [fetchUserOrdersHandler]);
+  }, [fetchUserOrdersHandler, refresh]);
 
   // Allocation form logic (already handled in the allocate function down below)
   // const handleInputChange = (e) => {
@@ -263,6 +266,7 @@ const WasteManagment = () => {
     });
   };
 
+  // @desc: submit allocation details
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     setShowForm(true);
@@ -285,7 +289,7 @@ const WasteManagment = () => {
             capacity: allocationDetails.items,
             location: allocationDetails.location,
             category: allocationDetails.category,
-            userPhoneNumber: allocationDetails.contactNumber
+            userPhoneNumber: allocationDetails.contactNumber,
           }),
           headers: {
             "Content-Type": "application/json",
@@ -295,7 +299,6 @@ const WasteManagment = () => {
       );
 
       const data = await response.json();
-      console.log(data);
 
       if (!response.ok && data.error) {
         setIsLoading(false);
@@ -308,7 +311,7 @@ const WasteManagment = () => {
         setShowForm(false);
         throw new Error("Pick up request point not found.");
       }
-      
+
       if (data.message === "Something happened. Try again later") {
         setIsLoading(false);
         setShowForm(false);
@@ -320,16 +323,24 @@ const WasteManagment = () => {
         setShowForm(false);
         throw new Error("Driver not found.");
       }
-      
 
+      if (response.status === 403) {
+        navigate('/login');
+      }
+      
       if (data.message === "jwt expired") {
         navigate("/login");
       }
-      setIsLoading(false);
+
       setShowForm(false);
+      setSuccessMessage(true); //state for setting the state to show the succes message
+      setTimeout(() => {
+        setSuccessMessage(false);
+      }, 2500);
+
+      setRefresh((prevVal) => !prevVal); //to re-render the component when this form is submitted
+      setIsLoading(false);
       setErrors("");
-      setRefresh(prevVal => !prevVal);
-      setSuccessMessage(true);
     } catch (error) {
       console.log(error);
       setOrders([]);
@@ -339,17 +350,6 @@ const WasteManagment = () => {
     }
   };
 
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setSuccessMessage(false);
-    }, 1500);
-
-    console.log(refresh)
-
-    return () => clearTimeout(timer);
-  }, [refresh]);
-  
   const handleCancel = () => {
     setShowForm(false);
   };
@@ -396,7 +396,7 @@ const WasteManagment = () => {
 
   // @desc: showing success message afer allocation has been made
   const showStaffCreatedMessage = (
-    <div className="absolute right-[35rem] bottom-[45rem] mt-[23rem] w-[300px] bg-[#549877] p-6 rounded-lg shadow-sm z-10">
+    <div className="absolute right-[35rem] bottom-[43rem] mt-[23rem] w-[300px] bg-[#549877] p-6 rounded-lg shadow-sm z-10">
       <div className="flex justify-between items-center pb-[-1px]">
         <h3 className="text-white font-Inter text-[16px] capitalize">
           Allocation submitted successfully.

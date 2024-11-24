@@ -71,13 +71,17 @@ const Dashboard = () => {
         throw new Error("No pickups found. Try by adding some.");
       }
 
+      if (response.status === 403) {
+        navigate('/login');
+      }
+      
       if (message === "jwt expired") {
         setIsLoading(false);
-        navigate('/login');
+        navigate("/login");
       }
 
       // @des: set user pickup order
-      const data = pickupData.slice(0, 6)
+      const data = pickupData.slice(0, 6);
       setOrders(data);
       setErrors(null);
       setIsLoading(false);
@@ -262,7 +266,7 @@ const Dashboard = () => {
         </div>
 
         <div
-          className="bg-no-repeat min-h-full bg-cover bg-center w-full px-5 py-2 font-Inter" 
+          className="bg-no-repeat min-h-full bg-cover bg-center w-full px-5 py-2 font-Inter"
           style={{ backgroundImage: `url(${formbg})` }}
         >
           <div className=" text-[#141417] font-Inter text-[20px] font-[600] mb-2">
@@ -358,6 +362,10 @@ const Dashboard = () => {
                       {order.status === "Pending" ? (
                         <span className="text-yellow-500 bg-yellow-50 p-1">
                           Pending
+                        </span>
+                      ) : order.status === "Driver Allocated" ? (
+                        <span className="text-orange-500 bg-green-50 p-1">
+                          Driver Allocated
                         </span>
                       ) : (
                         <span className="text-green-500 bg-green-50 p-1">

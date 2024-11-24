@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import Sidebar from "../../components/SidebarStaff";
-import PersonalInformation from "../clientpages/personalInformation";
-import NotificationPreferences from "../clientpages/notificationPreferences";
-import Security from "../clientpages/securitySettings";
+import PersonalInformation from "../staffpages/staffpersonalInformation";
+import NotificationPreferences from "../staffpages/staffnotificationPreferences";
+import Security from "../staffpages/staffsecuritySettings";
 import formbg from "../../assets/formsbg.png";
 import notificationdb from "../../assets/notificationdb.png";
 import cancelIcon from "../../assets/close.svg";
