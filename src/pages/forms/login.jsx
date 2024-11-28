@@ -27,7 +27,7 @@ const Login = () => {
 
     try {
       const response = await fetch(
-        "https://waste-mangement-backend-3qg6.onrender.com/api/login",
+        "https://waste-mangement-backend-3qg6.onrender.com~/api/login",
         {
           method: "POST",
           body: JSON.stringify({ email, password }),
