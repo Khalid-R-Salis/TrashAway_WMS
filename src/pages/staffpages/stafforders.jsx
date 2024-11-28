@@ -6,145 +6,6 @@ import notificationdb from "../../assets/notificationdb.png";
 import cancelIcon from "../../assets/close.svg";
 import search from "../../assets/Search.png";
 
-/* const [orders, setOrders]= useState([
-  {
-    id: 1001,
-    date: "7 July 2024",
-    items: 20,
-    category: "Recyclable",
-    status: "Pending",
-  },
-  {
-    id: 1002,
-    date: "7 July 2024",
-    items: 10,
-    category: "Recyclable",
-    status: "Pending",
-  },
-  {
-    id: 1003,
-    date: "7 July 2024",
-    items: 18,
-    category: "Hazardous",
-    status: "Pending",
-  },
-  {
-    id: 1004,
-    date: "7 July 2024",
-    items: 20,
-    category: "Organic",
-    status: "Pending",
-  },
-  {
-    id: 1005,
-    date: "7 July 2024",
-    items: 20,
-    category: "Organic",
-    status: "Completed",
-  },
-  {
-    id: 1006,
-    date: "7 July 2024",
-    items: 20,
-    category: "Organic",
-    status: "Completed",
-  },
-  {
-    id: 1007,
-    date: "7 July 2024",
-    items: 20,
-    category: "Organic",
-    status: "Completed",
-  },
-  {
-    id: 1008,
-    date: "7 July 2024",
-    items: 20,
-    category: "Organic",
-    status: "Completed",
-  },
-  {
-    id: 1009,
-    date: "7 July 2024",
-    items: 20,
-    category: "Organic",
-    status: "Completed",
-  },
-  {
-    id: 1010,
-    date: "7 July 2024",
-    items: 20,
-    category: "Organic",
-    status: "Pending",
-  },
-  {
-    id: 1011,
-    date: "7 July 2024",
-    items: 20,
-    category: "Organic",
-    status: "Completed",
-  },
-  {
-    id: 1012,
-    date: "7 July 2024",
-    items: 20,
-    category: "Organic",
-    status: "Completed",
-  },
-  {
-    id: 1013,
-    date: "7 July 2024",
-    items: 20,
-    category: "Organic",
-    status: "Completed",
-  },   {
-    id: 1014,
-    date: "7 July 2024",
-    items: 20,
-    category: "Organic",
-    status: "Completed",
-  },
-  {
-    id: 1015,
-    date: "7 July 2024",
-    items: 20,
-    category: "Organic",
-    status: "Completed",
-  },   {
-    id: 1016,
-    date: "7 July 2024",
-    items: 20,
-    category: "Organic",
-    status: "Pending",
-  },
-  {
-    id: 1017,
-    date: "7 July 2024",
-    items: 20,
-    category: "Organic",
-    status: "Completed",
-  },
-  {
-    id: 1018,
-    date: "7 July 2024",
-    items: 20,
-    category: "Organic",
-    status: "Completed",
-  },
-  {
-    id: 1019,
-    date: "7 July 2024",
-    items: 20,
-    category: "Organic",
-    status: "Completed",
-  },    {
-    id: 1020,
-    date: "7 July 2024",
-    items: 20,
-    category: "Organic",
-    status: "Pending",
-  },
-  ]); */
 const StaffOrders = () => {
   const [pickupOption, setPickupOption] = useState(null);
 
@@ -164,14 +25,19 @@ const StaffOrders = () => {
   const [searchId, setSearchId] = useState("");
   const [inputValue, setInputValue] = useState("");
   const [showForm, setShowForm] = useState(false);
+  const [showPickupOptions, setShowPickupOptions] = useState(true);
+  const [showSuccessMessage, setSuccessMessage] = useState(false);
+  const [showRejectMessage, setRejectMessage] = useState(false);
   const [allocationDetails, setAllocationDetails] = useState({
     location: "",
-    items: "",
+    items: null,
     category: "",
-    contactNumber: "",
-    driver: "",
+    timeArrived: "",
+    timeLeft: "",
+    pictureProof: "",
+    rejectReason: "",
   });
-
+  const [refresh, setRefresh] = useState(false);
   // start timer
   const [time, setTime] = useState({
     hours: "00",
@@ -248,16 +114,17 @@ const StaffOrders = () => {
         }
       );
 
-      const { updatedPickups, error, message } = await response.json();
+      const { updatedPickups, error, message, errorMessage } =
+        await response.json();
 
       if (!response.ok && error) {
         setIsLoading(false);
         throw new Error(error);
       }
 
-      if (message === "No pickups found.") {
+      if (errorMessage) {
         setIsLoading(false);
-        throw new Error("No pickups found. Try by adding some.");
+        throw new Error(errorMessage);
       }
 
       if (message === "jwt expired") {
@@ -279,16 +146,16 @@ const StaffOrders = () => {
   // desc: calling fetch orders to only re-render only once and when there is a change
   useEffect(() => {
     fetchUserOrderHandler();
-  }, [fetchUserOrderHandler]);
+  }, [fetchUserOrderHandler, refresh]);
 
   const toggleNotification = () => {
     setShowNotification((prevValue) => !prevValue);
   };
 
-  const handleDelete = (id) => {
-    const filteredOrders = orders.filter((order) => order.id !== id);
-    setOrders(filteredOrders);
-  };
+  // const handleDelete = (id) => {
+  //   const filteredOrders = orders.filter((order) => order.id !== id);
+  //   setOrders(filteredOrders);
+  // };
 
   const filteredOrders = orders.filter((order) => {
     if (filterStatus === "All") return true;
@@ -303,38 +170,165 @@ const StaffOrders = () => {
     indexOfLastOrder
   );
 
-  // Allocation form logic
-  const handleInputChange = (e) => {
-    setAllocationDetails({
-      ...allocationDetails,
-      [e.target.name]: e.target.value,
-    });
-  };
+  // Allocation form logic handled in handleFormSubmit function down below
+  // const handleInputChange = (e) => {
+  //   setAllocationDetails({
+  //     ...allocationDetails,
+  //     [e.target.name]: e.target.value,
+  //   });
+  // };
 
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    // Reset the form fields after submission
-    setAllocationDetails({
-      location: "",
-      items: "",
-      category: "",
-      contactNumber: "",
-      rejectionReason: "",
-    });
-    // Optionally, close the form or set other states
-    setPickupOption(null);
-    handleCancel();
-    setShowForm(false);
+  // @desc: handling the confirmation or rejection of pickup order
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+    setIsLoading(false);
+
+    if (pickupOption === "confirm") {
+      try {
+        const response = await fetch(
+          `http://localhost:9090/api//staff/complete-order/${selectedOrderId}/${staffID}`,
+          {
+            method: "POST",
+            body: JSON.stringify({
+              location: allocationDetails.location,
+              items: allocationDetails.items,
+              category: allocationDetails.category,
+              timeArrived: allocationDetails.timeArrived,
+              timeLeft: allocationDetails.timeLeft,
+              pictureProof: allocationDetails.pictureProof,
+            }),
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const data = await response.json();
+        console.log(data);
+
+        if (!response.ok && data.error) {
+          setIsLoading(false);
+          setShowForm(false);
+          throw new Error(data.error);
+        }
+
+        if (response.status === 403) {
+          navigate("/login");
+        }
+
+        if (data.message === "jwt expired") {
+          navigate("/login");
+        }
+
+        if (data.message) {
+          setIsLoading(false);
+          setShowForm(false);
+          throw new Error(data.message);
+        }
+
+        setShowForm(false);
+        setSuccessMessage(true); //state for setting the state to show the succes message
+        setTimeout(() => {
+          setSuccessMessage(false);
+        }, 2500);
+        setAllocationDetails({
+          location: "",
+          items: null,
+          category: "",
+          timeArrived: "",
+          timeLeft: "",
+          pictureProof: "",
+          rejectReason: "",
+        });
+        setError("");
+        setRefresh((curVal) => !curVal);
+      } catch (error) {
+        console.log("error from confirm pickup", error);
+        setError(error.message);
+        setIsLoading(false);
+        setOrders([]);
+      }
+    }
+
+    if (pickupOption === "reject") {
+      try {
+        const response = await fetch(
+          `http://localhost:9090/api//staff/reject-order/${selectedOrderId}/${staffID}`,
+          {
+            method: "POST",
+            body: JSON.stringify({
+              rejectOrderReason: allocationDetails.rejectReason,
+            }),
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const data = await response.json();
+        console.log(data);
+
+        if (!response.ok && data.error) {
+          setIsLoading(false);
+          setShowForm(false);
+          throw new Error(data.error);
+        }
+
+        if (response.status === 403) {
+          navigate("/login");
+        }
+
+        if (data.message === "jwt expired") {
+          navigate("/login");
+        }
+
+        if (data.message) {
+          setIsLoading(false);
+          setShowForm(false);
+          throw new Error(data.message);
+        }
+
+        setShowForm(false);
+
+        setRejectMessage(true); //state for setting the state to show the succes message
+        setTimeout(() => {
+          setRejectMessage(false);
+        }, 2500);
+
+        setAllocationDetails({ rejectReason: "" });
+        setError("");
+        setRefresh((curVal) => !curVal);
+      } catch (error) {
+        console.log("error from confirm pickup", error);
+        setError(error.message);
+        setIsLoading(false);
+        setOrders([]);
+      }
+    }
   };
 
   const handleCancel = () => {
     setShowForm(false);
+    setPickupOption(null);
+    setShowPickupOptions(true);
   };
 
   const handleAllocate = (id) => {
-    console.log(id);
-    setSelectedOrderId(id);
     setShowForm(true);
+    setSelectedOrderId(id);
+
+    const selectedOrder = orders.filter((order) => {
+      return order._id === id;
+    });
+
+    setAllocationDetails({
+      ...allocationDetails,
+      location: selectedOrder[0].location,
+      items: selectedOrder[0].capacity,
+      category: selectedOrder[0].category,
+    });
   };
 
   // Calculate total pages
@@ -356,9 +350,9 @@ const StaffOrders = () => {
 
   // @desc: showing error conditionally
   const showError = (
-    <div className="absolute right-[34rem] bottom-[20rem] mt-[23rem] w-[370px] bg-white  p-6 rounded-lg shadow-sm z-10">
+    <div className="absolute right-[34rem] bottom-[20rem] mt-[23rem] w-[370px] bg-[#549877] p-6 rounded-lg shadow-sm z-10">
       <div className="flex justify-between items-center pb-[32px]">
-        <h3 className="text-[#1E1E1E] font-Inter text-[20px] font-semibold capitalize">
+        <h3 className="text-white font-Inter text-[20px] font-semibold capitalize">
           {error}
         </h3>
       </div>
@@ -367,10 +361,32 @@ const StaffOrders = () => {
 
   // @desc: showing search error conditionally
   const showSearchError = (
-    <div className="absolute right-[34rem] bottom-[20rem] mt-[23rem] w-[370px] bg-white  p-6 rounded-lg shadow-sm z-10">
+    <div className="absolute right-[34rem] bottom-[20rem] mt-[23rem] w-[370px] bg-[#549877]  p-6 rounded-lg shadow-sm z-10">
       <div className="flex justify-between items-center pb-[32px]">
-        <h3 className="text-[#1E1E1E] font-Inter text-[20px] font-semibold capitalize">
+        <h3 className="text-white font-Inter text-[20px] font-semibold capitalize">
           {searchError}
+        </h3>
+      </div>
+    </div>
+  );
+
+  // @desc: showing success message that the order has been completed
+  const showOrderMessage = (
+    <div className="absolute right-[35rem] bottom-[43rem] mt-[23rem] w-[350px] bg-[#549877] p-6 rounded-lg shadow-sm z-10">
+      <div className="flex justify-between items-center pb-[-1px]">
+        <h3 className="text-white font-Inter text-[16px] capitalize">
+          Allocation Submitted successfully
+        </h3>
+      </div>
+    </div>
+  );
+
+  // @desc: showing success message that the order has been completed
+  const showRejectMessages = (
+    <div className="absolute right-[35rem] bottom-[43rem] mt-[23rem] w-[300px] bg-[#549877] p-6 rounded-lg shadow-sm z-10">
+      <div className="flex justify-between items-center pb-[-1px]">
+        <h3 className="text-white font-Inter text-[16px] capitalize">
+          Successfull.
         </h3>
       </div>
     </div>
@@ -379,13 +395,13 @@ const StaffOrders = () => {
   // @desc: handling search order to get the ID the user provides
   const searchOrderHandler = async (event) => {
     event.preventDefault();
-    const value = event.target.value.slice(0, 4);
+    const value = event.target.value.slice(0, 6);
     setInputValue(value);
   };
 
   // @desc: useEffect hook from getting the exact data and set it to searchId state for accessibility
   useEffect(() => {
-    if (inputValue !== "" && inputValue.length === 4) {
+    if (inputValue !== "" && inputValue.length === 6) {
       setSearchId(inputValue);
     } else if (inputValue === "") {
       setSearchId("");
@@ -405,7 +421,7 @@ const StaffOrders = () => {
       const searchIDUppercase = searchId.toUpperCase();
       try {
         const response = await fetch(
-          "https://waste-mangement-backend-3qg6.onrender.com/api/user/search-pickup",
+          "https://waste-mangement-backend-3qg6.onrender.com/api/staff/search-order",
           {
             method: "POST",
             body: JSON.stringify({ searchID: searchIDUppercase }),
@@ -561,7 +577,7 @@ const StaffOrders = () => {
               min={1}
               max={9999}
               value={inputValue}
-              maxLength={4}
+              maxLength={6}
               placeholder="Search by ID"
               className="px-[16px] py-[8px] outline-none rounded-[4px] w-[200px] h-[37px] bg-white bg-no-repeat bg-[20px_center] bg-[length:20px_20px] pl-[48px] pr-[16px] shadow-[0px_0px_3px_0px_rgba(0,0,0,0.10)]"
               style={{ backgroundImage: `url(${search})` }}
@@ -662,7 +678,7 @@ const StaffOrders = () => {
                         {order.status === "Pending" && (
                           <button
                             className="text-gray-green font-semibold tracking-wide"
-                            onClick={() => handleAllocate(order.id)}
+                            onClick={() => handleAllocate(order._id)}
                           >
                             Take Order
                           </button>
@@ -679,7 +695,7 @@ const StaffOrders = () => {
                     <tbody>
                       <tr key={searchResult._id} className="border-b">
                         <td className="px-[45px] py-2 text-[#23272E] text-[15px] font-[400] font-sans">
-                          {searchResult.searchId}
+                          {searchResult.collectionID}
                         </td>
                         <td className="px-[45px] py-2 text-[#23272E] text-[15px] font-[400] font-sans">
                           {searchResult.time}
@@ -733,8 +749,14 @@ const StaffOrders = () => {
                 </>
               )}
             </table>
+            {/* Loading spinner */}
+            {isLoading && !error && !searchError && !searchError && (
+              <div className="ml-[38rem] mt-[8rem] spinner-border text-[#549877] w-[40px] h-[40px] border-t-[#549877] border-4 border-solid  rounded-full animate-spin"></div>
+            )}
             {!isLoading && error && showError}
             {!isLoading && searchError && showSearchError}
+            {!isLoading && showSuccessMessage && showOrderMessage}
+            {!isLoading && showRejectMessage && showRejectMessages}
           </div>
         </div>
         {/* Pagination Content here */}
@@ -764,24 +786,28 @@ const StaffOrders = () => {
               {/* Form  */}
               <div className="fixed inset-0 flex items-center justify-center z-20">
                 <div className="bg-white p-6 rounded-lg shadow-lg w-[500px]">
-                  <h2 className="text-xl font-bold mb-4">
-                    Confirm/Reject Pickup
-                  </h2>
+                  {pickupOption === "confirm" ? (
+                    <h2 className="text-xl font-bold mb-4">Confirm Pickup</h2>
+                  ) : pickupOption === "reject" ? (
+                    <h2 className="text-xl font-bold mb-4">Reject Pickup</h2>
+                  ) : (
+                    <h2 className="text-xl font-bold mb-4">
+                      Confirm/Reject Pickup
+                    </h2>
+                  )}
                   <form onSubmit={handleFormSubmit}>
                     {/* Option 1: Confirm Pickup */}
                     {pickupOption === "confirm" && (
                       <>
                         <div className="mb-4">
-                          <h1 className=" font-bold">Confirm Pickup</h1>
                           <label className="block mb-1">Location:</label>
                           <input
                             type="text"
                             name="location"
                             value={allocationDetails.location}
-                            onChange={handleInputChange}
                             className="w-full p-2 border border-gray-300 rounded"
-                            placeholder="YUMSUK main campus"
                             required
+                            disabled
                           />
                         </div>
 
@@ -789,12 +815,11 @@ const StaffOrders = () => {
                           <label className="block mb-1">No of Items:</label>
                           <input
                             type="number"
-                            // name="items"
-                            // value={}
-                            onChange={handleInputChange}
+                            name="items"
+                            value={allocationDetails.items}
                             className="w-full p-2 border border-gray-300 rounded"
-                            placeholder="Must not be more than 20"
                             required
+                            disabled
                             max={20}
                           />
                         </div>
@@ -803,10 +828,10 @@ const StaffOrders = () => {
                           <label className="block mb-1">Category:</label>
                           <select
                             name="category"
-                            // value={allocationDetails.category}
-                            onChange={handleInputChange}
+                            value={allocationDetails.category}
                             className="w-full p-2 border border-gray-300 rounded"
                             required
+                            disabled
                           >
                             <option value="" disabled>
                               Select Category
@@ -821,7 +846,12 @@ const StaffOrders = () => {
                           <label className="block mb-1">Time Arrived:</label>
                           <input
                             type="time"
-                            onChange={handleInputChange}
+                            onChange={(event) =>
+                              setAllocationDetails({
+                                ...allocationDetails,
+                                timeArrived: event.target.value,
+                              })
+                            }
                             className="w-full p-2 border border-gray-300 rounded"
                             required
                           />
@@ -831,7 +861,12 @@ const StaffOrders = () => {
                           <label className="block mb-1">Time Left:</label>
                           <input
                             type="time"
-                            onChange={handleInputChange}
+                            onChange={(event) =>
+                              setAllocationDetails({
+                                ...allocationDetails,
+                                timeLeft: event.target.value,
+                              })
+                            }
                             className="w-full p-2 border border-gray-300 rounded"
                             required
                           />
@@ -841,7 +876,12 @@ const StaffOrders = () => {
                           <label className="block mb-1">Prove of Pickup:</label>
                           <input
                             type="file"
-                            onChange={handleInputChange}
+                            onChange={(event) =>
+                              setAllocationDetails({
+                                ...allocationDetails,
+                                pictureProof: event.target.value,
+                              })
+                            }
                             className="w-full p-2 border border-gray-300 rounded"
                             required
                           />
@@ -857,8 +897,11 @@ const StaffOrders = () => {
                         </label>
                         <textarea
                           name="rejectionReason"
-                          value={allocationDetails.rejectionReason}
-                          onChange={handleInputChange}
+                          onChange={(event) =>
+                            setAllocationDetails({
+                              rejectReason: event.target.value,
+                            })
+                          }
                           className="w-full p-2 border border-gray-300 rounded resize-none"
                           placeholder="Enter reason here"
                           rows="4"
@@ -894,23 +937,35 @@ const StaffOrders = () => {
                         </button>
                       )}
                     </div>
+                    {/* Loading spinner */}
+                    {isLoading && !showError && (
+                      <div className="ml-[15rem] mt-[] spinner-border text-[#549877] w-[30px] h-[30px] border-t-[#549877] border-4 border-solid  rounded-full animate-spin"></div>
+                    )}
                   </form>
 
                   {/* Pickup Options */}
-                  <div className="mt-4">
-                    <button
-                      className="w-full px-4 py-2 bg-gray-green text-white rounded mb-2"
-                      onClick={() => setPickupOption("confirm")}
-                    >
-                      Confirm Pickup
-                    </button>
-                    <button
-                      className="w-full px-4 py-2 bg-orange-800 text-white rounded"
-                      onClick={() => setPickupOption("reject")}
-                    >
-                      Reject Pickup
-                    </button>
-                  </div>
+                  {showPickupOptions && (
+                    <div className="mt-4">
+                      <button
+                        className="w-full px-4 py-2 bg-gray-green text-white rounded mb-2"
+                        onClick={() => {
+                          setPickupOption("confirm");
+                          setShowPickupOptions(false);
+                        }}
+                      >
+                        Confirm Pickup
+                      </button>
+                      <button
+                        className="w-full px-4 py-2 bg-orange-800 text-white rounded"
+                        onClick={() => {
+                          setPickupOption("reject");
+                          setShowPickupOptions(false);
+                        }}
+                      >
+                        Reject Pickup
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             </>

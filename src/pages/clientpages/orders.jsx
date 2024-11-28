@@ -391,6 +391,7 @@ const Orders = () => {
         console.log(error.message);
         setSearchError(error.message);
         setSearchResult({});
+        setError('')
         setIsLoading(false);
         setIsSearch(false);
       }
@@ -605,13 +606,9 @@ const Orders = () => {
                         {order.category}
                       </td>
                       <td className="px-[45px] py-2 text-[#23272E] text-[15px] font-[400] font-sans">
-                        {order.status === "Pending" ? (
+                        {order.status === "Pending" || order.status === 'Driver Allocated' ? (
                           <span className="text-yellow-500 bg-yellow-50 p-1">
                             Pending
-                          </span>
-                        ) : order.status === "Driver Allocated" ? (
-                          <span className="text-orange-500 bg-green-50 p-1">
-                            Driver Allocated
                           </span>
                         ) : (
                           <span className="text-green-500 bg-green-50 p-1">
@@ -664,13 +661,9 @@ const Orders = () => {
                           {searchResult.category}
                         </td>
                         <td className="px-[45px] py-2 text-[#23272E] text-[15px] font-[400] font-sans">
-                          {searchResult.status === "Pending" ? (
+                          {searchResult.status === "Pending" || searchResult.status === 'Driver Allocated' ? (
                             <span className="text-yellow-500 bg-yellow-50 p-1">
                               Pending
-                            </span>
-                          ) : searchResult.status === "Driver Allocated" ? (
-                            <span className="text-orange-500 bg-green-50 p-1">
-                              Driver Allocated
                             </span>
                           ) : (
                             <span className="text-green-500 bg-green-50 p-1">
@@ -710,6 +703,9 @@ const Orders = () => {
                 </>
               )}
             </table>
+            {/* Loading spinner */}
+            {isLoading && !error && !searchError && <div className="ml-[38rem] mt-[8rem] spinner-border text-[#549877] w-[40px] h-[40px] border-t-[#549877] border-4 border-solid  rounded-full animate-spin"></div>}
+            
             {!isLoading && error && showError}
             {!isLoading && searchError && showSearchError}
           </div>

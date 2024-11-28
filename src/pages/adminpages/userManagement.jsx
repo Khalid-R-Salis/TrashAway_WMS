@@ -84,7 +84,7 @@ const UserManagement = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [users, setUsers] = useState([]);
   const [errors, setErrors] = useState("");
-  const [isLoading, setIsLoading] = useState(false);  
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const [time, setTime] = useState({
@@ -150,27 +150,30 @@ const UserManagement = () => {
     const token = userSession?.token;
 
     setIsLoading(true);
-    setErrors('');
+    setErrors("");
 
     if (!token) return;
 
     try {
-      const response = await fetch('https://waste-mangement-backend-3qg6.onrender.com/api/admin/all-pickup', {
-        headers: {
-          Authorization: `Bearer ${token}`
+      const response = await fetch(
+        "https://waste-mangement-backend-3qg6.onrender.com/api/admin/all-pickup",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-      });
+      );
 
       const data = await response.json();
 
       if (!response.ok && data.error) {
         setIsLoading(false);
-        throw new Error('Server Error. Please try again later');
+        throw new Error("Server Error. Please try again later");
       }
 
-      if (data.message === 'No users found') {
+      if (data.message === "No users found") {
         setIsLoading(false);
-        throw new Error('User orders not available.');
+        throw new Error("User orders not available.");
       }
 
       if (data.message === "No pick up requests found.") {
@@ -178,17 +181,17 @@ const UserManagement = () => {
         throw new Error("No pick up requests found at the moment.");
       }
 
-      if (data.message === 'jwt expired') {
-        navigate('/login');
+      if (data.message === "jwt expired") {
+        navigate("/login");
       }
 
       setUsers(data.updatedPickUpRequest);
-      setErrors('');
+      setErrors("");
       setIsLoading(false);
     } catch (error) {
-      setUsers([])
+      setUsers([]);
       setErrors(error.message);
-      setIsLoading(false)
+      setIsLoading(false);
       console.log(error);
     }
   }, [navigate]);
@@ -388,6 +391,9 @@ const UserManagement = () => {
               </button>
             </div>
           </div>
+          {isLoading && !errors && (
+            <div className="ml-[38rem] mt-[5rem] spinner-border text-[#549877] w-[40px] h-[40px] border-t-[#549877] border-4 border-solid  rounded-full animate-spin"></div>
+          )}
           {!isLoading && errors && showError}
         </div>
       </main>

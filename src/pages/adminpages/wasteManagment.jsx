@@ -218,9 +218,9 @@ const WasteManagment = () => {
       }
 
       if (response.status === 403) {
-        navigate('/login');
+        navigate("/login");
       }
-      
+
       if (message === "jwt expired") {
         setIsLoading(false);
         navigate("/login");
@@ -325,9 +325,9 @@ const WasteManagment = () => {
       }
 
       if (response.status === 403) {
-        navigate('/login');
+        navigate("/login");
       }
-      
+
       if (data.message === "jwt expired") {
         navigate("/login");
       }
@@ -598,6 +598,11 @@ const WasteManagment = () => {
             </div>
           </div>
 
+          {/* Showing the loading spinner */}
+          {isLoading && !errors && (
+            <div className="ml-[38rem] mt-[4.5rem] spinner-border text-[#549877] w-[40px] h-[40px] border-t-[#549877] border-4 border-solid  rounded-full animate-spin"></div>
+          )}
+
           {showForm && (
             <>
               <div
@@ -712,6 +717,10 @@ const WasteManagment = () => {
                         Cancel
                       </button>
                     </div>
+                    {/* Loading spinner */}
+                    {isLoading && !errors && (
+                      <div className="ml-[15rem] mt-[] spinner-border text-[#549877] w-[30px] h-[30px] border-t-[#549877] border-4 border-solid  rounded-full animate-spin"></div>
+                    )}
                   </form>
                 </div>
               </div>

@@ -5,24 +5,6 @@ import notificationdb from "../../assets/notificationdb.png";
 import SidebarAdmin from "../../components/SidebarAdmin";
 import { useNavigate } from "react-router-dom";
 
-// const staff = [
-//   { id: 1001, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
-//   { id: 1002, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
-//   { id: 1003, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
-//   { id: 1004, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
-//   { id: 1005, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
-//   { id: 1006, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
-//   { id: 1007, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
-//   { id: 1008, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
-//   { id: 1009, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
-//   { id: 1010, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
-//   { id: 1011, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
-//   { id: 1012, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
-//   { id: 1013, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
-//   { id: 1014, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
-//   { id: 1015, name: "Khalid Rabiu", phoneNumber: 8085499803, role: "Driver" },
-// ]
-
 const Staffs = () => {
   const [showNotification, setShowNotification] = useState(false);
   const [staff, setStaff] = useState([]);
@@ -115,7 +97,7 @@ const Staffs = () => {
       if (!token) return;
 
       const response = await fetch(
-        "http://localhost:9090/api/admin/all-staff",
+        "https://waste-mangement-backend-3qg6.onrender.com/api/admin/all-staff",
         {
           headers: {
             "Content-Type": "application/json",
@@ -143,7 +125,7 @@ const Staffs = () => {
       setIsLoading(false);
       setError("");
       setShowErrorMessage(false);
-      console.log(refresh)
+      console.log(refresh);
     } catch (error) {
       console.log(error);
       setStaff([]);
@@ -187,32 +169,30 @@ const Staffs = () => {
 
       if (!response.ok && data.error) {
         setIsLoading(false);
-        setShowErrorMessage(false); 
+        setShowErrorMessage(false);
         throw new Error(data.error);
       }
 
-      if (data.message === 'User already exists with this email') {
+      if (data.message === "User already exists with this email") {
         setIsLoading(false);
-        setShowErrorMessage(false); 
-        throw new Error('User with email already exists.')
+        setShowErrorMessage(false);
+        throw new Error("User with email already exists.");
       }
 
       if (response.status === 403) {
-        navigate('/login');
+        navigate("/login");
       }
-      
-      if (data.message === 'jwt expired') {
+
+      if (data.message === "jwt expired") {
         setIsLoading(false);
-        setShowErrorMessage(false); 
-        navigate('/login')
-
+        setShowErrorMessage(false);
+        navigate("/login");
       }
 
-      
-      setRefresh(prevVal => !prevVal);
+      setRefresh((prevVal) => !prevVal);
       setIsLoading(false);
       setShowErrorMessage(false);
-      setFormError('');
+      setFormError("");
       setSuccessMessage(true);
       setShowModal(false);
     } catch (error) {
@@ -227,7 +207,7 @@ const Staffs = () => {
       setSuccessMessage(false);
     }, 2500);
 
-    console.log(refresh)
+    console.log(refresh);
 
     return () => clearTimeout(timer);
   }, [refresh]);
@@ -259,13 +239,13 @@ const Staffs = () => {
     setShowModal(false);
     setShowErrorMessage(false);
     setRefresh(true);
-    setFormError('')
+    setFormError("");
   }, []);
 
   useEffect(() => {
     closeModal();
 
-    console.log(refresh)
+    console.log(refresh);
   }, [closeModal, refresh]);
 
   // @desc: showing error modal conditionally
@@ -406,6 +386,10 @@ const Staffs = () => {
                 ))}
               </tbody>
             </table>
+            {/* Loading spinner */}
+            {isLoading && !showErrorMessage && (
+              <div className="ml-[38rem] mt-[8rem] spinner-border text-[#549877] w-[40px] h-[40px] border-t-[#549877] border-4 border-solid  rounded-full animate-spin"></div>
+            )}
             {/* Showing error conditionally */}
             {!isLoading && showErrorMessage && showError}
 
@@ -505,12 +489,13 @@ const Staffs = () => {
                         setEmail(emailValue);
                         setFormFieldError({
                           ...formFieldError,
-                          email: ''
+                          email: "",
                         });
-                      } else setFormFieldError({
-                        ...formFieldError,
-                        email: 'Invalid Email.'
-                      });;
+                      } else
+                        setFormFieldError({
+                          ...formFieldError,
+                          email: "Invalid Email.",
+                        });
                     }}
                     required
                   />
@@ -535,12 +520,13 @@ const Staffs = () => {
                         setPhoneNumber(phone);
                         setFormFieldError({
                           ...formFieldError,
-                          phone: ''
+                          phone: "",
                         });
-                      } else setFormFieldError({
-                        ...formFieldError,
-                        phone: 'Invaid Phone Format'
-                      });
+                      } else
+                        setFormFieldError({
+                          ...formFieldError,
+                          phone: "Invaid Phone Format",
+                        });
                     }}
                     required
                   />
@@ -574,6 +560,10 @@ const Staffs = () => {
                     Create
                   </button>
                 </div>
+                {/* Loading spinner */}
+                {isLoading && !showErrorMessage && (
+                  <div className="ml-[11rem] mt-[] spinner-border text-[#549877] w-[30px] h-[30px] border-t-[#549877] border-4 border-solid  rounded-full animate-spin"></div>
+                )}
               </form>
               {/* Form ends here */}
             </div>

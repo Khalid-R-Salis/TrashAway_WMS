@@ -59,8 +59,9 @@ const StaffDashboard = () => {
         }
       );
 
-      const { updatedPickups, message, error, errorMessage } = await response.json();
-     
+      const { updatedPickups, message, error, errorMessage } =
+        await response.json();
+
       if (!response.ok && error) {
         setIsLoading(false);
         throw new Error(error);
@@ -72,7 +73,7 @@ const StaffDashboard = () => {
       }
 
       if (response.status === 403) {
-        navigate('/login');
+        navigate("/login");
       }
 
       if (message === "jwt expired") {
@@ -396,6 +397,10 @@ const StaffDashboard = () => {
                 ))}
               </tbody>
             </table>
+            {/* Loading spinner */}
+            {isLoading && !errors && (
+              <div className="ml-[38rem] mt-[7rem] spinner-border text-[#549877] w-[40px] h-[40px] border-t-[#549877] border-4 border-solid  rounded-full animate-spin"></div>
+            )}
           </div>
           {!isLoading && errors && showError}
         </div>

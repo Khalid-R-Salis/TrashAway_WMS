@@ -72,9 +72,9 @@ const Dashboard = () => {
       }
 
       if (response.status === 403) {
-        navigate('/login');
+        navigate("/login");
       }
-      
+
       if (message === "jwt expired") {
         setIsLoading(false);
         navigate("/login");
@@ -359,13 +359,10 @@ const Dashboard = () => {
                       {order.category}
                     </td>
                     <td className="px-4 py-2 text-[#23272E] text-[15px] font-[400] font-sans">
-                      {order.status === "Pending" ? (
+                      {order.status === "Pending" ||
+                      order.status === "Driver Allocated" ? (
                         <span className="text-yellow-500 bg-yellow-50 p-1">
                           Pending
-                        </span>
-                      ) : order.status === "Driver Allocated" ? (
-                        <span className="text-orange-500 bg-green-50 p-1">
-                          Driver Allocated
                         </span>
                       ) : (
                         <span className="text-green-500 bg-green-50 p-1">
@@ -399,6 +396,7 @@ const Dashboard = () => {
                 ))}
               </tbody>
             </table>
+              {isLoading && !errors && <div className="ml-[38rem] mt-[8rem] spinner-border text-[#549877] w-[40px] h-[40px] border-t-[#549877] border-4 border-solid  rounded-full animate-spin"></div>}
           </div>
           {!isLoading && errors && showError}
         </div>

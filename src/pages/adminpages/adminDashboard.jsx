@@ -6,59 +6,6 @@ import cancelIcon from "../../assets/close.svg";
 import iconSet from "../../assets/iconSet.png";
 import { useNavigate } from "react-router-dom";
 
-/* 
-const orders = [
-  {
-    id: 1001,
-    date: "7 July 2024",
-    items: 20,
-    category: "Recyclable",
-    status: "Pending",
-  },
-  {
-    id: 1002,
-    date: "7 July 2024",
-    items: 10,
-    category: "Recyclable",
-    status: "Pending",
-  },
-  {
-    id: 1003,
-    date: "7 July 2024",
-    items: 8,
-    category: "Recyclable",
-    status: "Pending",
-  },
-  {
-    id: 1004,
-    date: "7 July 2024",
-    items: 4,
-    category: "Hazardous",
-    status: "Completed",
-  },
-  {
-    id: 1005,
-    date: "7 July 2024",
-    items: 16,
-    category: "Organic",
-    status: "Completed",
-  },
-  {
-    id: 1006,
-    date: "7 July 2024",
-    items: 18,
-    category: "Hazardous",
-    status: "Completed",
-  },
-  {
-    id: 1007,
-    date: "7 July 2024",
-    items: 20,
-    category: "Organic",
-    status: "Completed",
-  },
-] */
-
 const AdminDashboard = () => {
   const [showNotification, setShowNotification] = useState(false);
   const [orders, setOrders] = useState([]);
@@ -483,6 +430,9 @@ const AdminDashboard = () => {
                 ))}
               </tbody>
             </table>
+            {isLoading && !errors && (
+              <div className="ml-[38rem] mt-[6rem] spinner-border text-[#549877] w-[40px] h-[40px] border-t-[#549877] border-4 border-solid  rounded-full animate-spin"></div>
+            )}
           </div>
           {!isLoading && errors && showError}
         </div>
