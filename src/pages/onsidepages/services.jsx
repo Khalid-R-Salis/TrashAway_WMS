@@ -149,9 +149,9 @@ const Services = () => {
                     <li className="hover:bg-gray-100 p-2 font-[500]">
                       <a href="/orders">Orders</a>
                     </li>
-                    <li className="hover:bg-gray-100 p-2 font-[500]">
+                    {/* <li className="hover:bg-gray-100 p-2 font-[500]">
                       <a href="/collection">Collection Point</a>
-                    </li>
+                    </li> */}
                   </ul>
                 )}
               </div>
