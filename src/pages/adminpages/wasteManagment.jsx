@@ -474,7 +474,7 @@ const WasteManagment = () => {
               Pick up Requests
             </h1>
             <input
-              type="number"
+              type="text"
               min={1}
               max={9999}
               maxLength={4}
