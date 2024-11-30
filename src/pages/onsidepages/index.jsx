@@ -166,15 +166,15 @@ const Landing = () => {
       return;
     }
     setError("");
-    setShowForm(false); // Close the pickup form
-    setShowPaymentForm(true); // Open the payment form
+    setShowForm(false);
+    setShowPaymentForm(true);
   };
 
   const handlePayment = (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Prevent the default behavior of form submission
     setShowPaymentForm(false); // Close the payment modal
     alert("Payment successful! Pickup request created.");
-    // Add your payment API logic here
+    // Add any payment API logic here if needed
   };
 
   return (
@@ -305,7 +305,7 @@ const Landing = () => {
                 setError("");
               }}
             >
-              Close
+              X
             </button>
 
             <h2 className="text-[20px] font-[600] text-center">
@@ -359,7 +359,7 @@ const Landing = () => {
 
             <button
               className="text-white font-Inter text-[600] text-[16.646px] bg-[#549877] py-[8.136px] px-[96.893px] rounded-[2.959px] w-[476px] h-[37px]"
-              type="button" // Change type to button
+              type="button"
               onClick={openPaymentForm} // Trigger payment modal
             >
               Proceed to Payment
@@ -373,9 +373,32 @@ const Landing = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 z-30 flex justify-center items-center">
           <form
             className="font-Inter bg-[#EEF5F1] flex flex-col py-[14.793px] px-[11.834px] justify-center items-center rounded-[11.834px] gap-[17.751px]"
-            onSubmit={handlePayment}
+            onSubmit={(e) => {
+              e.preventDefault();
+              const cardNumber = document
+                .getElementById("cardNumber")
+                .value.trim();
+              const expiryDate = document
+                .getElementById("expiryDate")
+                .value.trim();
+              const cvv = document.getElementById("cvv").value.trim();
+              const pin = document.getElementById("pin").value.trim();
+
+              const errors = [];
+              if (cardNumber.length !== 16)
+                errors.push("Card Number must be 16 digits.");
+              if (!/^\d{2}\/\d{2}$/.test(expiryDate))
+                errors.push("Expiry Date must be in MM/YY format.");
+              if (cvv.length !== 3) errors.push("CVV must be 3 digits.");
+              if (pin.length !== 4) errors.push("Pin must be 4 digits.");
+
+              if (errors.length > 0) {
+                alert(errors.join("\n"));
+              } else {
+                handlePayment();
+              }
+            }}
           >
-            {/* Close Button */}
             <button
               type="button"
               className="absolute right-[32rem] top-[13.5rem] mt-[20px] mr-[20px] text-[16px] text-[#626262]"
@@ -388,7 +411,7 @@ const Landing = () => {
                 document.getElementById("pin").value = "";
               }}
             >
-              Close
+              X
             </button>
 
             <h2 className="text-[20px] font-[600] text-center">
@@ -399,7 +422,6 @@ const Landing = () => {
               <span className="absolute left-2 top-1/2 transform -translate-y-1/2 text-[#ffffff] text-md">
                 Total Amount:
               </span>
-
               <input
                 type="text"
                 placeholder={`NGN ${capacity * 3000}`}
@@ -419,20 +441,13 @@ const Landing = () => {
               onInput={(e) => {
                 e.target.value = e.target.value.replace(/[^0-9]/g, "");
               }}
-              onBlur={(e) => {
-                // Ensure exactly 16 digits
-                if (e.target.value.length !== 16) {
-                  alert("Card Number must be 16 digits.");
-                }
-              }}
             />
 
             <div className="flex justify-between gap-3">
-              {/* Expiry Date Input */}
               <input
                 id="expiryDate"
                 type="text"
-                placeholder="MM / YY"
+                placeholder="Expire: MM / YY"
                 maxLength={5}
                 className="outline-none rounded-[5.917px] pl-[7.4px] py-[11px] w-[230px] h-[37px] border-[#549877] border-[1px]"
                 required
@@ -443,16 +458,8 @@ const Landing = () => {
                   }
                   e.target.value = value.slice(0, 5);
                 }}
-                onBlur={(e) => {
-                  // Ensure MM/YY format
-                  const value = e.target.value;
-                  if (value.length !== 5 || !/^\d{2}\/\d{2}$/.test(value)) {
-                    alert("Please enter a valid expiry date in MM/YY format.");
-                  }
-                }}
               />
 
-              {/* CVV Input */}
               <input
                 id="cvv"
                 type="text"
@@ -463,38 +470,25 @@ const Landing = () => {
                 onInput={(e) => {
                   e.target.value = e.target.value.replace(/[^0-9]/g, "");
                 }}
-                onBlur={(e) => {
-                  // Ensure exactly 3 digits
-                  if (e.target.value.length !== 3) {
-                    alert("CVV must be 3 digits.");
-                  }
-                }}
               />
             </div>
 
             <input
               id="pin"
               type="password"
-              placeholder="Enter Your Pin"
+              placeholder="Card Pin"
               maxLength={4}
               className="outline-none rounded-[5.917px] pl-[7.4px] py-[11px] w-[476px] h-[37px] border-[#549877] border-[1px]"
               required
-              onBlur={(e) => {
-                // Ensure exactly 4 digits
-                if (e.target.value.length !== 4) {
-                  alert("Pin must be 4 digits.");
-                }
-              }}
             />
 
-            <div className=" flex justify-center items-center gap-8">
-              {/* Back Button */}
+            <div className="flex justify-center items-center gap-8">
               <button
                 type="button"
                 className="text-white font-Inter text-[600] text-[16.646px] bg-[#374840] py-[8.136px] px-[20px] rounded-[2.959px] h-[37px]"
                 onClick={() => {
                   setShowPaymentForm(false);
-                  setShowForm(true); // Show the pickup request form
+                  setShowForm(true);
                 }}
               >
                 {"<"} Back
@@ -502,8 +496,10 @@ const Landing = () => {
               <button
                 className="text-white font-Inter text-[600] text-[16.646px] bg-[#549877] py-[8.136px] px-[80px] rounded-[2.959px] h-[37px]"
                 type="submit"
+                disabled={isSubmitting}
               >
-                Request for Pickup
+                {isSubmitting ? "Submitting..." : "Request for Pickup"}
+                {/* Request for Pickup */}
               </button>
             </div>
           </form>
