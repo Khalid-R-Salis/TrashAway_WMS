@@ -71,6 +71,7 @@ const Landing = () => {
   // State variables
   const [isOpen, setIsOpen] = useState(false);
   const [showForm, setShowForm] = useState(false);
+  const [showPaymentForm, setShowPaymentForm] = useState(false);
   const [capacity, setCapacity] = useState(1);
   const [location, setLocation] = useState("");
   const [time, setTime] = useState("");
@@ -156,6 +157,24 @@ const Landing = () => {
       setError(error.message);
       setIsSubmitting(false);
     }
+  };
+
+  // Handle Payment Modal
+  const openPaymentForm = () => {
+    if (!capacity || !location || !time || !category) {
+      setError("Please fill all fields before proceeding to payment.");
+      return;
+    }
+    setError("");
+    setShowForm(false); // Close the pickup form
+    setShowPaymentForm(true); // Open the payment form
+  };
+
+  const handlePayment = (e) => {
+    e.preventDefault();
+    setShowPaymentForm(false); // Close the payment modal
+    alert("Payment successful! Pickup request created.");
+    // Add your payment API logic here
   };
 
   return (
@@ -269,16 +288,22 @@ const Landing = () => {
         </div>
       </div>
 
+      {/* Pickup Request Form */}
       {showForm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-30 flex justify-center items-center overflow-hidden">
-          <form
-            className="font-Inter bg-[#EEF5F1] flex flex-col py-[14.793px] px-[11.834px] justify-center items-center rounded-[11.834px] gap-[17.751px]"
-            onSubmit={handlePickupRequest}
-          >
+          <form className="font-Inter bg-[#EEF5F1] flex flex-col py-[14.793px] px-[11.834px] justify-center items-center rounded-[11.834px] gap-[17.751px]">
             <button
               type="button"
               className="absolute right-0 bottom-[33rem] mt-[205px] mr-[530px]"
-              onClick={() => setShowForm(false)}
+              onClick={() => {
+                setShowForm(false);
+                // Clear form fields when closed
+                setCapacity("");
+                setLocation("");
+                setTime("");
+                setCategory("");
+                setError("");
+              }}
             >
               Close
             </button>
@@ -334,11 +359,153 @@ const Landing = () => {
 
             <button
               className="text-white font-Inter text-[600] text-[16.646px] bg-[#549877] py-[8.136px] px-[96.893px] rounded-[2.959px] w-[476px] h-[37px]"
-              type="submit"
-              disabled={isSubmitting}
+              type="button" // Change type to button
+              onClick={openPaymentForm} // Trigger payment modal
             >
-              {isSubmitting ? "Submitting..." : "Request for Pickup"}
+              Proceed to Payment
             </button>
+          </form>
+        </div>
+      )}
+
+      {/* Payment Modal */}
+      {showPaymentForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-30 flex justify-center items-center">
+          <form
+            className="font-Inter bg-[#EEF5F1] flex flex-col py-[14.793px] px-[11.834px] justify-center items-center rounded-[11.834px] gap-[17.751px]"
+            onSubmit={handlePayment}
+          >
+            {/* Close Button */}
+            <button
+              type="button"
+              className="absolute right-[32rem] top-[13.5rem] mt-[20px] mr-[20px] text-[16px] text-[#626262]"
+              onClick={() => {
+                setShowPaymentForm(false);
+                // Clear form fields when closed
+                document.getElementById("cardNumber").value = "";
+                document.getElementById("expiryDate").value = "";
+                document.getElementById("cvv").value = "";
+                document.getElementById("pin").value = "";
+              }}
+            >
+              Close
+            </button>
+
+            <h2 className="text-[20px] font-[600] text-center">
+              Make Payment via Card
+            </h2>
+
+            <div className="relative w-[476px] h-[37px]">
+              <span className="absolute left-2 top-1/2 transform -translate-y-1/2 text-[#ffffff] text-md">
+                Total Amount:
+              </span>
+
+              <input
+                type="text"
+                placeholder={`NGN ${capacity * 3000}`}
+                className="outline-none w-full h-[37px] py-[11.834px] pl-[120px] pr-[8.876px] rounded-[5.917px] border-[0.74px] border-solid border-[#626262] bg-[#549877] text-white"
+                value={`NGN ${capacity * 3000}`}
+                disabled
+              />
+            </div>
+
+            <input
+              id="cardNumber"
+              type="text"
+              placeholder="Card Number"
+              maxLength={16}
+              className="outline-none rounded-[5.917px] pl-[7.4px] py-[11px] w-[476px] h-[37px] border-[#549877] border-[1px]"
+              required
+              onInput={(e) => {
+                e.target.value = e.target.value.replace(/[^0-9]/g, "");
+              }}
+              onBlur={(e) => {
+                // Ensure exactly 16 digits
+                if (e.target.value.length !== 16) {
+                  alert("Card Number must be 16 digits.");
+                }
+              }}
+            />
+
+            <div className="flex justify-between gap-3">
+              {/* Expiry Date Input */}
+              <input
+                id="expiryDate"
+                type="text"
+                placeholder="MM / YY"
+                maxLength={5}
+                className="outline-none rounded-[5.917px] pl-[7.4px] py-[11px] w-[230px] h-[37px] border-[#549877] border-[1px]"
+                required
+                onInput={(e) => {
+                  let value = e.target.value.replace(/[^0-9]/g, "");
+                  if (value.length > 2) {
+                    value = value.slice(0, 2) + "/" + value.slice(2, 4);
+                  }
+                  e.target.value = value.slice(0, 5);
+                }}
+                onBlur={(e) => {
+                  // Ensure MM/YY format
+                  const value = e.target.value;
+                  if (value.length !== 5 || !/^\d{2}\/\d{2}$/.test(value)) {
+                    alert("Please enter a valid expiry date in MM/YY format.");
+                  }
+                }}
+              />
+
+              {/* CVV Input */}
+              <input
+                id="cvv"
+                type="text"
+                placeholder="CVV"
+                maxLength={3}
+                className="outline-none rounded-[5.917px] pl-[7.4px] py-[11px] w-[230px] h-[37px] border-[#549877] border-[1px]"
+                required
+                onInput={(e) => {
+                  e.target.value = e.target.value.replace(/[^0-9]/g, "");
+                }}
+                onBlur={(e) => {
+                  // Ensure exactly 3 digits
+                  if (e.target.value.length !== 3) {
+                    alert("CVV must be 3 digits.");
+                  }
+                }}
+              />
+            </div>
+
+            <input
+              id="pin"
+              type="password"
+              placeholder="Enter Your Pin"
+              maxLength={4}
+              className="outline-none rounded-[5.917px] pl-[7.4px] py-[11px] w-[476px] h-[37px] border-[#549877] border-[1px]"
+              required
+              onBlur={(e) => {
+                // Ensure exactly 4 digits
+                if (e.target.value.length !== 4) {
+                  alert("Pin must be 4 digits.");
+                }
+              }}
+            />
+
+            <div className=" flex justify-center items-center gap-8">
+              {/* Back Button */}
+              <button
+                type="button"
+                className="text-white font-Inter text-[600] text-[16.646px] bg-[#374840] py-[8.136px] px-[20px] rounded-[2.959px] h-[37px]"
+                onClick={() => {
+                  setShowPaymentForm(false);
+                  setShowForm(true); // Show the pickup request form
+                }}
+              >
+                {"<"} Back
+              </button>
+              <button
+                className="text-white font-Inter text-[600] text-[16.646px] bg-[#549877] py-[8.136px] px-[80px] rounded-[2.959px] h-[37px]"
+                type="submit"
+              >
+                Request for Pickup
+              </button>
+            </div>
           </form>
         </div>
       )}
