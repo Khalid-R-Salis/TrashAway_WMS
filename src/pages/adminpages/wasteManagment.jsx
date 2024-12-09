@@ -126,6 +126,7 @@ const WasteManagment = () => {
     category: "",
     contactNumber: "",
   });
+  const [drivers, setAllDrivers] = useState(null);
 
   const driverInputRef = useRef();
 
@@ -205,7 +206,8 @@ const WasteManagment = () => {
         }
       );
 
-      const { updatedPickUpRequest, error, message } = await response.json();
+      const { updatedPickUpRequest, error, message, getAllStaffs } =
+        await response.json();
 
       if (!response.ok && error) {
         setIsLoading(false);
@@ -226,6 +228,7 @@ const WasteManagment = () => {
         navigate("/login");
       }
 
+      setAllDrivers(getAllStaffs);
       setOrders(updatedPickUpRequest);
       setErrors(null);
       setIsLoading(false);
@@ -396,7 +399,7 @@ const WasteManagment = () => {
 
   // @desc: showing success message afer allocation has been made
   const showStaffCreatedMessage = (
-    <div className="absolute right-[35rem] bottom-[43rem] mt-[23rem] w-[300px] bg-[#549877] p-6 rounded-lg shadow-sm z-10">
+    <div className="absolute right-[35rem] bottom-[39rem] mt-[23rem] w-[300px] bg-[#549877] p-6 rounded-lg shadow-sm z-10">
       <div className="flex justify-between items-center pb-[-1px]">
         <h3 className="text-white font-Inter text-[16px] capitalize">
           Allocation submitted successfully.
@@ -689,16 +692,15 @@ const WasteManagment = () => {
                         <option value="" disabled>
                           Select Driver
                         </option>
-                        <option value="Khalid Rabiu" className=" uppercase">
-                          Khalid Rabiu
-                        </option>
-                        <option value="Isa Musa" className=" uppercase">
-                          ISA Musa
-                        </option>
-                        <option value="Adam Isa">ADAM ISA</option>
-                        <option value="Kast Man Bigboss">
-                          KAST MAN BIGBOSS
-                        </option>
+                        {drivers.map((driver) => (
+                          <option
+                            key={driver._id}
+                            value={driver.name}
+                            className=" uppercase"
+                          >
+                            {driver.name}
+                          </option>
+                        ))}
                       </select>
                     </div>
 

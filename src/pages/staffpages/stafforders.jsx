@@ -132,9 +132,9 @@ const StaffOrders = () => {
         navigate("/login");
       }
 
+      setIsLoading(curVal => !curVal);
       setOrders(updatedPickups);
       setError(null);
-      setIsLoading(false);
     } catch (error) {
       console.log(error);
       setError(error.message);
@@ -186,7 +186,7 @@ const StaffOrders = () => {
     if (pickupOption === "confirm") {
       try {
         const response = await fetch(
-          `http://localhost:9090/api//staff/complete-order/${selectedOrderId}/${staffID}`,
+          `https://waste-mangement-backend-3qg6.onrender.com/api/staff/complete-order/${selectedOrderId}/${staffID}`,
           {
             method: "POST",
             body: JSON.stringify({
@@ -248,13 +248,14 @@ const StaffOrders = () => {
         setError(error.message);
         setIsLoading(false);
         setOrders([]);
+        setShowForm(false);
       }
     }
 
     if (pickupOption === "reject") {
       try {
         const response = await fetch(
-          `http://localhost:9090/api//staff/reject-order/${selectedOrderId}/${staffID}`,
+          `https://waste-mangement-backend-3qg6.onrender.com/api/staff/reject-order/${selectedOrderId}/${staffID}`,
           {
             method: "POST",
             body: JSON.stringify({
@@ -305,6 +306,7 @@ const StaffOrders = () => {
         setError(error.message);
         setIsLoading(false);
         setOrders([]);
+        setShowForm(false);
       }
     }
   };
@@ -372,7 +374,7 @@ const StaffOrders = () => {
 
   // @desc: showing success message that the order has been completed
   const showOrderMessage = (
-    <div className="absolute right-[35rem] bottom-[43rem] mt-[23rem] w-[350px] bg-[#549877] p-6 rounded-lg shadow-sm z-10">
+    <div className="absolute right-[35rem] bottom-[39rem] mt-[23rem] w-[350px] bg-[#549877] p-6 rounded-lg shadow-sm z-10">
       <div className="flex justify-between items-center pb-[-1px]">
         <h3 className="text-white font-Inter text-[16px] capitalize">
           Allocation Submitted successfully
@@ -383,7 +385,7 @@ const StaffOrders = () => {
 
   // @desc: showing success message that the order has been completed
   const showRejectMessages = (
-    <div className="absolute right-[35rem] bottom-[43rem] mt-[23rem] w-[300px] bg-[#549877] p-6 rounded-lg shadow-sm z-10">
+    <div className="absolute right-[35rem] bottom-[39rem] mt-[23rem] w-[300px] bg-[#549877] p-6 rounded-lg shadow-sm z-10">
       <div className="flex justify-between items-center pb-[-1px]">
         <h3 className="text-white font-Inter text-[16px] capitalize">
           Successfull.
@@ -750,7 +752,7 @@ const StaffOrders = () => {
               )}
             </table>
             {/* Loading spinner */}
-            {isLoading && !error && !searchError && !searchError && (
+            {isLoading && orders.length === 0 && (
               <div className="ml-[38rem] mt-[8rem] spinner-border text-[#549877] w-[40px] h-[40px] border-t-[#549877] border-4 border-solid  rounded-full animate-spin"></div>
             )}
             {!isLoading && error && showError}

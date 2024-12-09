@@ -36,6 +36,7 @@ const Staffs = () => {
     email: "",
     phone: "",
   });
+  const [deleteSuccessMessge, setDeleteSuccessMessge] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -75,13 +76,6 @@ const Staffs = () => {
 
   const toggleNotification = () => {
     setShowNotification(!showNotification);
-  };
-
-  const handleDelete = (id) => {
-    setStaff(staff.filter((order) => order.id !== id));
-    setShowDeleteModal(false); // Close modal after delete
-    setDeleteReason(""); // Clear reason input
-    console.log(id);
   };
 
   // @desc: fetching all staffs
@@ -202,9 +196,75 @@ const Staffs = () => {
     }
   };
 
+  // @desc: deleting the staff from the database
+  const handleDelete = async (id) => {
+    setIsLoading(true);
+    setShowErrorMessage(false);
+    setError('');
+    setDeleteSuccessMessge(false);
+
+    const userSession = JSON.parse(localStorage.getItem("userSession"));
+    const token = userSession?.token;
+    const adminID = userSession?.id;
+
+    try {
+      const response = await fetch(
+        `https://waste-mangement-backend-3qg6.onrender.com/api/admin/delete-staff/${adminID}/${id}`,
+        {
+          method: "DELETE",
+          body: JSON.stringify({ reason: deleteReason }),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+      console.log(data);
+
+      if (!response.ok && data.error) {
+        setIsLoading(false);
+        setShowErrorMessage(false);
+        throw new Error(data.error);
+      }
+      
+      if (data.message === "jwt expired") {
+        setIsLoading(false);
+        setShowErrorMessage(false);
+        navigate("/login");
+      }
+
+      if (data.message) {
+        setIsLoading(false);
+        setShowErrorMessage(false);
+        throw new Error(data.message);
+      }
+
+      if (response.status === 403) {
+        navigate("/login");
+      }
+      
+
+      setRefresh((prevVal) => !prevVal);
+      setIsLoading(false);
+      setDeleteSuccessMessge(true);
+      setShowErrorMessage(false);
+      setShowDeleteModal(false);
+      setDeleteReason("");
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+      setShowDeleteModal(false);
+      setShowErrorMessage(true);
+      setError(error.message);
+    }
+  };
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setSuccessMessage(false);
+      setDeleteSuccessMessge(false);
     }, 2500);
 
     console.log(refresh);
@@ -261,7 +321,7 @@ const Staffs = () => {
 
   // @desc: showing success message afer staff has been created
   const showStaffCreatedMessage = (
-    <div className="absolute right-[35rem] bottom-[45rem] mt-[23rem] w-[300px] bg-[#549877] p-6 rounded-lg shadow-sm z-10">
+    <div className="absolute right-[35rem] bottom-[39rem] mt-[23rem] w-[300px] bg-[#549877] p-6 rounded-lg shadow-sm z-10">
       <div className="flex justify-between items-center pb-[-1px]">
         <h3 className="text-white font-Inter text-[16px] capitalize">
           Staff successfully created.
@@ -269,6 +329,19 @@ const Staffs = () => {
       </div>
     </div>
   );
+
+// @desc: showing success message afer staff has been created
+  const showStaffDeletedMessage = (
+    <div className="absolute right-[35rem] bottom-[39rem] mt-[23rem] w-[300px] bg-[#549877] p-6 rounded-lg shadow-sm z-10">
+      <div className="flex justify-between items-center pb-[-1px]">
+        <h3 className="text-white font-Inter text-[16px] capitalize">
+          Staff successfully deleted.
+        </h3>
+      </div>
+    </div>
+  );
+
+
   return (
     <div className="flex h-screen overflow-hidden">
       <SidebarAdmin activePage="staffs" />
@@ -395,6 +468,9 @@ const Staffs = () => {
 
             {/* Showing staff created modal */}
             {!isLoading && showSuccessMessage && showStaffCreatedMessage}
+            
+             {/* Showing staff deleted modal */}
+            {!isLoading && deleteSuccessMessge && showStaffDeletedMessage}
           </div>
         </div>
 
