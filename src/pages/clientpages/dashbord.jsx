@@ -18,6 +18,8 @@ const Dashboard = () => {
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [username, setUserName] = useState("");
+  const [refresh, setRefresh] = useState(false);
+  const [isDeleteOrder, setIsDeleteOrder] = useState(false);
   const navigate = useNavigate();
 
   // @desc: States for Timer
@@ -80,7 +82,7 @@ const Dashboard = () => {
         navigate("/login");
       }
 
-      // @des: set user pickup order
+      // @desc: set user pickup order
       const data = pickupData.slice(0, 6);
       setOrders(data);
       setErrors(null);
@@ -95,7 +97,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchUserOrdersHandler();
-  }, [fetchUserOrdersHandler]);
+  }, [fetchUserOrdersHandler, refresh]);
 
   // start timer
   useEffect(() => {
@@ -142,9 +144,50 @@ const Dashboard = () => {
     setShowNotification(!showNotification);
   };
 
-  const handleDelete = (id) => {
-    const filteredOrders = orders.filter((order) => order.id !== id);
-    setOrders(filteredOrders);
+  const handleDelete = async (orderID) => {
+    setIsLoading(true);
+
+    try {
+      if (!userId || !token) return;
+
+      const response = await fetch(`https://waste-mangement-backend-3qg6.onrender.com/api/user/delete-pickup/${userId}/${orderID}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      const data = await response.json();
+      console.log(data);
+
+      if (!response.ok && data.error) {
+        setIsLoading(false);
+        throw new Error(data.error);
+      }
+
+      if (data.message) {
+        setIsLoading(false);
+        setIsDeleteOrder(true);
+      }
+
+      if (response.status === 403) {
+        navigate("/login");
+      }
+
+      setIsLoading(false);
+      setErrors('');
+      setRefresh(curVal => !curVal);
+
+      setTimeout(() => {
+        setIsDeleteOrder(false);
+      }, 1500);
+    } catch (error) {
+      console.log("Error from delete handler", error);
+      setOrders([]);
+      setErrors(error.message);
+      setIsLoading(false);
+    }
   };
 
   const showError = (
@@ -156,6 +199,18 @@ const Dashboard = () => {
       </div>
     </div>
   );
+
+  // @desc: showing a delete order success message after an order has been deleted
+  const deleteOrder = (
+    <div className="fixed top-5 left-1/2 transform -translate-x-1/2 w-[90%] sm:w-[60%] md:w-[40%] lg:w-[30%] max-w-[360px] bg-[#549877] p-6 rounded-lg shadow-sm z-10">
+      <div className="flex justify-between items-center">
+        <h3 className="text-white font-Inter text-[16px] capitalize">
+          Pickup Order Deleted.
+        </h3>
+      </div>
+    </div>
+  );
+  
   return (
     <div className="flex h-screen overflow-hidden">
       <Sidebar activePage="dashboard" />
@@ -382,7 +437,7 @@ const Dashboard = () => {
                           {selectedOrderId === order._id && (
                             <div className="absolute right-0 mt-2 w-[100px] bg-white shadow-md border border-gray-200">
                               <button
-                                onClick={() => handleDelete(order.id)}
+                                onClick={() => handleDelete(order._id)}
                                 className="w-full text-red-500 py-2 hover:bg-gray-100"
                               >
                                 Delete
@@ -396,9 +451,12 @@ const Dashboard = () => {
                 ))}
               </tbody>
             </table>
-              {isLoading && !errors && <div className="ml-[38rem] mt-[8rem] spinner-border text-[#549877] w-[40px] h-[40px] border-t-[#549877] border-4 border-solid  rounded-full animate-spin"></div>}
+            {isLoading && !errors && (
+              <div className="ml-[38rem] mt-[8rem] spinner-border text-[#549877] w-[40px] h-[40px] border-t-[#549877] border-4 border-solid  rounded-full animate-spin"></div>
+            )}
           </div>
           {!isLoading && errors && showError}
+          {!isLoading && isDeleteOrder && deleteOrder}
         </div>
       </main>
     </div>

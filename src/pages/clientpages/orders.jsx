@@ -161,6 +161,8 @@ const Orders = () => {
   const [searchError, setSearchError] = useState("");
   const [searchId, setSearchId] = useState("");
   const [inputValue, setInputValue] = useState("");
+  const [refresh, setRefresh] = useState(false);
+  const [isDeleteOrder, setIsDeleteOrder] = useState(false);
 
   // start timer
   const [time, setTime] = useState({
@@ -273,15 +275,56 @@ const Orders = () => {
   // desc: calling fetch orders to only re-render only once and when there is a change
   useEffect(() => {
     fetchUserOrderHandler();
-  }, [fetchUserOrderHandler]);
+  }, [fetchUserOrderHandler, refresh]);
 
   const toggleNotification = () => {
     setShowNotification((prevValue) => !prevValue);
   };
 
-  const handleDelete = (id) => {
-    const filteredOrders = orders.filter((order) => order.id !== id);
-    setOrders(filteredOrders);
+  const handleDelete = async (orderID) => {
+    setIsLoading(true);
+
+    try {
+      if (!userId || !token) return;
+
+      const response = await fetch(`https://waste-mangement-backend-3qg6.onrender.com/api/user/delete-pickup/${userId}/${orderID}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      const data = await response.json();
+      console.log(data);
+
+      if (!response.ok && data.error) {
+        setIsLoading(false);
+        throw new Error(data.error);
+      }
+
+      if (data.message) {
+        setIsLoading(false);
+        setIsDeleteOrder(true);
+      }
+
+      if (response.status === 403) {
+        navigate("/login");
+      }
+
+      setIsLoading(false);
+      setError('');
+      setRefresh(curVal => !curVal);
+
+      setTimeout(() => {
+        setIsDeleteOrder(false);
+      }, 1500);
+    } catch (error) {
+      console.log("Error from delete handler", error);
+      setOrders([]);
+      setError(error.message);
+      setIsLoading(false);
+    }
   };
 
   const filteredOrders = orders.filter((order) => {
@@ -336,6 +379,16 @@ const Orders = () => {
     </div>
   );
 
+  // @desc: showing a delete order success message after an order has been deleted
+  const deleteOrder = (
+    <div className="fixed top-5 left-1/2 transform -translate-x-1/2 w-[90%] sm:w-[60%] md:w-[40%] lg:w-[30%] max-w-[360px] bg-[#549877] p-6 rounded-lg shadow-sm z-10">
+      <div className="flex justify-between items-center">
+        <h3 className="text-white font-Inter text-[16px] capitalize">
+          Pickup Order Deleted.
+        </h3>
+      </div>
+    </div>
+  );
   // @desc: handling search order to get the ID the user provides
   const searchOrderHandler = async (event) => {
     event.preventDefault();
@@ -708,6 +761,7 @@ const Orders = () => {
             
             {!isLoading && error && showError}
             {!isLoading && searchError && showSearchError}
+            {!isLoading && isDeleteOrder && deleteOrder}
           </div>
         </div>
         {/* Pagination Content here */}
