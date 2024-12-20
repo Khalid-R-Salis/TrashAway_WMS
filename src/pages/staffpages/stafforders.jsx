@@ -181,7 +181,7 @@ const StaffOrders = () => {
   // @desc: handling the confirmation or rejection of pickup order
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    setIsLoading(false);
+    setIsLoading(true);
 
     if (pickupOption === "confirm") {
       try {
@@ -242,6 +242,7 @@ const StaffOrders = () => {
           rejectReason: "",
         });
         setError("");
+        setIsLoading(false);
         setRefresh((curVal) => !curVal);
       } catch (error) {
         console.log("error from confirm pickup", error);
@@ -292,7 +293,7 @@ const StaffOrders = () => {
         }
 
         setShowForm(false);
-
+        setIsLoading(false);
         setRejectMessage(true); //state for setting the state to show the succes message
         setTimeout(() => {
           setRejectMessage(false);
@@ -907,7 +908,6 @@ const StaffOrders = () => {
                           className="w-full p-2 border border-gray-300 rounded resize-none"
                           placeholder="Enter reason here"
                           rows="4"
-                          required
                         />
                       </div>
                     )}

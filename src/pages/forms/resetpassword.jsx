@@ -16,16 +16,13 @@ const Resetpassword = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch(
-        "https://waste-mangement-backend-3qg6.onrender.com/api/reset-password",
-        {
-          method: "PUT",
-          body: JSON.stringify({ email }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await fetch("https://waste-mangement-backend-3qg6.onrender.com/api/reset-password", {
+        method: "PUT",
+        body: JSON.stringify({ email }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
       const data = await response.json();
       console.log(data);
@@ -65,8 +62,8 @@ const Resetpassword = () => {
 
   // @desc: showing error message when an error is encounted
   const showError = (
-    <div className="absolute right-[44rem] bottom-[46rem] mt-[23rem] w-[300px] bg-[#549877] p-5 rounded-lg shadow-sm z-10">
-      <div className="flex justify-between items-center pb-[-1px]">
+    <div className="fixed top-5 left-1/2 transform -translate-x-1/2 w-[90%] sm:w-[60%] md:w-[40%] lg:w-[30%] max-w-[400px] bg-[#549877] p-6 rounded-lg shadow-sm z-10">
+      <div className="flex justify-between items-center">
         <h3 className="text-white font-Inter text-[16px] capitalize">
           {error}
         </h3>
@@ -76,8 +73,8 @@ const Resetpassword = () => {
 
   // @desc: showing success message afer staff has been created
   const showSuccessMessage = (
-    <div className="absolute right-[44rem] bottom-[46rem] mt-[23rem] w-[300px] bg-[#549877] p-6 rounded-lg shadow-sm z-10">
-      <div className="flex justify-between items-center pb-[-1px]">
+    <div className="fixed top-5 left-1/2 transform -translate-x-1/2 w-[90%] sm:w-[60%] md:w-[40%] lg:w-[30%] max-w-[400px] bg-[#549877] p-6 rounded-lg shadow-sm z-10">
+      <div className="flex justify-between items-center">
         <h3 className="text-white font-Inter text-[16px] capitalize">
           {successMessage}
         </h3>
@@ -101,7 +98,7 @@ const Resetpassword = () => {
         <p className="text-[#666] text-[18px] w-[342px] text-center leading-6 mt-[-30px]">
           Enter your email address to get the password reset link.
         </p>
-        <div className="flex flex-col justify-center items-start gap-[8px]">
+        <div className="flex flex-col justify-center items-start gap-[8px] relative ">
           <p className="text-[16px] font-[500]">Email Address</p>
           <input
             type="email"
@@ -123,9 +120,7 @@ const Resetpassword = () => {
             required
           />
         </div>
-        <p className="text-red-600 absolute bottom-[19.5rem] left-[40rem]">
-          {emailError}
-        </p>
+        <p className="absolute mt-1 text-red-600 text-sm">{emailError}</p>
 
         {/* Show spinner when loading */}
         {isLoading ? (
