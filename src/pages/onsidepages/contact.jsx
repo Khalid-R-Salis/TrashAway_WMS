@@ -62,7 +62,6 @@ const Contact = () => {
     setError("");
     setSuccessMessage("");
 
-    // Retrieve token and userId from localStorage
     const userSession = JSON.parse(localStorage.getItem("userSession"));
     const token = userSession?.token;
 
@@ -91,7 +90,7 @@ const Contact = () => {
       if (data.errCode === 11000) {
         setIsLoading(false);
         throw new Error(
-          "Submission already recieved, we will be in touch shorly."
+          "Submission already received, we will be in touch shortly."
         );
       }
 
@@ -103,6 +102,12 @@ const Contact = () => {
       setShowModal(true);
       setError("");
       setIsLoading(false);
+
+      // Clear the form fields
+      setName("");
+      setEmail("");
+      setPhoneNumber("");
+      setMessage("");
     } catch (error) {
       console.log(error);
       setError(error.message);
