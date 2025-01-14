@@ -35,7 +35,7 @@ const Footer = () => {
             <h2 className=" font-[500px] opacity-[0.4] ">CONTACT US</h2>
             <div className=" flex flex-col justify-center items-start gap-[4px] opacity-[0.8]">
               <h2>+234 80 6918 2114</h2>
-              <h2>trashaway@gmail.com</h2>
+              <h2>wmstrashaway@gmail.com</h2>
             </div>
           </div>
           <div className=" flex flex-col justify-center items-start gap-6">

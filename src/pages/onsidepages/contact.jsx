@@ -225,7 +225,7 @@ const Contact = () => {
                     here to help.
                   </p>
                   <p className=" text-[#1E1E1E] font-[400]">
-                    Emails: trashaway@gmail.com.com
+                    Emails: wmstrashaway@gmail.com.com
                   </p>
                 </div>
                 <form onSubmit={handleSubmissionHandler}>

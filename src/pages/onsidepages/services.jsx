@@ -1,4 +1,4 @@
-import { useState } from "react"; // Make sure you import useState
+import { useState, useEffect, useCallback } from "react";
 
 // import React from "react";
 import bgServices from "../../assets/image.png";
@@ -16,24 +16,25 @@ import cancel_onlogin from "../../assets/cancel_onlogin.png";
 import profileicon from "../../assets/profileicon.png";
 import arrow_down from "../../assets/arrow_down.svg";
 import { useNavigate } from "react-router-dom";
+import { PaystackButton } from "react-paystack";
 
 const Services = () => {
   // State to track the form's visibility
-  const [showForm, setShowForm] = useState(false);
+  // State variables
+  // const [showPaymentForm, setShowPaymentForm] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [showForm, setShowForm] = useState(false);
   const [capacity, setCapacity] = useState(1);
   const [location, setLocation] = useState("");
   const [time, setTime] = useState("");
   const [category, setCategory] = useState("");
+  const [isDisabled, setIsDisabled] = useState(true);
   const [error, setError] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [email, setEmail] = useState("");
   const navigate = useNavigate();
-  const [showPaymentForm, setShowPaymentForm] = useState(false);
 
-  // @desc: handling pickup requests
-  const handlePickupRequest = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+  // Handle form submission
+  const handlePickupRequest = async () => {
     setError("");
 
     try {
@@ -45,7 +46,6 @@ const Services = () => {
       // Check for token and userId
       if (!token || !userId) {
         alert("User not authenticated");
-        setIsSubmitting(false);
         console.log("Tokon and Id matched");
         return;
       }
@@ -71,10 +71,8 @@ const Services = () => {
       );
 
       const data = await response.json();
-      console.log(data);
 
       if (!response.ok) {
-        setIsSubmitting(false);
         console.log(data.error);
         throw new Error(data.error);
       }
@@ -85,35 +83,74 @@ const Services = () => {
 
       // // Handle success response
       if (data && data.message) {
-        alert(data.message);
         setShowForm(false); // Close form
       }
 
-      setIsSubmitting(false);
+      setCapacity("");
+      setLocation("");
+      setTime("");
+      setCategory("");
     } catch (error) {
       console.error("Pickup request failed:", error);
       setError(error.message);
-      setIsSubmitting(false);
     }
   };
 
-  // Handle Payment Modal
-  const openPaymentForm = () => {
+  // @desc: handle payment modal not needed because paystack handles all the heavy lifting
+  // const openPaymentForm = () => {
+  //   setError("");
+  //   setShowForm(false);
+  //   setShowPaymentForm(true);
+  // };
+
+  // @desc: getting user email from the local storage
+  useEffect(() => {
+    const userSession = JSON.parse(localStorage.getItem("userSession"));
+    const email = userSession?.email;
+    setEmail(email);
+  }, []);
+
+  // @desc: PAYSTACK CONFIGURATION
+  const PUBLIC_KEY = "pk_test_2148e071016bd11a6dd37489549cafe567b6f67c";
+
+  const componentProps = {
+    email: email,
+    amount: capacity * 3000 * 100, // Paystack requires amount in kobo (Naira * 100)
+    publicKey: PUBLIC_KEY,
+    text: "Proceed to Payment",
+    onSuccess: (response) => {
+      handlePickupRequest();
+      setIsDisabled(true);
+      alert(`Pickup Order Submitted. Transaction ID ${response.reference}`);
+    },
+    onClose: () => {
+      setIsDisabled(true);
+      alert("Pickup Order Cancelled");
+    },
+  };
+
+  const validateFields = useCallback(() => {
+    const errors = {};
     if (!capacity || !location || !time || !category) {
-      setError("Please fill all fields before proceeding to payment.");
-      return;
+      errors.allErrors = "errors available";
     }
-    setError("");
-    setShowForm(false);
-    setShowPaymentForm(true);
-  };
+    return Object.keys(errors).length === 0;
+  }, [capacity, location, category, time]);
 
-  const handlePayment = (e) => {
-    e.preventDefault(); // Prevent the default behavior of form submission
-    setShowPaymentForm(false); // Close the payment modal
-    alert("Payment successful! Pickup request created.");
-    // Add any payment API logic here if needed
-  };
+  useEffect(() => {
+    const isValid = validateFields();
+    setIsDisabled(!isValid);
+  }, [validateFields]);
+
+  useEffect(() => {
+    if (!isDisabled) {
+      document.body.classList.add("overflow-hidden", "h-screen");
+    }
+
+    // Cleanup: Remove classes when component unmounts
+    return () =>
+      document.body.classList.remove("overflow-hidden", "h-screen", "fixed");
+  }, [isDisabled]);
   return (
     <>
       <div
@@ -209,30 +246,31 @@ const Services = () => {
       {/* Pickup Request Form */}
       {showForm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-30 flex justify-center items-center overflow-hidden">
-          <form className="font-Inter bg-[#EEF5F1] flex flex-col py-[14.793px] px-[11.834px] justify-center items-center rounded-[11.834px] gap-[17.751px]">
-            <button
-              type="button"
-              className="absolute right-0 bottom-[33rem] mt-[205px] mr-[530px]"
-              onClick={() => {
-                setShowForm(false);
-                // Clear form fields when closed
-                setCapacity("");
-                setLocation("");
-                setTime("");
-                setCategory("");
-                setError("");
-              }}
-            >
-              X
-            </button>
+          <div className="font-Inter bg-[#EEF5F1] flex flex-col py-[14.793px] px-[11.834px] justify-center items-center rounded-[11.834px] gap-[17.751px]">
+            <div className="relative w-full">
+              <button
+                type="button"
+                className="absolute top-4 right-4 bg-black text-white p-2 rounded-full"
+                onClick={() => {
+                  setShowForm(false);
+                  setCapacity("");
+                  setLocation("");
+                  setTime("");
+                  setCategory("");
+                  setError("");
+                }}
+              >
+                X
+              </button>
 
-            <h2 className="text-[20px] font-[600] text-center">
-              Enter Amount of Recyclables
-            </h2>
+              <h2 className="text-[20px] font-[600] text-center mt-4">
+                Enter Amount of Recyclables
+              </h2>
+            </div>
 
             <input
               type="number"
-              placeholder="Capacity"
+              placeholder="1"
               min={1}
               max={99}
               className="outline-none w-[59px] h-[52px] py-[11.834px] px-[8.876px] rounded-[5.917px] border-[0.74px] border-solid border-[#626262] bg-[#549877] text-white"
@@ -275,19 +313,21 @@ const Services = () => {
 
             {error && <p className="text-red-500">{error}</p>}
 
-            <button
-              className="text-white font-Inter text-[600] text-[16.646px] bg-[#549877] py-[8.136px] px-[96.893px] rounded-[2.959px] w-[476px] h-[37px]"
-              type="button"
-              onClick={openPaymentForm} // Trigger payment modal
-            >
-              Proceed to Payment
-            </button>
-          </form>
+            <PaystackButton
+              {...componentProps}
+              disabled={isDisabled}
+              className={`${
+                isDisabled
+                  ? "bg-gray-400 cursor-not-allowed font-Inter text-[600] text-[16.646px] py-[8.136px] px-[96.893px] rounded-[2.959px] w-[476px] h-[37px]"
+                  : "text-white font-Inter text-[600] text-[16.646px] bg-[#549877] py-[8.136px] px-[96.893px] rounded-[2.959px] w-[476px] h-[37px] overflow-hidden"
+              }`}
+            />
+          </div>
         </div>
       )}
 
       {/* Payment Modal */}
-      {showPaymentForm && (
+      {/* {showPaymentForm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-30 flex justify-center items-center">
           <form
             className="font-Inter bg-[#EEF5F1] flex flex-col py-[14.793px] px-[11.834px] justify-center items-center rounded-[11.834px] gap-[17.751px]"
@@ -322,7 +362,7 @@ const Services = () => {
               className="absolute right-[32rem] top-[13.5rem] mt-[20px] mr-[20px] text-[16px] text-[#626262]"
               onClick={() => {
                 setShowPaymentForm(false);
-                // Clear form fields when closed
+               
                 document.getElementById("cardNumber").value = "";
                 document.getElementById("expiryDate").value = "";
                 document.getElementById("cvv").value = "";
@@ -417,12 +457,12 @@ const Services = () => {
                 disabled={isSubmitting}
               >
                 {isSubmitting ? "Submitting..." : "Request for Pickup"}
-                {/* Request for Pickup */}
+                
               </button>
             </div>
           </form>
         </div>
-      )}
+      )} */}
       <div
         className=" bg-center bg-cover min-h-screen px-20"
         style={{ backgroundImage: `url(${bg2})` }}

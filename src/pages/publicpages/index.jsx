@@ -291,17 +291,16 @@ const Landing = () => {
                         Sign Up
                       </h1>
                       <p className=" text-section-gray font-Inter">
-                        Reach out to us with your shipping inquiries or to get
-                        started.
+                        Create an account to get started
                       </p>
                     </div>
 
                     <div className=" flex flex-col justify-center items-left">
                       <h1 className=" text-[24px] font-Inter text-light-black font-semibold">
-                        Select Collection Point
+                        Request for Pickup
                       </h1>
                       <p className=" text-section-gray font-Inter">
-                        After contacting us, request a quote for your shipment.
+                        request for waste pickup, by providing basic infor
                       </p>
                     </div>
                   </div>
@@ -316,21 +315,19 @@ const Landing = () => {
                   <div className=" flex flex-col justify-center items-left gap-16">
                     <div className=" flex flex-col justify-center items-left">
                       <h1 className=" text-[24px] font-Inter text-light-black font-semibold">
-                        Schedule Collection
+                        Make Payment
                       </h1>
                       <p className=" text-section-gray font-Inter">
-                        Our experts will professionally pack and handle your
-                        items
+                        Make payment to validate your pickup request
                       </p>
                     </div>
 
                     <div className=" flex flex-col justify-center items-left">
                       <h1 className=" text-[24px] font-Inter text-light-black font-semibold">
-                        Track and Monitor
+                        Track
                       </h1>
                       <p className=" text-section-gray font-Inter">
-                        Track your shipment in real-time using our online
-                        tracking system.
+                        Track your pickups history
                       </p>
                     </div>
                   </div>
