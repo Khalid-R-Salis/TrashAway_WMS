@@ -269,7 +269,7 @@ const Referral = () => {
                   href="mailto:trashaway@gmail.com"
                   className="text-gray-green"
                 >
-                  trashaway@gmail.com
+                  wmstrashaway@gmail.com
                 </a>
               </h4>
             </div>

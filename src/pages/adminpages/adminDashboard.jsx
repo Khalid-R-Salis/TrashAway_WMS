@@ -273,7 +273,7 @@ const AdminDashboard = () => {
                   <h1 className="text-[17px] font-[600]">Total Vehicles</h1>
                 </div>
                 <div className="flex justify-between items-center w-full">
-                  <h1 className="text-[40px] font-[700]">50</h1>
+                  <h1 className="text-[40px] font-[700]">08</h1>
                   <div className="flex items-center gap-1 text-[14px] font-[400]">
                     <p>+0.03%</p>
                     <img src={iconSet} alt="iconSet" />
