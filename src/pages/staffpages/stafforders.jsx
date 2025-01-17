@@ -132,7 +132,7 @@ const StaffOrders = () => {
         navigate("/login");
       }
 
-      setIsLoading(curVal => !curVal);
+      setIsLoading((curVal) => !curVal);
       setOrders(updatedPickups);
       setError(null);
     } catch (error) {
@@ -570,7 +570,6 @@ const StaffOrders = () => {
           className="bg-no-repeat bg-cover bg-center w-full h-full"
           style={{ backgroundImage: `url(${formbg})` }}
         >
-          {/* CONTENT HERE */}
           <div className=" flex justify-between items-center px-5 py-2">
             <h1 className=" text-[#1E1E1E] text-[24px] font-Inter font-[600] tracking-[-0.48px]">
               Assinged Pickups

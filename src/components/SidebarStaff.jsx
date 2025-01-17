@@ -6,6 +6,7 @@ import shopdb from "../assets/shopdb.png";
 import logoutdb from "../assets/logoutdb.png";
 import cartdb from "../assets/cartdb.png";
 import profiledb1 from "../assets/profiledb1.png";
+import trackingicon from "../assets/trackingicon.png";
 
 // eslint-disable-next-line react/prop-types
 const Sidebar = ({ activePage }) => {
@@ -54,6 +55,19 @@ const Sidebar = ({ activePage }) => {
                 >
                   <img src={cartdb} alt="Icon" />
                   <Link to="/stafforders">Allocated Orders</Link>
+                </div>
+              </li>
+              <li>
+                <div
+                  className={`flex justify-start items-center gap-[16px] rounded-[4px] py-[12px] pl-[12px] w-[18rem] ${
+                    activePage === "staffvehicleTracking"
+                      ? "bg-gray-green2"
+                      : "hover:bg-gray-700"
+                  }`}
+                >
+                  <img src={trackingicon} alt="Icon" />
+
+                  <Link to="/staffvehicletracking">Vehicle Tracking</Link>
                 </div>
               </li>
             </ul>

@@ -23,7 +23,7 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true); // Show the spinner when the login process starts
-    setError('');
+    setError("");
 
     try {
       const response = await fetch(

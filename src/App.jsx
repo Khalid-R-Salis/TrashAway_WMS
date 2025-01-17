@@ -49,6 +49,7 @@ import StaffOrders from "./pages/staffpages/stafforders";
 import StaffSupport from "./pages/staffpages/staffsupport";
 import StaffSettings from "./pages/staffpages/staffsettings";
 import StaffReferral from "./pages/staffpages/staffreferral";
+import StaffVehicleTracking from "./pages/staffpages/staffvehicleTracking";
 
 // Footer Inport
 import Footer from "./components/Footer";
@@ -98,6 +99,10 @@ function App() {
           <Route path="/staffsupport" element={<StaffSupport />} />
           <Route path="/staffsettings" element={<StaffSettings />} />
           <Route path="/staffreferral" element={<StaffReferral />} />
+          <Route
+            path="/StaffVehicleTracking"
+            element={<StaffVehicleTracking />}
+          />
         </Routes>
         {/* ------------------------------------------------ */}
         {location.pathname !== "/login" &&
@@ -123,7 +128,8 @@ function App() {
           location.pathname !== "/stafforders" &&
           location.pathname !== "/staffsupport" &&
           location.pathname !== "/staffsettings" &&
-          location.pathname !== "/staffreferral" && <Footer />}
+          location.pathname !== "/staffreferral" &&
+          location.pathname !== "/StaffVehicleTracking" && <Footer />}
       </div>
     </div>
   );

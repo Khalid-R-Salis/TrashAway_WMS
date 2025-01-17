@@ -2,21 +2,20 @@ import React, { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import formbg from "../../assets/formsbg.png";
-import cancelIcon from "../../assets/close.svg";
-import notificationdb from "../../assets/notificationdb.png";
-import SidebarAdmin from "../../components/SidebarAdmin";
+import Sidebar from "../../components/SidebarStaff";
 
+// Fix for default Marker icon in Leaflet
 import L from "leaflet";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import carIcon from "../../assets/car-icon.png";
 
-const WasteManagment = () => {
+const StaffTracking = () => {
   const carMarkerIcon = L.icon({
     iconUrl: carIcon,
     iconSize: [32, 32],
     iconAnchor: [16, 32],
-    popupAnchor: [0, -32],
+    popupAnchor: [0, -32], // popup position
   });
 
   const [time, setTime] = useState({
@@ -71,11 +70,11 @@ const WasteManagment = () => {
 
   return (
     <div className="flex h-screen">
-      <SidebarAdmin activePage="vehicleTracking" />
+      <Sidebar activePage="staffvehicleTracking" />
       <main className="flex-1 flex flex-col">
         <div className="flex justify-between items-center px-[32px] py-[12px] w-full bg-[#1E1E1E] h-20 relative">
           <h2 className="text-white font-Inter text-[20px] font-[600] tracking-[-0.4]">
-            Admin Dashboard
+            Staff Dashboard
           </h2>
 
           <div className="flex gap-4 items-center justify-center text-white font-Inter text-[16px] font-[500] p-2 border-gray-green/50 rounded-xl border-[1px]">
@@ -125,12 +124,12 @@ const WasteManagment = () => {
           style={{ backgroundImage: `url(${formbg})` }}
         >
           <div className="w-full h-full relative z-20">
-            <div className="absolute top-[30rem] left-60 p-4 bg-white shadow-lg rounded-lg w-[450px] h-[200px]">
+            {/* <div className="absolute top-[30rem] left-60 p-4 bg-white shadow-lg rounded-lg w-[450px] h-[200px]">
               <h4 className="text-black font-bold text-lg">
                 Total Drivers on Route
               </h4>
               <p className="text-black text-2xl">{totalDrivers}</p>
-            </div>
+            </div> */}
 
             <MapContainer
               center={[12.0022, 8.5919]} // (Kano, Nigeria)
@@ -149,9 +148,9 @@ const WasteManagment = () => {
                   zIndex: 1000,
                 }}
               >
-                <p style={{ margin: 0, fontWeight: "bold", color: "#1E1E1E" }}>
+                {/* <p style={{ margin: 0, fontWeight: "bold", color: "#1E1E1E" }}>
                   Drivers on Route: 8
-                </p>
+                </p> */}
               </div>
 
               <TileLayer
@@ -162,7 +161,7 @@ const WasteManagment = () => {
                 <Popup>TrashAway Vehicle D2</Popup>
               </Marker>
 
-              <Marker position={[11.9944, 8.5323]} icon={carMarkerIcon}>
+              {/* <Marker position={[11.9944, 8.5323]} icon={carMarkerIcon}>
                 <Popup>TrashAway Vehicle D3</Popup>
               </Marker>
 
@@ -188,7 +187,7 @@ const WasteManagment = () => {
 
               <Marker position={[12.0192, 8.5089]} icon={carMarkerIcon}>
                 <Popup>TrashAway Vehicle D8</Popup>
-              </Marker>
+              </Marker> */}
             </MapContainer>
           </div>
         </div>
@@ -197,4 +196,4 @@ const WasteManagment = () => {
   );
 };
 
-export default WasteManagment;
+export default StaffTracking;
