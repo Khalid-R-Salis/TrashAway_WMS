@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import formbg from "../../assets/formsbg.png";
-import cancelIcon from "../../assets/close.svg";
-import notificationdb from "../../assets/notificationdb.png";
+// import cancelIcon from "../../assets/close.svg";
+// import notificationdb from "../../assets/notificationdb.png";
 import SidebarAdmin from "../../components/SidebarAdmin";
 
 import L from "leaflet";
-import markerIcon from "leaflet/dist/images/marker-icon.png";
-import markerShadow from "leaflet/dist/images/marker-shadow.png";
+// import markerIcon from "leaflet/dist/images/marker-icon.png";
+// import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import carIcon from "../../assets/car-icon.png";
 
 const WasteManagment = () => {
@@ -25,7 +25,8 @@ const WasteManagment = () => {
     seconds: "00",
   });
   const [date, setDate] = useState({ day: "1st", month: "Jan", year: 2023 });
-  const [showNotification, setShowNotification] = useState(false);
+  const [userLocation, setUserLocation] = useState(null);
+  // const [showNotification, setShowNotification] = useState(false);
 
   const totalDrivers = 8;
 
@@ -65,9 +66,29 @@ const WasteManagment = () => {
     return () => clearInterval(intervalId);
   }, []);
 
-  const toggleNotification = () => {
-    setShowNotification(!showNotification);
-  };
+  // const toggleNotification = () => {
+  //   setShowNotification(!showNotification);
+  // };
+
+  // @desc: getting user geolocation
+  useEffect(() => {
+    const getUserGeolocation = () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          const { latitude: lat, longitude: lng } = position.coords;
+          setUserLocation([lat, lng]);
+        }, (error) => {
+          alert('Cannot get location', error.message);
+          console.log(error.message);
+        });
+      } else {
+        alert("Geolocation not supported in this browser!");
+        console.log("location is supported");
+      }
+    }
+    
+    getUserGeolocation();
+  }, []);
 
   return (
     <div className="flex h-screen">
@@ -132,8 +153,8 @@ const WasteManagment = () => {
               <p className="text-black text-2xl">{totalDrivers}</p>
             </div>
 
-            <MapContainer
-              center={[12.0022, 8.5919]} // (Kano, Nigeria)
+            {userLocation && <MapContainer
+              center={userLocation}
               zoom={13}
               className="h-full w-full rounded-lg relative"
             >
@@ -150,7 +171,7 @@ const WasteManagment = () => {
                 }}
               >
                 <p style={{ margin: 0, fontWeight: "bold", color: "#1E1E1E" }}>
-                  Drivers on Route: 8
+                  Drivers on Route: 1
                 </p>
               </div>
 
@@ -158,11 +179,11 @@ const WasteManagment = () => {
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 attribution="TRASH AWAY"
               />
-              <Marker position={[12.0022, 8.5919]} icon={carMarkerIcon}>
+              <Marker position={userLocation} icon={carMarkerIcon}>
                 <Popup>TrashAway Vehicle D2</Popup>
               </Marker>
 
-              <Marker position={[11.9944, 8.5323]} icon={carMarkerIcon}>
+              {/* <Marker position={[11.9944, 8.5323]} icon={carMarkerIcon}>
                 <Popup>TrashAway Vehicle D3</Popup>
               </Marker>
 
@@ -188,8 +209,8 @@ const WasteManagment = () => {
 
               <Marker position={[12.0192, 8.5089]} icon={carMarkerIcon}>
                 <Popup>TrashAway Vehicle D8</Popup>
-              </Marker>
-            </MapContainer>
+              </Marker> */}
+            </MapContainer>}
           </div>
         </div>
       </main>

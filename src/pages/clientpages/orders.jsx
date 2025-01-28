@@ -162,7 +162,9 @@ const Orders = () => {
   const [searchId, setSearchId] = useState("");
   const [inputValue, setInputValue] = useState("");
   const [refresh, setRefresh] = useState(false);
+  const [isCompleted, setIsCompleted] = useState([]);
   const [isDeleteOrder, setIsDeleteOrder] = useState(false);
+  const [completedItems, setCompletedItems] = useState('');
 
   // start timer
   const [time, setTime] = useState({
@@ -279,6 +281,7 @@ const Orders = () => {
 
   const toggleNotification = () => {
     setShowNotification((prevValue) => !prevValue);
+    setCompletedItems('');
   };
 
   const handleDelete = async (orderID) => {
@@ -326,6 +329,58 @@ const Orders = () => {
       setIsLoading(false);
     }
   };
+
+  // @desc: fetching completed pickups for notification area..
+  useEffect(() => {
+    const fetchCompletedPickups = async () => {
+      setIsLoading(true);
+
+      if (!userId || !token) return;
+
+      try {
+        const response = await fetch(
+          `https://waste-mangement-backend-3qg6.onrender.com/api/user/completed-pickup/${userId}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const { allCompletedPickups, error, message } = await response.json();
+        console.log(allCompletedPickups);
+
+        if (!response.ok && error) {
+          setIsLoading(false);
+          throw new Error(error);
+        }
+
+        if (message === "No pickups found.") {
+          setIsLoading(false);
+          throw new Error("No pickups found. Try by adding some.");
+        }
+
+        if (response.status === 403) {
+          navigate("/login");
+        }
+
+        if (message === "jwt expired") {
+          setIsLoading(false);
+          navigate("/login");
+        }
+
+        setIsCompleted(allCompletedPickups);
+        setCompletedItems(allCompletedPickups.length);
+        setIsLoading(false);
+      } catch (error) {
+        console.log("Error from dashboard", error);
+        setIsLoading(false);
+      }
+    };
+
+    fetchCompletedPickups();
+  }, [token, userId, navigate]);
 
   const filteredOrders = orders.filter((order) => {
     if (filterStatus === "All") return true;
@@ -473,12 +528,17 @@ const Orders = () => {
             </div>
           </div>
 
-          <img
-            src={notificationdb}
-            alt="Notifications"
-            className="cursor-pointer"
-            onClick={toggleNotification}
-          />
+          <div className="relative inline-block">
+            <img
+              src={notificationdb}
+              alt="Notifications"
+              className="cursor-pointer"
+              onClick={toggleNotification}
+            />
+            {completedItems && <span className="absolute top-[-6px] right-[-4px] bg-white text-black text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">
+              {completedItems}
+            </span>}
+          </div>
           {/* Notification Dropdown */}
           {showNotification && (
             <>
@@ -500,45 +560,20 @@ const Orders = () => {
                   />
                 </div>
 
-                <div className=" flex justify-between items-center">
-                  <div className="text-[#343A40] font-Inter text-[16px] font-medium">
-                    Pick up completed
-                  </div>
-                  <div className="text-[#B9B9B9] font-Inter text-[12px] font-medium mb-5">
-                    10/10/2024
-                  </div>
-                </div>
-                <hr className="w-full border-b-[1px] border-[#E9E9E9]  mb-4" />
-
-                <div className=" flex justify-between items-center">
-                  <div className="text-[#343A40] font-Inter text-[16px] font-medium">
-                    Pick up completed
-                  </div>
-                  <div className="text-[#B9B9B9] font-Inter text-[12px] font-medium mb-5">
-                    10/10/2024
-                  </div>
-                </div>
-                <hr className="w-full border-b-[1px] border-[#E9E9E9]  mb-4" />
-
-                <div className=" flex justify-between items-center">
-                  <div className="text-[#343A40] font-Inter text-[16px] font-medium">
-                    Pick up completed
-                  </div>
-                  <div className="text-[#B9B9B9] font-Inter text-[12px] font-medium mb-5">
-                    10/10/2024
-                  </div>
-                </div>
-                <hr className="w-full border-b-[1px] border-[#E9E9E9]  mb-4" />
-
-                <div className=" flex justify-between items-center">
-                  <div className="text-[#343A40] font-Inter text-[16px] font-medium">
-                    Pick up completed
-                  </div>
-                  <div className="text-[#B9B9B9] font-Inter text-[12px] font-medium mb-5">
-                    10/10/2024
-                  </div>
-                </div>
-                <hr className="w-full border-b-[1px] border-[#E9E9E9]  mb-4" />
+                {isCompleted &&
+                  isCompleted.map((item) => (
+                    <div key={item._id}>
+                      <div className=" flex justify-between items-center mb-3">
+                        <div className="text-[#343A40] font-Inter text-[16px] font-medium">
+                          Pick up completed
+                        </div>
+                        <div className="text-[#B9B9B9] font-Inter text-[12px] font-medium">
+                          {item.time}
+                        </div>
+                      </div>
+                      <hr className="w-full border-b-[1px] border-[#E9E9E9]  mb-4" />
+                    </div>
+                  ))}
 
                 {/* {[...Array(4)].map((_, idx) => (
                 <div

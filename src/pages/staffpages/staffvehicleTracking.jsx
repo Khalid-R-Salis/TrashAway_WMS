@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import formbg from "../../assets/formsbg.png";
@@ -6,8 +6,8 @@ import Sidebar from "../../components/SidebarStaff";
 
 // Fix for default Marker icon in Leaflet
 import L from "leaflet";
-import markerIcon from "leaflet/dist/images/marker-icon.png";
-import markerShadow from "leaflet/dist/images/marker-shadow.png";
+// import markerIcon from "leaflet/dist/images/marker-icon.png";
+// import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import carIcon from "../../assets/car-icon.png";
 
 const StaffTracking = () => {
@@ -24,9 +24,9 @@ const StaffTracking = () => {
     seconds: "00",
   });
   const [date, setDate] = useState({ day: "1st", month: "Jan", year: 2023 });
-  const [showNotification, setShowNotification] = useState(false);
+  const [userLocation, setUserLocation] = useState(null);
 
-  const totalDrivers = 8;
+  // const totalDrivers = 8;
 
   useEffect(() => {
     const updateDateTime = () => {
@@ -64,9 +64,25 @@ const StaffTracking = () => {
     return () => clearInterval(intervalId);
   }, []);
 
-  const toggleNotification = () => {
-    setShowNotification(!showNotification);
-  };
+  // @desc: getting user geolocation
+  useEffect(() => {
+    const getUserGeolocation = () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          const { latitude: lat, longitude: lng } = position.coords;
+          setUserLocation([lat, lng]);
+        }, (error) => {
+          alert('Cannot get location', error.message);
+          console.log(error.message);
+        });
+      } else {
+        alert("Geolocation not supported in this browser!");
+        console.log("location is supported");
+      }
+    }
+    
+    getUserGeolocation();
+  }, []);
 
   return (
     <div className="flex h-screen">
@@ -131,8 +147,8 @@ const StaffTracking = () => {
               <p className="text-black text-2xl">{totalDrivers}</p>
             </div> */}
 
-            <MapContainer
-              center={[12.0022, 8.5919]} // (Kano, Nigeria)
+            {userLocation && <MapContainer
+              center={userLocation} // (Kano, Nigeria)
               zoom={13}
               className="h-full w-full rounded-lg relative"
             >
@@ -157,8 +173,8 @@ const StaffTracking = () => {
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 attribution="TRASH AWAY"
               />
-              <Marker position={[12.0022, 8.5919]} icon={carMarkerIcon}>
-                <Popup>TrashAway Vehicle D2</Popup>
+              <Marker position={userLocation} icon={carMarkerIcon}>
+                <Popup>TrashAway Vehicle D1</Popup>
               </Marker>
 
               {/* <Marker position={[11.9944, 8.5323]} icon={carMarkerIcon}>
@@ -188,7 +204,7 @@ const StaffTracking = () => {
               <Marker position={[12.0192, 8.5089]} icon={carMarkerIcon}>
                 <Popup>TrashAway Vehicle D8</Popup>
               </Marker> */}
-            </MapContainer>
+            </MapContainer>}
           </div>
         </div>
       </main>
