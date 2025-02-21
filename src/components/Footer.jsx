@@ -20,13 +20,13 @@ const Footer = () => {
             <nav className=" flex flex-col justify-start items-center gap-1 ">
               <ul className=" text-[14px] font-[2px] leading-[200%] opacity-[0.8]">
                 <li>
-                  <a href="#">About us</a>
+                  <a href="/about">About Us</a>
                 </li>
                 <li>
                   <a href="#">For customers</a>
                 </li>
                 <li>
-                  <a href="#">Contacts</a>
+                  <a href="/contact">Contact</a>
                 </li>
               </ul>
             </nav>
