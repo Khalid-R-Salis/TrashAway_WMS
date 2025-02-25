@@ -67,7 +67,7 @@ const Sidebar = ({ activePage }) => {
                 >
                   <img src={trackingicon} alt="Icon" />
 
-                  <Link to="/staffvehicletracking">Vehicle Tracking</Link>
+                  <Link to="/staffvehicletracking">Client Tracking</Link>
                 </div>
               </li>
             </ul>
